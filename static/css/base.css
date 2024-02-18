@@ -1,0 +1,79 @@
+/* Robert Thompson, rt598@drexel.edu
+CS530: DUI, Assignment [2] */
+
+body {
+  font-family: "Avenir";
+  font-size: 1rem;
+  background: #ffffff;
+}
+
+header {
+  background: #006298;
+}
+
+.table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.btn-primary {
+  background: #e31837; /* Chiefs Red */
+  color: white;
+  border: none;
+}
+
+.divider {
+  width: 10px;
+  height: auto;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  color: white;
+  border: none;
+  background: #cc0000; /* BU Scarlet Red */
+}
+
+.btn-secondary {
+  border: none;
+  color: black;
+  background-color: #a9a9a9;
+}
+
+.row.empty {
+  opacity: 0.25;
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
+}
+
+.row.fill {
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
+}
+
+.navbar-expand-md .navbar-nav .nav-link {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: #ffc600;
+}
+
+.content {
+  padding: 2rem 1.5rem;
+}
+
+.jumbotron {
+  padding: 1.5rem;
+  background: 0;
+}
+
+.jumbotron img {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.btn-size {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+}
