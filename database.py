@@ -10,7 +10,6 @@ class Database:
         # Begin: User Queries
         self.INSERT_USER_QUERY = "INSERT INTO users (first_name, last_name, username, password) VALUES (?, ?, ?, ?)"
         self.GET_USER_QUERY = "SELECT * FROM users WHERE username=?"
-        self.GET_ALL_USERS_QUERY = "SELECT * FROM users"
         # End: User Queries
 
     def select(self, sql, parameters=[]):
@@ -42,26 +41,6 @@ class Database:
                 'first_name': user_data[3],
                 'last_name': user_data[4]
             }
-        else:
-            return None
-    
-    def get_all_users(self):
-        data = self.select(self.GET_ALL_USERS_QUERY)
-        
-        if data:
-            all_data = []
-            for user in data:
-                user_dict = {
-                'id': user[0],
-                'username': user[1],
-                'password': user[2],
-                'first_name': user[3],
-                'last_name': user[4]
-                }   
-                
-                all_data.append(user_dict)
-            
-            return all_data
         else:
             return None
     # End: User Functions

@@ -17,7 +17,6 @@ header {
 }
 
 .btn-primary {
-  background: #e31837; /* Chiefs Red */
   color: white;
   border: none;
 }
@@ -31,7 +30,6 @@ header {
 .btn-primary:hover {
   color: white;
   border: none;
-  background: #cc0000; /* BU Scarlet Red */
 }
 
 .btn-secondary {
