@@ -8,7 +8,7 @@ body {
 }
 
 header {
-  background: #006298;
+  background: #28282B;
 }
 
 .table {
@@ -56,7 +56,7 @@ header {
 .navbar-expand-md .navbar-nav .nav-link {
   padding-left: 1rem;
   padding-right: 1rem;
-  color: #ffc600;
+  color: #FFDD6B;
 }
 
 .content {
