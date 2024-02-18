@@ -1,4 +1,4 @@
-from flask import Flask, g, flash, render_template, redirect, request, session
+from flask import Flask, g, flash, render_template, redirect, request, session, jsonify
 from database import Database
 from passlib.hash import pbkdf2_sha256
 
@@ -7,9 +7,10 @@ app.secret_key = 'backstage_pass_cs530'
 DATABASE_PATH = './dev/backstage_pass.db'
 
 
-
 # Start: Login Messages
 SUCCESSFUL_LOGIN = "You were successfully logged in"
+ERROR_USER_HAS_ACCOUNT = "Username entered already has an account."
+ERROR_INVALID_DATA = "One or more fields entered is invalid."
 ERROR_UNKNOWN_USER = "Unknown username, please try again."
 ERROR_INVALID_PASSWORD = "Invalid password, please try again."
 ERROR_MISSING_USERNAME = "Missing username, please try again"
@@ -34,7 +35,9 @@ def about():
     return render_template('about.html')
 
 # Begin: Account Creation
-@app.route('/create_account', methods=['GET', 'POST'])
+
+
+@app.route('/create_account', methods=['POST'])
 def create_account():
     if request.method == 'POST':
         first_name = request.form["firstName"]
@@ -48,23 +51,14 @@ def create_account():
                 get_db().create_user(first_name, last_name, username, encrypted_password)
                 session['user'] = get_db().get_user(username)
                 flash(SUCCESSFUL_LOGIN)
-                return redirect('/')
+                return jsonify({'success': True})
             else:
-                # TODO: Change this to re-direct to login modal to login with their credentials
-                print("**********************************************************")
-                print("User:" + username +
-                      " is already created - not fully implemented to stay on login modal")
-                print("**********************************************************")
-                return redirect('/')
+                return jsonify({'success': False, 'error': ERROR_USER_HAS_ACCOUNT})
 
-    # TODO: Stay on the create account modal as there was an error
-    print("**********************************************************")
-    print("Error occured creating an account - not fully implemented")
-    print("**********************************************************")
-    return redirect('/')
+        return jsonify({'success': False, 'error': ERROR_INVALID_DATA})
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
     if 'user' in session:
         return redirect('/')
@@ -81,7 +75,7 @@ def login():
                     if pbkdf2_sha256.verify(password, user['password']):
                         session['user'] = user
                         flash(SUCCESSFUL_LOGIN)
-                        return redirect('/')
+                        return jsonify({'success': True})
                     else:
                         error_message = ERROR_INVALID_PASSWORD
                 else:
@@ -91,12 +85,8 @@ def login():
             elif not username and password:
                 error_message = ERROR_MISSING_USERNAME
 
-    # TODO: Stay on the login modal as there was an error. Pass error to the login modal
-    print("*****************************************************************")
-    print("Error occured logging in - not fully implemented:", error_message)
-    print("*****************************************************************")
     flash(error_message)
-    return redirect('/')
+    return jsonify({'success': False, 'error': error_message})
 
 
 @app.route('/signout')

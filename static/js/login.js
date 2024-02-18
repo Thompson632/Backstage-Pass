@@ -1,36 +1,67 @@
-// Ensure our script gets loaded after the DOM is fully up
 document.addEventListener("DOMContentLoaded", function () {
-  var loginModal = document.getElementById("loginModal");
-  var openModalButton = document.getElementById("openModal");
-  var closeButton = document.getElementsByClassName("close-button")[0];
-  var showRegisterFormButton = document.getElementById("showRegisterForm");
-  var showLoginFormButton = document.getElementById("showLoginForm");
-  var loginFormDiv = document.getElementById("loginForm");
-  var registerFormDiv = document.getElementById("registerForm");
+  const BASE_HOME_REDIRECT = "/";
+  const DEFAULT_ACTION = "POST";
+  const DEFAULT_DATA_TYPE = "json";
+  const DEFAULT_ERROR_LOG = "An error occurred. Please try again later.";
 
-  openModalButton.onclick = function () {
-    loginModal.style.display = "block";
-    loginFormDiv.style.display = "block";
-    registerFormDiv.style.display = "none";
-  };
-
-  closeButton.onclick = function () {
-    loginModal.style.display = "none";
-  };
-
-  window.onclick = function (event) {
-    if (event.target == loginModal) {
-      loginModal.style.display = "none";
+  $(document).ready(function () {
+    function clearErrorMessage() {
+      $(".alert-danger").remove();
     }
-  };
 
-  showRegisterFormButton.onclick = function () {
-    loginFormDiv.style.display = "none";
-    registerFormDiv.style.display = "block";
-  };
+    $("form").on("submit", function (event) {
+      event.preventDefault();
 
-  showLoginFormButton.onclick = function () {
-    registerFormDiv.style.display = "none";
-    loginFormDiv.style.display = "block";
-  };
+      var form = $(this);
+      var url = form.attr("action");
+
+      console.debug("Posting to URL:", url);
+
+      clearErrorMessage();
+
+      $.ajax({
+        type: DEFAULT_ACTION,
+        url: url,
+        data: form.serialize(),
+        dataType: DEFAULT_DATA_TYPE,
+        success: function (response) {
+          if (response.success) {
+            // Handle re-direct here to display error on modal to user
+            window.location.href = BASE_HOME_REDIRECT;
+          } else {
+            form.prepend(
+              '<div class="alert alert-danger">' + response.error + "</div>"
+            );
+          }
+        },
+        error: function () {
+          form.prepend(
+            '<div class="alert alert-danger">' + DEFAULT_ERROR_LOG + "</div>"
+          );
+        },
+      });
+    });
+
+    $("#showRegisterForm").click(function () {
+      $("#loginForm").hide();
+      $("#registerForm").show();
+      clearErrorMessage();
+    });
+
+    $("#showLoginForm").click(function () {
+      $("#registerForm").hide();
+      $("#loginForm").show();
+      clearErrorMessage();
+    });
+
+    $("#openModal").click(function () {
+      $("#loginModal").show();
+      clearErrorMessage();
+    });
+
+    $(".close-button").click(function () {
+      $("#loginModal").hide();
+      clearErrorMessage();
+    });
+  });
 });
