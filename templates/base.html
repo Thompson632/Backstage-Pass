@@ -12,10 +12,12 @@
 
     <link rel="stylesheet" href="/static/lib/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="/static/css/base.css" />
+    <link rel="stylesheet" href="/static/css/login-modal.css" />
 
     <script src="/static/lib/jquery/jquery.min.js"></script>
     <script src="/static/lib/popper/popper.min.js"></script>
     <script src="/static/lib/bootstrap/bootstrap.min.js"></script>
+    <script src="/static/js/login.js"></script>
     {% block header %}
 
     {% endblock %}
@@ -41,11 +43,43 @@
                   </li>
                 </ul>
               </div>
+
+              <div class="header-user-profile my-auto ml-4 mr-2 d-flex">
+                <i class="fa-solid fa-user my-auto"></i>
+                  <div class="mx-2 d-flex flex-column">
+                    <button id="openModal" type="button" class="btn btn-warning">Login / Register</button>
+                  </div>
+              </div>
             </nav>
           </div>
         </div>
       </div>
     </header>
+
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+          <span class="close-button">&times;</span>
+          
+          <div id="loginForm">
+              <h2>Login</h2>
+              <input type="text" placeholder="Username" name="username" required>
+              <input type="password" placeholder="Password" name="password" required>
+              <button type="button" id="loginButton" class="login-button">Login</button>
+              <button type="button" id="showRegisterForm" class="create-account-button">Create Account</button>
+          </div>
+          
+          <div id="registerForm" style="display:none;">
+              <h2>Create Account</h2>
+              <input type="text" placeholder="First Name" name="firstName" required>
+              <input type="text" placeholder="Last Name" name="lastName" required>
+              <input type="text" placeholder="Username" name="newUsername" required>
+              <input type="password" placeholder="Password" name="newPassword" required>
+              <input type="password" placeholder="Re-type Password" name="retypePassword" required>
+              <button type="button" id="createAccountButton" class="create-account-button">Create Account</button>
+              <button type="button" id="showLoginForm" class="login-button">Back to Login</button>
+          </div>
+      </div>
+  </div>
 
     <main>
       <div class="container content">
