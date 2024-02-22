@@ -1,14 +1,75 @@
-{% extends 'base.html' %}
-{% set active = 'About' %}
-
-{% block title %}
+{% extends 'base.html' %} {% set active = 'About' %} {% block title %}
   About Us
-{% endblock %}
+{% endblock %} {% block content %}
+  <h1>About Backstage Pass</h1>
 
-{% block content %}
-  <h1>About Drexel Bikes</h1>
+  <h3>Temporary: Users Description</h3>
 
-  <p>
-    Drexel Bikes is our personal portal to <a href="https://drexel.edu/campusservices/studentCenters/creeseCenter/BikeShare">Drexel Bike Share.</a> There isn't much to this site right now, but we could extend it into something very cool!
-  </p>
+  <p>The users of our ticket-selling system are a diverse group, including students, young adults, and families who are passionate about music and live performances. Their main goal is to easily access tickets for concerts across the country, ranging from popular artists to local bands. Some users might be looking for tickets to attend their first concert experience, while others may be planning a fun outing with friends or family. However, they might face constraints such as limited budgets, availability of tickets for highly anticipated events, and the need to balance ticket purchases with other expenses. Additionally, varying levels of familiarity with online purchasing platforms could affect how they navigate the system, highlighting the importance of creating a user-friendly interface.</p>
+
+  <h3>Temporary: System Description</h3>
+
+  <p>Our ticket-selling system is designed to make it easy for students, young adults, and families to explore and purchase tickets for concerts across the country. One standout feature is the interactive venue map, which allows users to get a detailed view of the venue and specific seats available for each event. With features like account management, users can create their profiles, log in to access their information, and view their past orders. The search function allows users to find events based on their preferences, whether it's by venue, artist, price, or date. Once they've found the perfect event, they can learn more about it, select their seats, and choose the number of tickets they want to buy. The checkout process is simple and secure, ensuring that users can safely enter their payment information. With a user-friendly interface and helpful sections like an About Us and/or Contact page, our system is designed to make the entire ticket-buying experience enjoyable and stress-free for individuals of all ages and backgrounds.</p>
+
+  <h3>Project Plan</h3>
+
+  <h4>Technology Stack</h4>
+  <p>Our full-stack technology stack will be as follows:</p>
+
+  <h6>Front-End</h6>
+  <ul>
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>JavaScript</li>
+    <li>jQuery</li>
+    <li>Bootstrap</li>
+  </ul>
+
+  <h6>Back-End</h6>
+  <ul>
+    <li>Flask</li>
+    <li>Python</li>
+    <li>SQLite</li>
+  </ul>
+
+  <h4>Project Coordination</h4>
+
+  <p>To accurately version control, we will leverage a GitHub repository to manage our code and facilitate collaboration. This platform will allow each group member to both apply their existing skills and explore new areas, such as front-end or back-end development, promoting a learning-oriented team environment. Our strategy involves a balance between specialization and shared responsibilities, ensuring that tasks are assigned not just based on current expertise but also to encourage skill development. We plan to assign work through regular team discussions on Discord, focusing on individual preferences and what is within the project scope.</p>
+
+  <h4>Project Schedule</h4>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Week</th>
+        <th>Feature/Task</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>5</td>
+        <td>Idea Formulation, Interface Prototype/Mockups, Project Description, Coordination, Schedule</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Home/Base, Account Management (Front/Back), Events (Front), Event Details (Front)</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Events (Back), Event Details (Front/Back)</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>Search (Front/Back), Checkout (Front/Back)</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>About, Contact Us (Front/Back)</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>Tux Deployment</td>
+      </tr>
+    </tbody>
+  </table>
 {% endblock %}

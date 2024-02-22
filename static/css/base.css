@@ -8,7 +8,7 @@ body {
 }
 
 header {
-  background: #006298;
+  background: #28282B;
 }
 
 .table {
@@ -17,7 +17,6 @@ header {
 }
 
 .btn-primary {
-  background: #e31837; /* Chiefs Red */
   color: white;
   border: none;
 }
@@ -31,7 +30,6 @@ header {
 .btn-primary:hover {
   color: white;
   border: none;
-  background: #cc0000; /* BU Scarlet Red */
 }
 
 .btn-secondary {
@@ -56,7 +54,7 @@ header {
 .navbar-expand-md .navbar-nav .nav-link {
   padding-left: 1rem;
   padding-right: 1rem;
-  color: #ffc600;
+  color: #FFDD6B;
 }
 
 .content {
