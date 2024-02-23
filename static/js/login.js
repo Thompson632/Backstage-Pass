@@ -8,8 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function clearErrorMessage() {
       $(".alert-danger").remove();
     }
+    // TODO: Add same for create
 
-    $("form").on("submit", function (event) {
+    $("loginForm").on("submit", function (event) {
       event.preventDefault();
 
       var form = $(this);

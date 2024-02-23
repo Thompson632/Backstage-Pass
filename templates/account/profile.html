@@ -5,114 +5,119 @@
   My Profile
 {% endblock %}
 
+{% block header %}
+  <script src="/static/js/profile.js"></script>
+{% endblock %}
+
 {% block content %}
-
-<div class="mb-3">
-  <nav aria-label="breadcrumb">
+  <div class="mb-3">
+    <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/">Home</a></li>
-          <li class="breadcrumb-item active" aria-current="page">My Profile</li>
+        <li class="breadcrumb-item">
+          <a href="/">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">My Profile</li>
       </ol>
-  </nav>
-</div>
-
-<div class="container mt-5">
-  <div class="mb-5">
-    <form action="YOUR_BACKEND_ENDPOINT" method="POST">
-      <div id="updateMyInfoForm">
-        <h2>My Info</h2>
-        <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
-          <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required />
-        </div>
-        <div class="mb-3">
-          <label for="firstName" class="form-label">First Name</label>
-          <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter your first name" required />
-        </div>
-        <div class="mb-3">
-          <label for="lastName" class="form-label">Last Name</label>
-          <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter your last name" required />
-        </div>
-        <button type="submit" class="btn btn-primary">Update Details</button>
-      </div>
-    </form>
+    </nav>
   </div>
 
-  <hr>
-
-  <div class="mb-5">
-    <form action="YOUR_BACKEND_ENDPOINT" method="POST">
-      <div id="updateEmailAddressForm">
-        <h2>Email Address</h2>
-        <div class="mb-3">
-          <label for="emailAddress" class="form-label">Email Address</label>
-          <input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Enter your email address" required />
+  <div class="container mt-5">
+    <div class="mb-5">
+      <form action="#" method="POST" data-user-id="{{ session['user']['id'] }}">
+        <div id="updateMyInfoForm">
+          <h2>My Info</h2>
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required disabled />
+            <input type="hidden" name="username" value="{{ user.username }}" />
+          </div>
+          <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required />
+          </div>
+          <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Update Details</button>
         </div>
-        <button type="submit" class="btn btn-primary">Update Email</button>
-      </div>
-    </form>
+      </form>
+    </div>
+
+    <hr />
+
+    <div class="mb-5">
+      <form action="/api/profile/edit/email_address" method="POST" data-user-id="{{ session['user']['id'] }}">
+        <div id="updateEmailAddressForm">
+          <h2>Email Address</h2>
+          <div class="mb-3">
+            <label for="email_address" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="email_address" name="email_address" value="{{ user.email_address }}" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Update Email</button>
+        </div>
+      </form>
+    </div>
+
+    <hr />
+
+    <div class="mb-5">
+      <form action="#" method="POST" data-user-id="{{ session['user']['id'] }}">
+        <div id="updatePasswordForm">
+          <h2>Update Password</h2>
+          <div class="mb-3">
+            <label for="password" class="form-label">New Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Update Password</button>
+        </div>
+      </form>
+    </div>
+
+    <hr />
+
+    <div class="mb-5">
+      <form action="#" method="POST" data-user-id="{{ session['user']['id'] }}">
+        <div id="updatePhoneNumberForm">
+          <h2>Phone Number</h2>
+          <div class="mb-3">
+            <label for="phoneNumber" class="form-label">Phone Number</label>
+            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" value="{{ user.phone_number }}" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Update Number</button>
+        </div>
+      </form>
+    </div>
+
+    <hr />
+
+    <div class="mb-5">
+      <form action="#" method="POST" data-user-id="{{ session['user']['id'] }}">
+        <div id="updateAddressForm">
+          <h2>Address</h2>
+          <div class="mb-3">
+            <label for="street" class="form-label">Street</label>
+            <input type="text" class="form-control" id="street" name="street" value="{{ user.street }}" required />
+          </div>
+          <div class="mb-3">
+            <label for="city" class="form-label">City</label>
+            <input type="text" class="form-control" id="city" name="city" value="{{ user.city }}" required />
+          </div>
+          <div class="mb-3">
+            <label for="state" class="form-label">State</label>
+            <input type="text" class="form-control" id="state" name="state" value="{{ user.state }}" required />
+          </div>
+          <div class="mb-3">
+            <label for="zipCode" class="form-label">Zip Code</label>
+            <input type="text" class="form-control" id="zipCode" name="zipCode" value="{{ user.zip }}" required />
+          </div>
+          <div class="mb-3">
+            <label for="country" class="form-label">Country</label>
+            <input type="text" class="form-control" id="country" name="country" value="{{ user.country }}" required />
+          </div>
+          <button type="submit" class="btn btn-primary">Update Address</button>
+        </div>
+      </form>
+    </div>
   </div>
-
-  <hr>
-
-  <div class="mb-5">
-    <form action="YOUR_BACKEND_ENDPOINT" method="POST">
-      <div id="updatePasswordForm">
-        <h2>Update Password</h2>
-        <div class="mb-3">
-          <label for="updatedPassword" class="form-label">New Password</label>
-          <input type="password" class="form-control" id="updatedPassword" name="updatedPassword" placeholder="Enter new password" required />
-        </div>
-        <button type="submit" class="btn btn-primary">Update Password</button>
-      </div>
-    </form>
-  </div>
-
-  <hr>
-
-  <div class="mb-5">
-    <form action="YOUR_BACKEND_ENDPOINT" method="POST">
-      <div id="updatePhoneNumberForm">
-        <h2>Phone Number</h2>
-        <div class="mb-3">
-          <label for="phoneNumber" class="form-label">Phone Number</label>
-          <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Enter new phone number" required />
-        </div>
-        <button type="submit" class="btn btn-primary">Update Number</button>
-      </div>
-    </form>
-  </div>
-
-  <hr>
-
-  <div class="mb-5">
-    <form action="YOUR_BACKEND_ENDPOINT" method="POST">
-      <div id="updateAddressForm">
-        <h2>Address</h2>
-        <div class="mb-3">
-          <label for="street" class="form-label">Street</label>
-          <input type="text" class="form-control" id="street" name="street" placeholder="Enter new street" required />
-        </div>
-        <div class="mb-3">
-          <label for="city" class="form-label">City</label>
-          <input type="text" class="form-control" id="city" name="city" placeholder="Enter new city" required />
-        </div>
-        <div class="mb-3">
-          <label for="state" class="form-label">State</label>
-          <input type="text" class="form-control" id="state" name="state" placeholder="Enter new state" required />
-        </div>
-        <div class="mb-3">
-          <label for="zipCode" class="form-label">Zip Code</label>
-          <input type="text" class="form-control" id="zipCode" name="zipCode" placeholder="Enter new zip code" required />
-        </div>
-        <div class="mb-3">
-          <label for="country" class="form-label">Country</label>
-          <input type="text" class="form-control" id="country" name="country" placeholder="Enter new country" required />
-        </div>
-        <button type="submit" class="btn btn-primary">Update Address</button>
-      </div>
-    </form>
-  </div>
-</div>
-
 {% endblock %}

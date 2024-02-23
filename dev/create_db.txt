@@ -3,7 +3,14 @@ CREATE TABLE IF NOT EXISTS users (
 	username text unique not null,
 	password text not null,
 	first_name text not null,
-	last_name text not null
+	last_name text not null,
+	email_address text,
+	phone_number text,
+	street text,
+	city text,
+	state text,
+	zip_code text,
+	country text
 );
 
 .mode csv

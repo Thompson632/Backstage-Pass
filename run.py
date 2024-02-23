@@ -46,10 +46,10 @@ def create_account():
         password = request.form["password"]
 
         if is_valid_data([first_name, last_name, username, password]):
-            if get_db().get_user(username) is None:
+            if get_db().get_user_by_username(username) is None:
                 encrypted_password = pbkdf2_sha256.hash(password)
                 get_db().create_user(first_name, last_name, username, encrypted_password)
-                session['user'] = get_db().get_user(username)
+                session['user'] = get_db().get_user_by_username(username)
                 flash(SUCCESSFUL_LOGIN)
                 return jsonify({'success': True})
             else:
@@ -69,7 +69,7 @@ def login():
             password = request.form['password']
 
             if username and password:
-                user = get_db().get_user(username)
+                user = get_db().get_user_by_username(username)
 
                 if user:
                     if pbkdf2_sha256.verify(password, user['password']):
@@ -96,14 +96,103 @@ def signout():
 # End: Account Creation
 
 # Start: Account Profile
+
+
 @app.route('/account/settings', methods=['GET'])
 def my_profile():
     if 'user' in session:
-        user_data = get_db().get_user(session['user']['id'])
-        return render_template('account/profile.html', user_data=user_data)
+        user_data = get_db().get_user_by_username(session['user']['username'])
+        return render_template('account/profile.html', user=user_data)
     else:
         redirect('/')
 
+
+@app.route('/api/profile/edit/info', methods=['GET','POST'])
+def edit_user_info():
+    if 'user' in session:
+        user_id = request.args.get('user_id')
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        get_db().update_user_info(user_id, first_name, last_name)
+        user_data = get_db().get_user_by_id(user_id)
+        
+        if user_data:
+            return render_template('account/profile.html', user=user_data)
+        else:
+            return ("Error: Failed to update user info", 404)
+    else:
+        redirect('/')
+
+
+@app.route('/api/profile/edit/email_address', methods=['POST'])
+def edit_user_email_address():
+    if 'user' in session:
+        print(request.args)
+        print(request.form)
+        user_id = request.args.get('user_id')
+        email_address = request.form['email_address']
+        get_db().update_user_email_address(user_id, email_address)
+        user_data = get_db().get_user_by_id(user_id)
+        
+        if user_data:
+            return render_template('account/profile.html', user=user_data)
+        else:
+            return ("Error: Failed to update user email address", 404)
+    else:
+        redirect('/')
+
+
+@app.route('/api/profile/edit/password', methods=['POST'])
+def edit_user_password():
+    if 'user' in session:
+        user_id = request.args.get('user_id')
+        password = request.form['password']
+        encrypted_password = pbkdf2_sha256.hash(password)
+        get_db().update_user_password(user_id, encrypted_password)
+        user_data = get_db().get_user_by_id(user_id)
+        
+        if user_data:
+            return render_template('account/profile.html', user=user_data)
+        else:
+            return ("Error: Failed to update user password", 404)
+    else:
+        redirect('/')
+
+
+@app.route('/api/profile/edit/phone_number', methods=['POST'])
+def edit_user_phone_number():
+    if 'user' in session:
+        user_id = request.args.get('user_id')
+        phone_number = request.form['phone_number']
+        get_db().update_user_phone_number(user_id, phone_number)
+        user_data = get_db().get_user_by_id(user_id)
+        
+        if user_data:
+            return render_template('account/profile.html', user=user_data)
+        else:
+            return ("Error: Failed to update user phone number", 404)
+    else:
+        redirect('/')
+
+
+@app.route('/api/profile/edit/address', methods=['POST'])
+def edit_user_address():
+    if 'user' in session:
+        user_id = request.args.get('user_id')
+        street = request.form['street']
+        city = request.form['city']
+        state = request.form['state']
+        zip_code = request.form['zip_code']
+        country = request.form['country']
+        get_db().update_user_address(user_id, street, city, state, zip_code, country)
+        user_data = get_db().get_user_by_id(user_id)
+        
+        if user_data:
+            return render_template('account/profile.html', user=user_data)
+        else:
+            return ("Error: Failed to update user address", 404)
+    else:
+        redirect('/')
 # End: Account Profile
 
 
@@ -112,6 +201,7 @@ def is_valid_data(parameters=[]):
         if param is None:
             return False
     return True
+
 
 if __name__ == '__main__':
     app.run(host='localhost', port=8080, debug=True)
