@@ -93,6 +93,18 @@ def login():
 def signout():
     session.pop('user', None)
     return redirect('/')
+# End: Account Creation
+
+# Start: Account Profile
+@app.route('/account/settings', methods=['GET'])
+def my_profile():
+    if 'user' in session:
+        user_data = get_db().get_user(session['user']['id'])
+        return render_template('account/profile.html', user_data=user_data)
+    else:
+        redirect('/')
+
+# End: Account Profile
 
 
 def is_valid_data(parameters=[]):
@@ -100,8 +112,6 @@ def is_valid_data(parameters=[]):
         if param is None:
             return False
     return True
-# End: Account Creation
-
 
 if __name__ == '__main__':
     app.run(host='localhost', port=8080, debug=True)
