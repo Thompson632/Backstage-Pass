@@ -74,11 +74,12 @@ class Database:
             'password': user_data[2],
             'first_name': user_data[3],
             'last_name': user_data[4],
-            'phone_number': user_data[5],
-            'street': user_data[6],
-            'city': user_data[7],
-            'state': user_data[8],
-            'zip_code': user_data[9],
-            'country': user_data[10]
+            'email_address': user_data[5],
+            'phone_number': user_data[6],
+            'street': user_data[7],
+            'city': user_data[8],
+            'state': user_data[9],
+            'zip_code': user_data[10],
+            'country': user_data[11]
         }
     # End: User Functions

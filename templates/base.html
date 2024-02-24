@@ -76,8 +76,8 @@
         <div class="modal-content">
           <span class="close-button">&times;</span>
 
-          <form method="POST" action="/login">
-            <div id="loginForm">
+          <form id="loginForm" method="POST" action="/login">
+            <div>
               <h2>Login</h2>
               <input type="text" placeholder="Username" name="username" required />
               <input type="password" placeholder="Password" name="password" required />
@@ -86,8 +86,8 @@
             </div>
           </form>
 
-          <form method="POST" action="/create_account">
-            <div id="registerForm" style="display:none;">
+          <form id="registerForm" method="POST" action="/create_account" style="display:none;">
+            <div>
               <h2>Create Account</h2>
               <input type="text" placeholder="First Name" name="firstName" required />
               <input type="text" placeholder="Last Name" name="lastName" required />
@@ -100,8 +100,8 @@
           </form>
         </div>
       </div>
-      <!-- End: Login/Register Modal -->
     </div>
+    <!-- End: Login/Register Modal -->
 
     <main>
       <div class="container content">

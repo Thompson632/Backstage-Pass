@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
         data: $(this).serialize(),
         success: function (response) {
           alert("Information updated successfully.");
-          console.log(response);
         },
         error: function () {
           alert("An error occurred updating information.");
@@ -30,10 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       var form = $(this);
       const userId = form.data("user-id");
-      console.log("userid:", userId);
-      console.log("form: ", JSON.stringify(form, null, 2));
-      var url = form.attr("action");
-      console.log("url:", url)
 
       $.ajax({
         url: `/api/profile/edit/email_address?user_id=${userId}`,
@@ -41,9 +36,8 @@ document.addEventListener("DOMContentLoaded", function () {
         data: form.serialize(),
         success: function (response) {
           alert("Email updated successfully.");
-          console.log(response);
         },
-        error: function () {
+        error: function (error) {
           alert("An error occurred updating email.");
           console.error(error);
         },
@@ -64,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
         data: $(this).serialize(),
         success: function (response) {
           alert("Password updated successfully.");
-          console.log(response);
         },
         error: function () {
           alert("An error occurred updating password.");
@@ -87,7 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
         data: $(this).serialize(),
         success: function (response) {
           alert("Phone number updated successfully.");
-          console.log(response);
         },
         error: function () {
           alert("An error occurred updating phone number.");
@@ -108,7 +100,6 @@ document.addEventListener("DOMContentLoaded", function () {
         data: form.serialize(),
         success: function (response) {
           alert("Address updated successfully.");
-          console.log(response);
         },
         error: function () {
           alert("An error occurred updating address.");
