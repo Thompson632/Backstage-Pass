@@ -191,10 +191,17 @@ def edit_user_address():
             return ("Error: Failed to update user address", 404)
     else:
         redirect("/")
-
-
 # End: Account Profile
 
+# Start: Account Tickets
+@app.route("/account/tickets", methods=["GET"])
+def my_tickets():
+    if "user" in session:
+        user_ticket_data = get_db().get_user_by_username(session["user"]["username"])
+        return render_template("account/tickets.html", user_ticket_data=user_ticket_data)
+    else:
+        redirect("/")
+# End: Account Tickets
 
 def is_valid_data(parameters=[]):
     for param in parameters:

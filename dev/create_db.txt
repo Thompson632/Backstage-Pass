@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS venue (
 
 CREATE TABLE IF NOT EXISTS venue_image (
 	id integer primary key,
-	image blob
+	image text
 );
 
 CREATE TABLE IF NOT EXISTS event (
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS event (
 	end_date date not null,
 	start_time time not null,
 	end_time time not null,
-	event_image blob,
+	event_image text,
 	foreign key (venue_id) references venue(id)
 );
 
@@ -69,5 +69,6 @@ CREATE TABLE IF NOT EXISTS ticket_order_details (
 	foreign key(ticket_order_id) references ticket_orders(id),
 	foreign key(seat_id) references seat(id)
 );
+
 
 .mode csv
