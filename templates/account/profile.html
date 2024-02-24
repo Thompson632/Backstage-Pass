@@ -1,110 +1,122 @@
 {% extends 'base.html' %}
 {% set active = 'My Profile' %}
 
-{% block title %}My Profile{% endblock %}
+{% block title %}
+  My Profile
+{% endblock %}
 
 {% block header %}
-<script src="/static/js/profile.js"></script>
+  <script src="/static/js/account/profile.js"></script>
+  <script src="/static/js/account/states.js"></script>
+  <script src="/static/js/account/countries.js"></script>
+  <script>
+    var userState = "{{ user.state | default('', true) }}"
+    var userCountry = "{{ user.country | default('', true) }}"
+  </script>
 {% endblock %}
 
 {% block content %}
-<div class="mb-3">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="/">Home</a>
-      </li>
-      <li class="breadcrumb-item active" aria-current="page">My Profile</li>
-    </ol>
-  </nav>
-</div>
-
-<div class="container mt-5">
-  <div class="mb-5">
-    <form id="updateMyInfoForm" action="/api/profile/edit/my_info" method="POST" data-user-id="{{ session['user']['id'] }}">
-      <h2>My Info</h2>
-      <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required disabled />
-      </div>
-      <div class="mb-3">
-        <label for="first_name" class="form-label">First Name</label>
-        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" data-initial-value="{{ user.first_name }}" required />
-      </div>
-      <div class="mb-3">
-        <label for="last_name" class="form-label">Last Name</label>
-        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" data-initial-value="{{ user.last_name }}" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Update Details</button>
-    </form>
+  <div class="mb-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="/">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">My Profile</li>
+      </ol>
+    </nav>
   </div>
 
-  <hr />
+  <div class="container mt-5">
+    <div class="mb-5">
+      <form id="updateMyInfoForm" action="/api/profile/edit/my_info" method="POST" data-user-id="{{ session['user']['id'] }}">
+        <h2>My Info</h2>
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required disabled />
+        </div>
+        <div class="mb-3">
+          <label for="first_name" class="form-label">First Name</label>
+          <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" data-initial-value="{{ user.first_name }}" required />
+        </div>
+        <div class="mb-3">
+          <label for="last_name" class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" data-initial-value="{{ user.last_name }}" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Update Details</button>
+      </form>
+    </div>
 
-  <div class="mb-5">
-    <form id="updateEmailAddressForm" action="/api/profile/edit/email_address" method="POST" data-user-id="{{ session['user']['id'] }}">
-      <h2>Email Address</h2>
-      <div class="mb-3">
-        <label for="email_address" class="form-label">Email Address</label>
-        <input type="email" class="form-control" id="email_address" name="email_address" value="{{ user.email_address | default('', true) }}" data-initial-value="{{ user.email_address | default('', true) }}" placeholder="Enter email" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Update Email</button>
-    </form>
+    <hr />
+
+    <div class="mb-5">
+      <form id="updateEmailAddressForm" action="/api/profile/edit/email_address" method="POST" data-user-id="{{ session['user']['id'] }}">
+        <h2>Email Address</h2>
+        <div class="mb-3">
+          <label for="email_address" class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="email_address" name="email_address" value="{{ user.email_address|default('', true) }}" data-initial-value="{{ user.email_address|default('', true) }}" placeholder="Enter email" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Update Email</button>
+      </form>
+    </div>
+
+    <hr />
+
+    <div class="mb-5">
+      <form id="updatePasswordForm" action="/api/profile/edit/password" method="POST" data-user-id="{{ session['user']['id'] }}">
+        <h2>Update Password</h2>
+        <div class="mb-3">
+          <label for="password" class="form-label">New Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Update Password</button>
+      </form>
+    </div>
+
+    <hr />
+
+    <div class="mb-5">
+      <form id="updatePhoneNumberForm" action="/api/profile/edit/phone_number" method="POST" data-user-id="{{ session['user']['id'] }}">
+        <h2>Phone Number</h2>
+        <div class="mb-3">
+          <label for="phone_number" class="form-label">Phone Number</label>
+          <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{ user.phone_number|default('', true) }}" data-initial-value="{{ user.phone_number|default('', true) }}" placeholder="Enter phone number" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Update Number</button>
+      </form>
+    </div>
+
+    <hr />
+
+    <div class="mb-5">
+      <form id="updateAddressForm" action="/api/profile/edit/address" method="POST" data-user-id="{{ session['user']['id'] }}">
+        <h2>Address</h2>
+        <div class="mb-3">
+          <label for="street" class="form-label">Street</label>
+          <input type="text" class="form-control" id="street" name="street" value="{{ user.street|default('', true) }}" data-initial-value="{{ user.street|default('', true) }}" placeholder="Enter street" required />
+        </div>
+        <div class="mb-3">
+          <label for="city" class="form-label">City</label>
+          <input type="text" class="form-control" id="city" name="city" value="{{ user.city|default('', true) }}" data-initial-value="{{ user.city|default('', true) }}" placeholder="Enter city" required />
+        </div>
+        <div class="mb-3">
+          <label for="state" class="form-label">State</label>
+          <select class="form-control" id="state" name="state" required>
+            <option value="">Select a state</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="zip_code" class="form-label">Zip Code</label>
+          <input type="text" class="form-control" id="zip_code" name="zip_code" value="{{ user.zip_code|default('', true) }}" data-initial-value="{{ user.zip_code|default('', true) }}" placeholder="Enter zip code" required />
+        </div>
+        <div class="mb-3">
+          <label for="country" class="form-label">Country</label>
+          <select class="form-control" id="country" name="country" required>
+            <option value="">Select a country</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Address</button>
+      </form>
+    </div>
   </div>
-
-  <hr />
-
-  <div class="mb-5">
-    <form id="updatePasswordForm" action="/api/profile/edit/password" method="POST" data-user-id="{{ session['user']['id'] }}">
-      <h2>Update Password</h2>
-      <div class="mb-3">
-        <label for="password" class="form-label">New Password</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Update Password</button>
-    </form>
-  </div>
-
-  <hr />
-
-  <div class="mb-5">
-    <form id="updatePhoneNumberForm" action="/api/profile/edit/phone_number" method="POST" data-user-id="{{ session['user']['id'] }}">
-      <h2>Phone Number</h2>
-      <div class="mb-3">
-        <label for="phone_number" class="form-label">Phone Number</label>
-        <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{ user.phone_number | default('', true) }}" data-initial-value="{{ user.phone_number | default('', true) }}" placeholder="Enter phone number" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Update Number</button>
-    </form>
-  </div>
-
-  <hr />
-
-  <div class="mb-5">
-    <form id="updateAddressForm" action="/api/profile/edit/address" method="POST" data-user-id="{{ session['user']['id'] }}">
-      <h2>Address</h2>
-      <div class="mb-3">
-        <label for="street" class="form-label">Street</label>
-        <input type="text" class="form-control" id="street" name="street" value="{{ user.street | default('', true) }}" data-initial-value="{{ user.street | default('', true) }}" placeholder="Enter street" required />
-      </div>
-      <div class="mb-3">
-        <label for="city" class="form-label">City</label>
-        <input type="text" class="form-control" id="city" name="city" value="{{ user.city | default('', true) }}" data-initial-value="{{ user.city | default('', true) }}" placeholder="Enter city" required />
-      </div>
-      <div class="mb-3">
-        <label for="state" class="form-label">State</label>
-        <input type="text" class="form-control" id="state" name="state" value="{{ user.state | default('', true) }}" data-initial-value="{{ user.state | default('', true) }}" placeholder="Enter state" required />
-      </div>
-      <div class="mb-3">
-        <label for="zip_code" class="form-label">Zip Code</label>
-        <input type="text" class="form-control" id="zip_code" name="zip_code" value="{{ user.zip_code | default('', true) }}" data-initial-value="{{ user.zip_code | default('', true) }}" placeholder="Enter zip code" required />
-      </div>
-      <div class="mb-3">
-        <label for="country" class="form-label">Country</label>
-        <input type="text" class="form-control" id="country" name="country" value="{{ user.country | default('', true) }}" data-initial-value="{{ user.country | default('', true) }}" placeholder="Enter country" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Update Address</button>
-    </form>
-  </div>
-</div>
 {% endblock %}

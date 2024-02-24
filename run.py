@@ -175,6 +175,7 @@ def edit_user_phone_number():
 @app.route("/api/profile/edit/address", methods=["POST"])
 def edit_user_address():
     if "user" in session:
+        print(request.form)
         user_id = request.args.get("user_id")
         street = request.form.get("street")
         city = request.form.get("city")
