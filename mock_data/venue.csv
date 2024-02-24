@@ -1,0 +1,100 @@
+1,Music Palace,123 Main Street,Anytown,CA,12345,USA,100
+2,Rock Arena,456 Center Avenue,Somewhere,TX,54321,USA,500
+3,Jazz Haven,789 Broadway,Metropolis,NY,67890,USA,80
+4,Metal Dome,101 Rocker Street,Loudville,OH,13579,USA,300
+5,Pop Pavilion,202 Pop Lane,Harmony,FL,97531,USA,150
+6,Blues Alley,303 Blues Boulevard,Rhythmland,GA,24680,USA,70
+7,Folk Field,404 Folk Road,Acousticville,TN,86420,USA,120
+8,Country Hall,505 Country Drive,Nashville,TN,12345,USA,200
+9,HipHop Hub,606 Rap Avenue,Beat City,CA,54321,USA,250
+10,Indie Loft,707 Indie Lane,Underground,TX,98765,USA,40
+11,Soul Center,808 Soul Street,Harmony,FL,13579,USA,60
+12,Electronic Dome,909 EDM Boulevard,Beat City,CA,24680,USA,300
+13,Reggae Retreat,1010 Reggae Road,Island Paradise,HI,86420,USA,80
+14,Classical Hall,1111 Symphony Avenue,Orchestral City,NY,97531,USA,150
+15,Punk Palace,1212 Punk Lane,Underground,TX,12345,USA,50
+16,R&B Lounge,1313 Rhythm Street,Grooveland,GA,54321,USA,70
+17,Metalhead Arena,1414 Metal Avenue,Loudville,OH,67890,USA,250
+18,Rock & Roll Hall,1515 Rock Boulevard,Musictown,CA,13579,USA,300
+19,Pop Plaza,1616 Pop Street,Melodyville,TX,86420,USA,100
+20,Jazz Junction,1717 Jazz Avenue,Bluesville,MS,97531,USA,120
+21,Folk Field,1818 Folk Road,Harmony,FL,12345,USA,80
+22,Country Club,1919 Country Lane,Twangtown,TN,54321,USA,200
+23,HipHop Haven,2020 Rap Street,Beat City,CA,67890,USA,250
+24,Indie Inn,2121 Indie Lane,Underground,TX,24680,USA,40
+25,Soulful Stage,2222 Soul Boulevard,Grooveland,GA,13579,USA,70
+26,Electronic Arena,2323 EDM Road,Technocity,CA,86420,USA,300
+27,Reggae Rhythm,2424 Reggae Lane,Island Paradise,HI,12345,USA,80
+28,Classical Center,2525 Symphony Street,Orchestral City,NY,97531,USA,150
+29,Punk Place,2626 Punk Road,Rebelliontown,OH,54321,USA,50
+30,R&B Lounge,2727 Rhythm Avenue,Grooveland,GA,67890,USA,70
+31,Metal Dome,2828 Metal Street,Loudville,OH,24680,USA,250
+32,Opera Oasis,2929 Opera Lane,Harmony,FL,13579,USA,60
+33,Alternative Arena,3030 Alternative Boulevard,Indietown,CA,86420,USA,200
+34,Blues Barn,3131 Blues Road,Harmony,FL,12345,USA,50
+35,Rock Ridge,3232 Rock Lane,Rocktown,TX,97531,USA,150
+36,Salsa Spot,3333 Salsa Avenue,Rhythmville,FL,54321,USA,100
+37,Hipster Hangout,3434 Hipster Lane,Indietown,CA,67890,USA,30
+38,Soulful Sanctuary,3535 Soul Street,Grooveland,GA,13579,USA,70
+39,Electro Emporium,3636 EDM Boulevard,Technocity,CA,86420,USA,250
+40,Reggae Retreat,3737 Reggae Road,Island Paradise,HI,12345,USA,80
+41,Classical Corner,3838 Symphony Lane,Orchestral City,NY,97531,USA,150
+42,Punk Palace,3939 Punk Avenue,Rebelliontown,OH,54321,USA,50
+43,R&B Lounge,4040 Rhythm Street,Grooveland,GA,67890,USA,70
+44,Metalhead Arena,4141 Metal Boulevard,Loudville,OH,24680,USA,250
+45,Opera Oasis,4242 Opera Lane,Harmony,FL,13579,USA,60
+46,Alternative Arena,4343 Alternative Road,Indietown,CA,86420,USA,200
+47,Blues Barn,4444 Blues Avenue,Harmony,FL,12345,USA,50
+48,Rock Ridge,4545 Rock Street,Rocktown,TX,97531,USA,150
+49,Salsa Spot,4646 Salsa Lane,Rhythmville,FL,54321,USA,100
+50,Hipster Hangout,4747 Hipster Road,Indietown,CA,67890,USA,30
+51,Soulful Sanctuary,4848 Soul Boulevard,Grooveland,GA,13579,USA,70
+52,Electro Emporium,4949 EDM Road,Technocity,CA,86420,USA,250
+53,Reggae Retreat,5050 Reggae Lane,Island Paradise,HI,12345,USA,80
+54,Classical Corner,5151 Symphony Street,Orchestral City,NY,97531,USA,150
+55,Punk Palace,5252 Punk Boulevard,Rebelliontown,OH,54321,USA,50
+56,R&B Lounge,5353 Rhythm Avenue,Grooveland,GA,67890,USA,70
+57,Metalhead Arena,5454 Metal Lane,Loudville,OH,24680,USA,250
+58,Opera Oasis,5555 Opera Street,Harmony,FL,13579,USA,60
+59,Alternative Arena,5656 Alternative Road,Indietown,CA,86420,USA,200
+60,Blues Barn,5757 Blues Lane,Harmony,FL,12345,USA,50
+61,Rock Ridge,5858 Rock Boulevard,Rocktown,TX,97531,USA,150
+62,Salsa Spot,5959 Salsa Street,Rhythmville,FL,54321,USA,100
+63,Hipster Hangout,6060 Hipster Avenue,Indietown,CA,67890,USA,30
+64,Soulful Sanctuary,6161 Soul Road,Grooveland,GA,13579,USA,70
+65,Electro Emporium,6262 EDM Boulevard,Technocity,CA,86420,USA,250
+66,Reggae Retreat,6363 Reggae Lane,Island Paradise,HI,12345,USA,80
+67,Classical Corner,6464 Symphony Boulevard,Orchestral City,NY,97531,USA,150
+68,Pop Paradise,6767 Pop Street,Melodyville,TX,86420,USA,100
+69,Jazz Jukebox,6868 Jazz Lane,Bluesville,MS,97531,USA,120
+70,Folk Festival,6969 Folk Boulevard,Harmony,FL,12345,USA,80
+71,Country Cafe,7070 Country Street,Twangtown,TN,54321,USA,200
+72,HipHop House,7171 Rap Road,Beat City,CA,67890,USA,250
+73,Indie Island,7272 Indie Street,Underground,TX,24680,USA,40
+74,Soul Lounge,7373 Soul Avenue,Grooveland,GA,13579,USA,70
+75,Electronic Eden,7474 EDM Lane,Technocity,CA,86420,USA,300
+76,Reggae Rendezvous,7575 Reggae Boulevard,Island Paradise,HI,12345,USA,80
+77,Classical Chamber,7676 Symphony Road,Orchestral City,NY,97531,USA,150
+78,Punk Pit,7777 Punk Street,Rebelliontown,OH,54321,USA,50
+79,R&B Retreat,7878 Rhythm Lane,Grooveland,GA,67890,USA,70
+80,Metal Maze,7979 Metal Boulevard,Loudville,OH,24680,USA,250
+81,Opera Outpost,8080 Opera Avenue,Harmony,FL,13579,USA,60
+82,Alternative Amphitheater,8181 Alternative Street,Indietown,CA,86420,USA,200
+83,Blues Bar,8282 Blues Road,Harmony,FL,12345,USA,50
+84,Rock Ranch,8383 Rock Boulevard,Rocktown,TX,97531,USA,150
+85,Salsa Sanctuary,8484 Salsa Street,Rhythmville,FL,54321,USA,100
+86,Hipster Hangar,8585 Hipster Lane,Indietown,CA,67890,USA,30
+87,Soul Soiree,8686 Soul Road,Grooveland,GA,13579,USA,70
+88,Electro Enclave,8787 EDM Boulevard,Technocity,CA,86420,USA,250
+89,Reggae Rest,8888 Reggae Lane,Island Paradise,HI,12345,USA,80
+90,Classical Court,8989 Symphony Street,Orchestral City,NY,97531,USA,150
+91,Punk Palace,9090 Punk Avenue,Rebelliontown,OH,54321,USA,50
+92,R&B Rooftop,9191 Rhythm Road,Grooveland,GA,67890,USA,70
+93,Metal Mania,9292 Metal Street,Loudville,OH,24680,USA,250
+94,Opera Oasis,9393 Opera Lane,Harmony,FL,13579,USA,60
+95,Alternative Attic,9494 Alternative Boulevard,Indietown,CA,86420,USA,200
+96,Blues Basement,9595 Blues Lane,Harmony,FL,12345,USA,50
+97,Rock Retreat,9696 Rock Avenue,Rocktown,TX,97531,USA,150
+98,Salsa Stage,9797 Salsa Boulevard,Rhythmville,FL,54321,USA,100
+99,Hipster Hideaway,9898 Hipster Road,Indietown,CA,67890,USA,30
+100,Soulful Spot,9999 Soul Avenue,Grooveland,GA,13579,USA,70

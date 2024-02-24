@@ -72,3 +72,6 @@ CREATE TABLE IF NOT EXISTS ticket_order_details (
 
 
 .mode csv
+.import ../mock_data/mock_venue_image.csv venue_image
+.import ../mock_data/mock_venue.csv venue
+.import ../mock_data/mock_event.csv event
