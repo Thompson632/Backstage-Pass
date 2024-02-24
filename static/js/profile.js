@@ -1,113 +1,59 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const POST_ACTION = "POST";
+  function formHasChanges(form) {
+    let hasChanges = false;
+    form.find("input").each(function () {
+      if ($(this).attr("type") === "submit" || $(this).is(":disabled")) return;
 
-  $(document).ready(function () {
-    $("#updateMyInfoForm").submit(function (event) {
-      event.preventDefault();
+      let initialValue = $(this).data("initial-value");
+      let currentUserInput = $(this).val();
 
-      var form = $(this);
-      const userId = form.data("user-id");
+      if (isNumber(initialValue)) {
+        initialValue = initialValue.toString();
+      }
 
-      $.ajax({
-        url: `/api/profile/edit/info?user_id=${userId}`,
-        type: POST_ACTION,
-        data: $(this).serialize(),
-        success: function (response) {
-          alert("Information updated successfully.");
-        },
-        error: function () {
-          alert("An error occurred updating information.");
-          console.error(error);
-        },
-      }).done(() => {
-        location.reload();
-      });
+      if (currentUserInput !== initialValue) {
+        hasChanges = true;
+      }
     });
 
-    $("#updateEmailAddressForm").submit(function (event) {
-      event.preventDefault();
+    return hasChanges;
+  }
 
-      var form = $(this);
-      const userId = form.data("user-id");
+  function isNumber(value) {
+    return typeof value === "number";
+  }
 
-      $.ajax({
-        url: `/api/profile/edit/email_address?user_id=${userId}`,
-        type: POST_ACTION,
-        data: form.serialize(),
-        success: function (response) {
-          alert("Email updated successfully.");
-        },
-        error: function (error) {
-          alert("An error occurred updating email.");
-          console.error(error);
-        },
-      }).done(() => {
-        location.reload();
-      });
-    });
+  $(
+    "#updateMyInfoForm, #updateEmailAddressForm, #updatePasswordForm, #updatePhoneNumberForm, #updateAddressForm"
+  ).submit(function (event) {
+    event.preventDefault();
 
-    $("#updatePasswordForm").submit(function (event) {
-      event.preventDefault();
+    var form = $(this);
+    const userId = form.data("user-id");
+    const actionUrl = form.attr("action");
 
-      var form = $(this);
-      const userId = form.data("user-id");
+    if (!formHasChanges(form)) {
+      alert("There is nothing to update.");
+      return;
+    }
 
-      $.ajax({
-        url: `/api/profile/edit/password?user_id=${userId}`,
-        type: POST_ACTION,
-        data: $(this).serialize(),
-        success: function (response) {
-          alert("Password updated successfully.");
-        },
-        error: function () {
-          alert("An error occurred updating password.");
-          console.error(error);
-        },
-      }).done(() => {
-        location.reload();
-      });
-    });
+    console.log("Update UserId:", userId);
+    console.log("Posting to URL:", actionUrl);
+    console.log("Form:", form);
 
-    $("#updatePhoneNumberForm").submit(function (event) {
-      event.preventDefault();
-
-      var form = $(this);
-      const userId = form.data("user-id");
-
-      $.ajax({
-        url: `/api/profile/edit/phone_number?user_id=${userId}`,
-        type: POST_ACTION,
-        data: $(this).serialize(),
-        success: function (response) {
-          alert("Phone number updated successfully.");
-        },
-        error: function () {
-          alert("An error occurred updating phone number.");
-          console.error(error);
-        },
-      });
-    });
-
-    $("#updateAddressForm").submit(function (event) {
-      event.preventDefault();
-
-      var form = $(this);
-      const userId = form.data("user-id");
-
-      $.ajax({
-        url: `/api/profile/edit/address?user_id=${userId}`,
-        type: POST_ACTION,
-        data: form.serialize(),
-        success: function (response) {
-          alert("Address updated successfully.");
-        },
-        error: function () {
-          alert("An error occurred updating address.");
-          console.error(error);
-        },
-      }).done(() => {
-        location.reload();
-      });
+    $.ajax({
+      url: actionUrl + `?user_id=${userId}`,
+      type: "POST",
+      data: form.serialize(),
+      success: function (response) {
+        alert("Updated successfully!", response);
+      },
+      error: function (error) {
+        alert("Error occured!", error);
+        console.error(error);
+      },
+    }).done(() => {
+      location.reload();
     });
   });
 });
