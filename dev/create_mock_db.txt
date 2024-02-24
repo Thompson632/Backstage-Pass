@@ -3,8 +3,76 @@ CREATE TABLE IF NOT EXISTS user (
 	username text unique not null,
 	password text not null,
 	first_name text not null,
-	last_name text not null
+	last_name text not null,
+	email_address text,
+	phone_number text,
+	street text,
+	city text,
+	state text,
+	zip_code text,
+	country text
+);
+
+CREATE TABLE IF NOT EXISTS venue (
+	id integer primary key,
+	venue_name text not null,
+	venue_image_id integer not null,
+	street text not null,
+	city text not null,
+	state text not null,
+	zip_code text not null,
+	country text not null,
+	number_of_seats integer not null,
+	foreign key (venue_image_id) references venue_image(id)
+);
+
+CREATE TABLE IF NOT EXISTS venue_image (
+	id integer primary key,
+	image blob
+);
+
+CREATE TABLE IF NOT EXISTS event (
+	id primary key,
+	venue_id integer not null,
+	event_name text not null,
+	artist text not null,
+	start_date date not null,
+	end_date date not null,
+	start_time time not null,
+	end_time time not null,
+	event_image blob,
+	foreign key (venue_id) references venue(id)
+);
+
+CREATE TABLE IF NOT EXISTS event_seat (
+	id integer primary key,
+	event_id integer not null,
+	seat_number integer not null,
+	seat_price real not null,
+	booking_status integer not null,
+	foreign key (event_id) references event(id)
+);
+
+CREATE TABLE IF NOT EXISTS ticket_orders (
+	id integer primary key,
+	user_id integer not null,
+	ticket_order_date date not null,
+	ticket_order_price integer not null,
+	foreign key(user_id) references user(id)
+);
+
+CREATE TABLE IF NOT EXISTS ticket_order_details (
+	id integer primary key,
+	ticket_order_id integer not null,
+	seat_id integer not null,
+	quantity integer not null,
+	foreign key(ticket_order_id) references ticket_orders(id),
+	foreign key(seat_id) references seat(id)
 );
 
 .mode csv
-.import ../mock_data/mock_users_data.csv user
+.import ../mock_data/mock_venue_image.csv venue_image
+.import ../mock_data/mock_event.csv event
+.import ../mock_data/mock_event_seat.csv event_seat
+.import ../mock_data/mock_ticket_orders.csv ticket_orders
+.import ../mock_data/mock_ticket_order_details.csv ticket_order_details
