@@ -204,6 +204,21 @@ def my_tickets():
         redirect("/")
 # End: Account Tickets
 
+# Start: Get Events
+@app.route("/events", methods=["GET"])
+def all_events():
+    return render_template("events.html")
+
+def generate_response(args):
+    return jsonify({
+        'events': get_db().get_all_events()
+    })
+
+@app.route('/api/get_events', methods=['GET'])
+def api_get_events():
+    return generate_response(request.form)
+
+# End: Get Events
 def is_valid_data(parameters=[]):
     for param in parameters:
         if param is None:

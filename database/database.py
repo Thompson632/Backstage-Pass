@@ -5,6 +5,27 @@ class Database:
     def __init__(self, SQLITE_PATH="./dev/backstage_pass.db"):
         self.conn = sqlite3.connect(SQLITE_PATH)
 
+        # Get Event Data
+        self.GET_ALL_EVENTS = """
+                    SELECT 
+                        e.event_name
+                    ,	e.artist
+                    ,	e.start_date
+                    ,	e.end_date
+                    ,	e.start_time
+                    ,	e.end_time
+                    ,	e.event_image
+                    ,	v.city
+                    ,	v.zip_code
+                    ,	v.state
+                    ,	v.number_of_seats
+                    ,	img.image as venue_img
+                    FROM event e 
+                    INNER JOIN venue v ON e.venue_id = v.id 
+                    INNER JOIN venue_image img ON v.venue_image_id = img.id
+                """
+        # end: Get Event Data
+    
     def select(self, sql, parameters=[]):
         c = self.conn.cursor()
         c.execute(sql, parameters)
@@ -110,5 +131,27 @@ class Database:
             "seat_price": ticket[18],
             "seat_number": ticket[19],
         }
+
+    # Get All events
+    def get_all_events(self):
+        data = self.select(self.GET_ALL_EVENTS)
+        print (data)
+        if data:
+            return [{
+                'event_name': d[0],
+                'artist': d[1],
+                'start_date': d[2],
+                'end_date': d[3],
+                'start_time': d[4],
+                'end_time': d[5],
+                'event_image': d[6],
+                'city': d[7],
+                'zip_code': d[8],
+                'state': d[9],
+                'number_of_seats': d[10],
+                'venue_img': d[11]
+            } for d in data]
+        else:
+            return None
 
     # End: User Ticket Functions
