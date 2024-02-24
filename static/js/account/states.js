@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     { abbr: "WA", name: "Washington" },
     { abbr: "WV", name: "West Virginia" },
     { abbr: "WI", name: "Wisconsin" },
-    { abbr: "WY", name: "Wyoming" },
+    { abbr: "WY", name: "Wyoming" }
   ];
 
   const stateSelect = document.getElementById("state");

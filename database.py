@@ -6,14 +6,14 @@ class Database:
         self.conn = sqlite3.connect(SQLITE_PATH)
 
         # Begin: User Queries
-        self.CREATE_USER = "INSERT INTO users (first_name, last_name, username, password) VALUES (?, ?, ?, ?)"
-        self.GET_USER_BY_USERNAME = "SELECT * FROM users WHERE username=?"
-        self.GET_USER_BY_ID = "SELECT * FROM users where id=?"
-        self.UPDATE_USER_INFO = "UPDATE users SET first_name=?, last_name=? WHERE id=?"
-        self.UPDATE_EMAIL_ADDRESS = "UPDATE users SET email_address=? WHERE id=?"
-        self.UPDATE_PASSWORD = "UPDATE users SET password=? WHERE id=?"
-        self.UPDATE_PHONE_NUMBER = "UPDATE users SET phone_number=? WHERE id=?"
-        self.UPDATE_ADDRESS = "UPDATE users SET street=?, city=?, state=?, zip_code=?, country=? WHERE id=?"
+        self.CREATE_USER = "INSERT INTO user (first_name, last_name, username, password) VALUES (?, ?, ?, ?)"
+        self.GET_USER_BY_USERNAME = "SELECT * FROM user WHERE username=?"
+        self.GET_USER_BY_ID = "SELECT * FROM user where id=?"
+        self.UPDATE_USER_INFO = "UPDATE user SET first_name=?, last_name=? WHERE id=?"
+        self.UPDATE_EMAIL_ADDRESS = "UPDATE user SET email_address=? WHERE id=?"
+        self.UPDATE_PASSWORD = "UPDATE user SET password=? WHERE id=?"
+        self.UPDATE_PHONE_NUMBER = "UPDATE user SET phone_number=? WHERE id=?"
+        self.UPDATE_ADDRESS = "UPDATE user SET street=?, city=?, state=?, zip_code=?, country=? WHERE id=?"
         # End: User Queries
 
     def select(self, sql, parameters=[]):

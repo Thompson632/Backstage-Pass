@@ -80,7 +80,7 @@
         <h2>Phone Number</h2>
         <div class="mb-3">
           <label for="phone_number" class="form-label">Phone Number</label>
-          <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{ user.phone_number|default('', true) }}" data-initial-value="{{ user.phone_number|default('', true) }}" placeholder="Enter phone number" required />
+          <input type="tel" class="form-control" id="phone_number" name="phone_number" value="{{ user.phone_number|default('', true) }}" data-initial-value="{{ user.phone_number|default('', true) }}" placeholder="e.g. (999)-999-9999" required pattern="\d{3}-\d{3}-\d{4}" title="(999)-999-9999 format required" />
         </div>
         <button type="submit" class="btn btn-primary">Update Number</button>
       </form>
@@ -107,7 +107,7 @@
         </div>
         <div class="mb-3">
           <label for="zip_code" class="form-label">Zip Code</label>
-          <input type="text" class="form-control" id="zip_code" name="zip_code" value="{{ user.zip_code|default('', true) }}" data-initial-value="{{ user.zip_code|default('', true) }}" placeholder="Enter zip code" required />
+          <input type="text" class="form-control" id="zip_code" name="zip_code" value="{{ user.zip_code|default('', true) }}" data-initial-value="{{ user.zip_code|default('', true) }}" placeholder="Enter zip code" required pattern="\d{5}" title="Five digit zip code required" />
         </div>
         <div class="mb-3">
           <label for="country" class="form-label">Country</label>
