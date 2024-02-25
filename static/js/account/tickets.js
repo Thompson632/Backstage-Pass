@@ -12,63 +12,57 @@ class TicketsView {
 
   renderTable() {
     console.log("Tickets:", JSON.stringify(this.user_ticket_data, null, 2));
+    
     const $ticketsTable = $("#ticketsTable").empty();
     const tableBody = $('<tbody id="ticketsTableBody"></tbody>').appendTo(
       $ticketsTable
     );
+
     const eventsGroup = this.groupTicketsByEvent();
 
     eventsGroup.forEach((group) => {
       tableBody.append(this.createEventRow(group));
       group.forEach((ticket) =>
-        tableBody.append(this.createDetailsRow(ticket))
+        tableBody.append(this.createTicketDetailsRow(ticket))
       );
     });
   }
 
   groupTicketsByEvent() {
     return Object.values(
-      this.user_ticket_data.reduce((acc, ticket) => {
-        (acc[ticket.event_id] = acc[ticket.event_id] || []).push(ticket);
-        return acc;
+      this.user_ticket_data.reduce((account, ticket) => {
+        (account[ticket.event_id] = account[ticket.event_id] || []).push(ticket);
+        return account;
       }, {})
     );
   }
 
   createEventRow(group) {
     const firstTicket = group[0];
-    const venueInfo = this.constructVenueInfo(firstTicket);
+    const venueInfo = this.buildVenueInformation(firstTicket);
 
     return $(`
       <tr class="event-row" data-event-id="${firstTicket.event_id}">
         <td>
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
-              <img src="/static/img/events/${
-                firstTicket.event_image
-              }" alt="Event Image" style="width: 100px; height: auto; margin-right: 20px;">
+              <img src="/static/img/events/${firstTicket.event_image}" alt="Event Image" style="width: 100px; height: auto; margin-right: 20px;">
               <div>
                 <h5>${firstTicket.event_name} - ${firstTicket.artist}</h5>
-                <p>${venueInfo}<br>${this.formatDate(
-      firstTicket.start_date
-    )} at ${this.formatTime(firstTicket.start_time)}</p>
-                <button type="button" class="btn btn-link toggle-details" data-event-name="${
-                  firstTicket.event_name
-                }">
+                <p>${venueInfo}<br>${this.formatDate(firstTicket.start_date)} at ${this.formatTime(firstTicket.start_time)}</p>
+                <button type="button" class="btn btn-link toggle-details" data-event-name="${firstTicket.event_name}">
                   <i class="fas fa-caret-down"></i> View Details
                 </button>
               </div>
             </div>
-            <div class="total-price"><strong>Total Price: $${this.calculateTotalPrice(
-              group
-            )}</strong></div>
+            <div class="total-price"><strong>Total Price: $${this.calculateTotalPrice(group)}</strong></div>
           </div>
         </td>
       </tr>
     `);
   }
 
-  constructVenueInfo(firstTicket) {
+  buildVenueInformation(firstTicket) {
     return `<a href="#" class="venue-link" data-toggle="modal" data-target="#venueModal" 
             data-venue-name="${firstTicket.venue_name}" 
             data-venue-image="/static/img/venues/${firstTicket.venue_image}">${firstTicket.venue_name} - 
@@ -81,17 +75,15 @@ class TicketsView {
       .toFixed(2);
   }
 
-  createDetailsRow(ticket) {
+  createTicketDetailsRow(ticket) {
     return $(`
-      <tr class="details-row" data-event-name="${
-        ticket.event_name
-      }" style="display: none;">
-        <td>${this.ticketDetails(ticket)}</td>
+      <tr class="details-row" data-event-name="${ticket.event_name}" style="display: none;">
+        <td>${this.buildTicketDetails(ticket)}</td>
       </tr>
     `);
   }
 
-  ticketDetails(ticket) {
+  buildTicketDetails(ticket) {
     return `
       <div class="details-content">
         <p><strong>Ticket ID:</strong> ${ticket.ticket_id}</p>
@@ -124,8 +116,8 @@ class TicketsView {
     return convertTo12HourFormat(time);
   }
 
-  formatDate(dateStr) {
-    return convertDateToHumanReadable(dateStr);
+  formatDate(dateString) {
+    return convertDateToHumanReadable(dateString);
   }
 }
 

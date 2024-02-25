@@ -74,11 +74,13 @@
     <div id="loginModal" class="modal login-modal">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content login-modal-content">
-          <span class="close-button">&times;</span>
+          <div class="modal-header">
+            <h2 id="modalTitle">Login</h2>
+            <span class="close-button">&times;</span>
+          </div>
 
           <form id="loginForm" method="POST" action="/login">
             <div>
-              <h2>Login</h2>
               <input type="text" placeholder="Username" name="username" required />
               <input type="password" placeholder="Password" name="password" required />
               <button type="submit" id="loginButton" class="btn btn-primary login-button">Login</button>
@@ -88,7 +90,6 @@
 
           <form id="registerForm" method="POST" action="/create_account" style="display:none;">
             <div>
-              <h2>Create Account</h2>
               <input type="text" placeholder="First Name" name="firstName" required />
               <input type="text" placeholder="Last Name" name="lastName" required />
               <input type="text" placeholder="Username" name="username" required />

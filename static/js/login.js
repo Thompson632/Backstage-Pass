@@ -3,10 +3,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const DEFAULT_ACTION = "POST";
   const DEFAULT_DATA_TYPE = "json";
   const DEFAULT_ERROR_LOG = "An error occurred. Please try again later.";
+  const CREATE_ACCOUNT_HEADER = "Create Account";
+  const LOGIN_HEADER = "Login";
 
   $(document).ready(function () {
     function clearErrorMessage() {
       $(".alert-danger").remove();
+    }
+
+    function updateModalTitle(title) {
+      $("#modalTitle").text(title);
     }
 
     $("#registerForm, #loginForm").on("submit", function (event) {
@@ -43,12 +49,14 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#showRegisterForm").click(function () {
       $("#loginForm").hide();
       $("#registerForm").show();
+      updateModalTitle(CREATE_ACCOUNT_HEADER);
       clearErrorMessage();
     });
 
     $("#showLoginForm").click(function () {
       $("#registerForm").hide();
       $("#loginForm").show();
+      updateModalTitle(LOGIN_HEADER);
       clearErrorMessage();
     });
 
