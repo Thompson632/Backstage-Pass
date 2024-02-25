@@ -196,23 +196,10 @@ def edit_user_address():
 @app.route("/account/tickets", methods=["GET"])
 def my_tickets():
     if "user" in session:
-        user_ticket_data = get_db().get_user_by_username(session["user"]["username"])
+        user_id = session['user']['id']
+        user_ticket_data = get_db().get_user_tickets(user_id)
+        print(user_ticket_data)
         return render_template("account/tickets.html", user_ticket_data=user_ticket_data)
-    else:
-        redirect("/")
-        
-@app.route("/account/tickets", methods=["GET"])
-def get_my_tickets():
-    if "user" in session:
-        print("not implemented")
-    else:
-        redirect("/")
-
-@app.route("/account/tickets/ticket_details", methods=["GET"])
-def get_my_ticket_details_by_id():
-    if "user" in session:
-        print("not implemented")
-        return render_template("account/ticket_details.html")
     else:
         redirect("/")
 # End: Account Tickets
