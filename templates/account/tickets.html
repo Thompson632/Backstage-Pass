@@ -1,35 +1,51 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  My Tickets
+My Tickets
 {% endblock %}
 
 {% block header %}
-  <link rel="stylesheet" href="/static/css/tickets.css" />
-  <script src="/static/js/account/tickets.js"></script>
-  <script>
-    var user_ticket_data = {{ user_ticket_data | tojson | safe }};
-    
-    document.addEventListener("DOMContentLoaded", function () {
-      new TicketsView(user_ticket_data)
-    });
-  </script>
+<link rel="stylesheet" href="/static/css/tickets.css" />
+<script src="/static/js/account/tickets.js"></script>
+<script>
+  var user_ticket_data = {{ user_ticket_data | tojson | safe }};
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    new TicketsView(user_ticket_data);
+  });
+</script>
 {% endblock %}
 
 {% block content %}
-  <div class="mb-3">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="/">Home</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">My Tickets</li>
-      </ol>
-    </nav>
-  </div>
+<div class="mb-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="/">Home</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">My Tickets</li>
+    </ol>
+  </nav>
+</div>
 
-  <div class="container mt-5">
-    <h2>My Tickets</h2>
-    <table class="table" id="ticketsTable"></table>
+<div class="container mt-5">
+  <h2>My Tickets</h2>
+  <table class="table" id="ticketsTable"></table>
+
+  <div class="modal fade" id="venueModal" tabindex="-1" aria-labelledby="venueModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="venueModalLabel">Venue Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img src="" id="venueImage" alt="Venue" style="width: 100%; height: auto;">
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 {% endblock %}
