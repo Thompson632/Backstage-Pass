@@ -4,12 +4,13 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
   
     const countrySelect = document.getElementById("country");
-    countries.forEach((country) => {
+    
+    for (const country of countries) {
       const option = document.createElement("option");
       option.value = `${country.name} (${country.abbr})`;
       option.textContent = `${country.name} (${country.abbr})`;
       countrySelect.appendChild(option);
-    });
+    };
   
     if (userCountry) {
       countrySelect.value = userCountry;

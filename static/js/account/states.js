@@ -53,12 +53,13 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
 
   const stateSelect = document.getElementById("state");
-  states.forEach((state) => {
+
+  for (const state of states) {
     const option = document.createElement("option");
     option.value = `${state.name} (${state.abbr})`;
     option.textContent = `${state.name} (${state.abbr})`;
     stateSelect.appendChild(option);
-  });
+  };
 
   if (userState) {
     stateSelect.value = userState;

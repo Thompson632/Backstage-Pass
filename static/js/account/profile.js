@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("Updated successfully!", response);
       },
       error: function (error) {
-        alert("Error occured!", error);
+        alert("Error occurred!", error);
         console.error(error);
       },
     }).done(() => {

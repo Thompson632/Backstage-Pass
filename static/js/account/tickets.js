@@ -1,31 +1,54 @@
 class TicketsView {
-  constructor(user_ticket_data) {
+  constructor(user_ticket_data, itemsPerPage = 5) {
     this.user_ticket_data = user_ticket_data;
+    this.currentPage = 1;
+    this.itemsPerPage = itemsPerPage;
+    this.totalPages = Math.ceil(this.groupTicketsByEvent().length / this.itemsPerPage);
     this.initialize();
   }
 
   initialize() {
+    this.updateHeader();
     this.renderTable();
     this.initializeVenueModal();
     this.initializeToggleDetails();
+    this.updatePagination();
+  }
+
+  updateHeader() {
+    if (this.user_ticket_data.length === 0) {
+      $("#ticketHeader").text("No Tickets Purchased");
+    } else {
+      $("#ticketHeader").text("My Tickets");
+    }
   }
 
   renderTable() {
-    console.log("Tickets:", JSON.stringify(this.user_ticket_data, null, 2));
-    
+    const paginatedTickets = this.paginateTickets();
     const $ticketsTable = $("#ticketsTable").empty();
-    const tableBody = $('<tbody id="ticketsTableBody"></tbody>').appendTo(
-      $ticketsTable
-    );
 
-    const eventsGroup = this.groupTicketsByEvent();
-
-    eventsGroup.forEach((group) => {
+    // Only build the table if we have data
+    if (this.shouldRenderTable(paginatedTickets)) {
+      return;
+    }
+  
+    const tableBody = $('<tbody id="ticketsTableBody"></tbody>').appendTo($ticketsTable);
+  
+    for (const group of paginatedTickets) {
       tableBody.append(this.createEventRow(group));
-      group.forEach((ticket) =>
-        tableBody.append(this.createTicketDetailsRow(ticket))
-      );
-    });
+      group.forEach((ticket) => tableBody.append(this.createTicketDetailsRow(ticket)));
+    };
+  }
+
+  shouldRenderTable(paginatedTickets) {
+    return paginatedTickets.length === 0;
+  }
+
+  paginateTickets() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    const paginatedGroups = this.groupTicketsByEvent().slice(startIndex, endIndex);
+    return paginatedGroups;
   }
 
   groupTicketsByEvent() {
@@ -69,12 +92,6 @@ class TicketsView {
             ${firstTicket.venue_street}, ${firstTicket.venue_city}, ${firstTicket.venue_state}, ${firstTicket.venue_zip_code}</a>`;
   }
 
-  calculateTotalPrice(group) {
-    return group
-      .reduce((acc, ticket) => acc + ticket.seat_price * ticket.quantity, 0)
-      .toFixed(2);
-  }
-
   createTicketDetailsRow(ticket) {
     return $(`
       <tr class="details-row" data-event-name="${ticket.event_name}" style="display: none;">
@@ -96,7 +113,7 @@ class TicketsView {
   }
 
   initializeToggleDetails() {
-    $(".toggle-details").on("click", function () {
+    $(document).on("click", ".toggle-details", function () {
       const eventName = $(this).data("event-name");
       $(`.details-row[data-event-name="${eventName}"]`).toggle();
       $(this).find("i").toggleClass("fa-caret-down fa-caret-up");
@@ -110,6 +127,49 @@ class TicketsView {
       modal.find(".modal-title").text(button.data("venue-name"));
       modal.find("#venueImage").attr("src", button.data("venue-image"));
     });
+  }
+
+  createPageLink(text, toPage, active, disabled) {
+    const link = $(`<li class="page-item"><a class="page-link">${text}</a></li>`);
+
+    if (active) {
+      link.addClass('active');
+    }
+    
+    if (disabled) {
+      link.addClass('disabled');
+    }
+
+    link.find('.page-link').on('click', () => {
+      if (!disabled) {
+        this.currentPage = toPage;
+        this.renderTable();
+        this.updatePagination();
+      }
+    });
+
+    return link;
+  }
+
+  updatePagination() {
+    if (this.totalPages > 1) {
+      const pagination = $('#paginationList').empty();
+      pagination.append(this.createPageLink('Previous', this.currentPage - 1, false, this.currentPage === 1));
+  
+      for (let page = 1; page <= this.totalPages; page++) {
+        pagination.append(this.createPageLink(page, page, page === this.currentPage, false));
+      }
+  
+      pagination.append(this.createPageLink('Next', this.currentPage + 1, false, this.currentPage === this.totalPages));
+    } else {
+      $('#paginationList').hide();
+    }
+  }
+
+  calculateTotalPrice(group) {
+    return group
+      .reduce((acc, ticket) => acc + ticket.seat_price * ticket.quantity, 0)
+      .toFixed(2);
   }
 
   formatTime(time) {

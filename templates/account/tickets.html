@@ -29,8 +29,10 @@ My Tickets
 </div>
 
 <div class="container mt-5">
-  <h2>My Tickets</h2>
-  <table class="table" id="ticketsTable"></table>
+  <h2 id="ticketHeader">My Tickets</h2>
+  <div id="ticketsTableContainer">
+    <table class="table" id="ticketsTable"></table>
+  </div>
 
   <div class="modal fade" id="venueModal" tabindex="-1" aria-labelledby="venueModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -48,4 +50,9 @@ My Tickets
     </div>
   </div>
 </div>
+
+<nav>
+  <ul id="paginationList" class="pagination justify-content-center">
+  </ul>
+</nav>
 {% endblock %}
