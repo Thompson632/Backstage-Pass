@@ -175,7 +175,6 @@ def edit_user_phone_number():
 @app.route("/api/profile/edit/address", methods=["POST"])
 def edit_user_address():
     if "user" in session:
-        print(request.form)
         user_id = request.args.get("user_id")
         street = request.form.get("street")
         city = request.form.get("city")
@@ -191,10 +190,19 @@ def edit_user_address():
             return ("Error: Failed to update user address", 404)
     else:
         redirect("/")
-
-
 # End: Account Profile
 
+# Start: Account Tickets
+@app.route("/account/tickets", methods=["GET"])
+def my_tickets():
+    if "user" in session:
+        user_id = session['user']['id']
+        user_ticket_data = get_db().get_user_tickets(user_id)
+        print(user_ticket_data)
+        return render_template("account/tickets.html", user_ticket_data=user_ticket_data)
+    else:
+        redirect("/")
+# End: Account Tickets
 
 def is_valid_data(parameters=[]):
     for param in parameters:
