@@ -1,56 +1,9 @@
 import sqlite3
-
+from .queries import *
 
 class Database:
     def __init__(self, SQLITE_PATH="./dev/backstage_pass.db"):
         self.conn = sqlite3.connect(SQLITE_PATH)
-
-        # Begin: User Queries
-        self.CREATE_USER = "INSERT INTO user (first_name, last_name, username, password) VALUES (?, ?, ?, ?)"
-        self.GET_USER_BY_USERNAME = "SELECT * FROM user WHERE username=?"
-        self.GET_USER_BY_ID = "SELECT * FROM user where id=?"
-        self.UPDATE_USER_INFO = "UPDATE user SET first_name=?, last_name=? WHERE id=?"
-        self.UPDATE_EMAIL_ADDRESS = "UPDATE user SET email_address=? WHERE id=?"
-        self.UPDATE_PASSWORD = "UPDATE user SET password=? WHERE id=?"
-        self.UPDATE_PHONE_NUMBER = "UPDATE user SET phone_number=? WHERE id=?"
-        self.UPDATE_ADDRESS = "UPDATE user SET street=?, city=?, state=?, zip_code=?, country=? WHERE id=?"
-        # End: User Queries
-
-        # Begin: User Ticket Queries
-        self.GET_TICKETS_BY_USER_ID = """
-            SELECT
-                u.id AS user_id,
-                tod.id AS ticket_id,
-                e.id AS event_id,
-                e.event_name AS event_name,
-                v.venue_name AS venue_name,
-                v.street AS venue_street,
-                v.city AS venue_city,
-                v.state AS venue_state,
-                v.zip_code AS venue_zip_code,
-                v.country AS venue_country,
-                vi.image AS venue_image,
-                e.artist AS artist,
-                e.start_date AS start_date,
-                e.start_time AS start_time,
-                e.event_image AS event_image,
-                tod.quantity AS quantity,
-                ticket_orders.ticket_order_date AS ticket_order_date,
-                ticket_orders.ticket_order_price AS ticket_order_price,
-                es.seat_price AS seat_price,
-                es.seat_number AS seat_number
-            FROM
-                ticket_orders
-            INNER JOIN user u ON ticket_orders.user_id = u.id
-            INNER JOIN ticket_order_details tod ON ticket_orders.id = tod.ticket_order_id
-            INNER JOIN event_seat es ON tod.seat_id = es.id -- Correct reference to event_seat table
-            INNER JOIN event e ON es.event_id = e.id
-            INNER JOIN venue v ON e.venue_id = v.id
-            LEFT JOIN venue_image vi ON v.venue_image_id = vi.id
-            WHERE
-                u.id = ?;
-            """
-        # end: User Ticket Queries
 
     def select(self, sql, parameters=[]):
         c = self.conn.cursor()
@@ -67,12 +20,10 @@ class Database:
 
     # Begin: User Functions
     def create_user(self, first_name, last_name, username, encrypted_password):
-        self.execute(
-            self.CREATE_USER, [first_name, last_name, username, encrypted_password]
-        )
+        self.execute(CREATE_USER, [first_name, last_name, username, encrypted_password])
 
     def get_user_by_id(self, id):
-        data = self.select(self.GET_USER_BY_ID, [id])
+        data = self.select(GET_USER_BY_ID, [id])
 
         if data:
             return self.build_user_data(data[0])
@@ -80,7 +31,7 @@ class Database:
             return None
 
     def get_user_by_username(self, username):
-        data = self.select(self.GET_USER_BY_USERNAME, [username])
+        data = self.select(GET_USER_BY_USERNAME, [username])
 
         if data:
             return self.build_user_data(data[0])
@@ -88,19 +39,19 @@ class Database:
             return None
 
     def update_user_info(self, id, first_name, last_name):
-        self.execute(self.UPDATE_USER_INFO, [first_name, last_name, id])
+        self.execute(UPDATE_USER_INFO, [first_name, last_name, id])
 
     def update_user_email_address(self, id, email_address):
-        self.execute(self.UPDATE_EMAIL_ADDRESS, [email_address, id])
+        self.execute(UPDATE_EMAIL_ADDRESS, [email_address, id])
 
     def update_user_password(self, id, password):
-        self.execute(self.UPDATE_PASSWORD, [password, id])
+        self.execute(UPDATE_PASSWORD, [password, id])
 
     def update_user_phone_number(self, id, phone_number):
-        self.execute(self.UPDATE_PHONE_NUMBER, [phone_number, id])
+        self.execute(UPDATE_PHONE_NUMBER, [phone_number, id])
 
     def update_user_address(self, id, street, city, state, zip_code, country):
-        self.execute(self.UPDATE_ADDRESS, [street, city, state, zip_code, country, id])
+        self.execute(UPDATE_ADDRESS, [street, city, state, zip_code, country, id])
 
     def build_user_data(self, user_data):
         return {
@@ -122,7 +73,7 @@ class Database:
 
     # Begin: User Ticket Functions
     def get_user_tickets(self, id):
-        data = self.select(self.GET_TICKETS_BY_USER_ID, [id])
+        data = self.select(GET_TICKETS_BY_USER_ID, [id])
 
         if data:
             return self.build_user_tickets(data)

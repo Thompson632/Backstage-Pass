@@ -1,13 +1,25 @@
 document.addEventListener("DOMContentLoaded", function () {
   function formHasChanges(form) {
     let hasChanges = false;
-    form.find("input").each(function () {
-      if ($(this).attr("type") === "submit" || $(this).is(":disabled")) return;
+
+    form.find("input, select").each(function () {
+      // Don't check submit types or fields that are marked as disabled (ex. usernames)
+      if (this.type === "submit" || this.disabled) {
+        return;
+      }
 
       let initialValue = $(this).data("initial-value");
-      let currentUserInput = $(this).val();
+      let currentUserInput;
 
-      if (isNumber(initialValue)) {
+      // If its a selection option, get the selected option otherwise get the value
+      if ($(this).is("select")) {
+        currentUserInput = $(this).find("option:selected").val();
+      } else {
+        currentUserInput = $(this).val();
+      }
+
+      // Check if initial value is a number
+      if (!isNaN(initialValue)) {
         initialValue = initialValue.toString();
       }
 
@@ -17,10 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     return hasChanges;
-  }
-
-  function isNumber(value) {
-    return typeof value === "number";
   }
 
   $(

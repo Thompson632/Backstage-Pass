@@ -1,5 +1,5 @@
-from flask import Flask, g, flash, render_template, redirect, request, session, jsonify
-from database import Database
+from flask import Flask, g, render_template, redirect, request, session, jsonify
+from database.database import Database
 from passlib.hash import pbkdf2_sha256
 
 app = Flask(__name__)

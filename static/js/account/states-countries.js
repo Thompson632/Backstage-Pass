@@ -49,19 +49,35 @@ document.addEventListener("DOMContentLoaded", function () {
     { abbr: "WA", name: "Washington" },
     { abbr: "WV", name: "West Virginia" },
     { abbr: "WI", name: "Wisconsin" },
-    { abbr: "WY", name: "Wyoming" }
+    { abbr: "WY", name: "Wyoming" },
   ];
 
+  const countries = [{ abbr: "US", name: "United States" }];
+
   const stateSelect = document.getElementById("state");
+  const countrySelect = document.getElementById("country");
 
   for (const state of states) {
     const option = document.createElement("option");
     option.value = `${state.name} (${state.abbr})`;
     option.textContent = `${state.name} (${state.abbr})`;
     stateSelect.appendChild(option);
-  };
+  }
 
   if (userState) {
     stateSelect.value = userState;
+    stateSelect.dataset.initialValue = userState;
+  }
+
+  for (const country of countries) {
+    const option = document.createElement("option");
+    option.value = `${country.name} (${country.abbr})`;
+    option.textContent = `${country.name} (${country.abbr})`;
+    countrySelect.appendChild(option);
+  }
+
+  if (userCountry) {
+    countrySelect.value = userCountry;
+    countrySelect.dataset.initialValue = userCountry;
   }
 });

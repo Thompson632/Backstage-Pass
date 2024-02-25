@@ -6,8 +6,7 @@
 
 {% block header %}
   <script src="/static/js/account/profile.js"></script>
-  <script src="/static/js/account/states.js"></script>
-  <script src="/static/js/account/countries.js"></script>
+  <script src="/static/js/account/states-countries.js"></script>
   <script>
     var userState = "{{ user.state | default('', true) }}"
     var userCountry = "{{ user.country | default('', true) }}"
@@ -28,7 +27,7 @@
 
   <div class="container mt-5">
     <div class="mb-5">
-      <form id="updateMyInfoForm" action="/api/profile/edit/my_info" method="POST" data-user-id="{{ session['user']['id'] }}">
+      <form id="updateMyInfoForm" action="/api/profile/edit/info" method="POST" data-user-id="{{ session['user']['id'] }}">
         <h2>My Info</h2>
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
