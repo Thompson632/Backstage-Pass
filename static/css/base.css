@@ -75,3 +75,7 @@ header {
   height: 40px;
   display: inline-block;
 }
+
+.page-link, .page-link:hover {
+  color: #204C19;
+}

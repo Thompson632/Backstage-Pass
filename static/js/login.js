@@ -3,20 +3,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const DEFAULT_ACTION = "POST";
   const DEFAULT_DATA_TYPE = "json";
   const DEFAULT_ERROR_LOG = "An error occurred. Please try again later.";
+  const CREATE_ACCOUNT_HEADER = "Create Account";
+  const LOGIN_HEADER = "Login";
 
   $(document).ready(function () {
     function clearErrorMessage() {
       $(".alert-danger").remove();
     }
 
-    $("form").on("submit", function (event) {
+    function updateModalTitle(title) {
+      $("#modalTitle").text(title);
+    }
+
+    $("#registerForm, #loginForm").on("submit", function (event) {
       event.preventDefault();
 
       var form = $(this);
       var url = form.attr("action");
-
-      console.debug("Posting to URL:", url);
-
+      
       clearErrorMessage();
 
       $.ajax({
@@ -26,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         dataType: DEFAULT_DATA_TYPE,
         success: function (response) {
           if (response.success) {
-            // Handle re-direct here to display error on modal to user
+            alert(response.message);
             window.location.href = BASE_HOME_REDIRECT;
           } else {
             form.prepend(
@@ -45,12 +49,14 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#showRegisterForm").click(function () {
       $("#loginForm").hide();
       $("#registerForm").show();
+      updateModalTitle(CREATE_ACCOUNT_HEADER);
       clearErrorMessage();
     });
 
     $("#showLoginForm").click(function () {
       $("#registerForm").hide();
       $("#loginForm").show();
+      updateModalTitle(LOGIN_HEADER);
       clearErrorMessage();
     });
 

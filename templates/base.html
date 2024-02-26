@@ -53,8 +53,8 @@
                       <h6 class="dropdown-header">Welcome back!</h6>
                       <h6 class="dropdown-header">{{ session['user']['first_name'] }} {{ session['user']['last_name'] }}</h6>
                       <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="/my_tickets">My Tickets</a>
-                      <a class="dropdown-item" href="/my_settings">My Settings</a>
+                      <a class="dropdown-item" href="/account/tickets">My Tickets</a>
+                      <a class="dropdown-item" href="/account/settings">My Profile</a>
                       <a class="dropdown-item" href="/signout">Sign Out</a>
                     </div>
                   </div>
@@ -71,14 +71,16 @@
     </header>
 
     <!-- Start: Login/Register Modal -->
-    <div id="loginModal" class="modal">
+    <div id="loginModal" class="modal login-modal">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <span class="close-button">&times;</span>
+        <div class="modal-content login-modal-content">
+          <div class="modal-header">
+            <h2 id="modalTitle">Login</h2>
+            <span class="close-button">&times;</span>
+          </div>
 
-          <form method="POST" action="/login">
-            <div id="loginForm">
-              <h2>Login</h2>
+          <form id="loginForm" method="POST" action="/login">
+            <div>
               <input type="text" placeholder="Username" name="username" required />
               <input type="password" placeholder="Password" name="password" required />
               <button type="submit" id="loginButton" class="btn btn-primary login-button">Login</button>
@@ -86,9 +88,8 @@
             </div>
           </form>
 
-          <form method="POST" action="/create_account">
-            <div id="registerForm" style="display:none;">
-              <h2>Create Account</h2>
+          <form id="registerForm" method="POST" action="/create_account" style="display:none;">
+            <div>
               <input type="text" placeholder="First Name" name="firstName" required />
               <input type="text" placeholder="Last Name" name="lastName" required />
               <input type="text" placeholder="Username" name="username" required />
@@ -100,8 +101,8 @@
           </form>
         </div>
       </div>
-      <!-- End: Login/Register Modal -->
     </div>
+    <!-- End: Login/Register Modal -->
 
     <main>
       <div class="container content">
