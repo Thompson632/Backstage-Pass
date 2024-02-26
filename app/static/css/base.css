@@ -1,6 +1,11 @@
 /* Robert Thompson, rt598@drexel.edu
 CS530: DUI, Assignment [2] */
 
+:root {
+  --primary-color: #5386e4;
+  --secondary-color: #4c4b63;
+}
+
 body {
   font-family: "Avenir";
   font-size: 1rem;
@@ -8,74 +13,82 @@ body {
 }
 
 header {
-  background: #28282B;
+  background: #fff;
 }
 
-.table {
-  table-layout: fixed;
+.navbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
 
-.btn-primary {
-  color: white;
-  border: none;
+.navbar-brand {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
-.divider {
-  width: 10px;
-  height: auto;
-  display: inline-block;
-}
-
-.btn-primary:hover {
-  color: white;
-  border: none;
-}
-
-.btn-secondary {
-  border: none;
-  color: black;
-  background-color: #a9a9a9;
-}
-
-.row.empty {
-  opacity: 0.25;
-  display: table-row;
-  vertical-align: inherit;
-  border-color: inherit;
-}
-
-.row.fill {
-  display: table-row;
-  vertical-align: inherit;
-  border-color: inherit;
+.navbar-brand h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
 }
 
 .navbar-expand-md .navbar-nav .nav-link {
   padding-left: 1rem;
   padding-right: 1rem;
-  color: #FFDD6B;
+  color: #222;
+  font-weight: 500;
 }
 
-.content {
-  padding: 2rem 1.5rem;
+.btn-primary {
+  background-color: var(--secondary-color);
+  border: none;
+  outline: 0;
 }
 
-.jumbotron {
-  padding: 1.5rem;
-  background: 0;
+.btn-primary:hover {
+  background-color: var(--primary-color);
 }
 
-.jumbotron img {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+.hero-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-.btn-size {
-  width: 40px;
-  height: 40px;
-  display: inline-block;
+.hero-text {
+  margin-right: 32px;
+  width: 50%;
 }
 
-.page-link, .page-link:hover {
-  color: #204C19;
+.hero-img {
+  height: 500px;
+  width: 50%;
+  background-color: #222;
+}
+
+.jumbotron-fluid {
+  background-color: #fff;
+}
+
+@media only screen and (max-width: 600px) {
+  .hero-section {
+    flex-direction: column;
+  }
+
+  .hero-text {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero-img {
+    width: 100%;
+  }
 }
