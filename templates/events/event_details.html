@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Event Details
+{% endblock %}
+
+{% block header %}
+  <script type="module" src="/static/js/events/event_details.js"></script>
+  <link rel="stylesheet" href="/static/css/event_details.css" />
+{% endblock %}
+
+{% block content %}
+  <div class="mb-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="/">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="/events">Events</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Event Details</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="event-container">
+    <header class="event-header" id="event-header">
+      <img id="event-image" src="" alt="Event Image" style="max-width: 100%; height: auto;" />
+      <h1 id="event-name">Event Name</h1>
+      <h2 id="artist-name">Artist Name</h2>
+    </header>
+    <div class="event-info">
+      <h3>Event Details</h3>
+      <p id="event-date">
+        <strong>Date:</strong>
+      </p>
+      <p id="event-time">
+        <strong>Time:</strong>
+      </p>
+      <p id="event-venue">
+        <strong>Venue:</strong>
+      </p>
+      <p id="event-address">
+        <strong>Address:</strong>
+      </p>
+      <p id="seats-available">
+        <strong>Seats Available:</strong>
+      </p>
+    </div>
+    <div class="venue-image">
+      <h3 id="toggle-venue-image">Venue Image <i class="fas fa-chevron-down"></i></h3>
+      <img id="venue-img" src="" alt="Venue Image" style="max-width: 100%; height: auto; display: none;" />
+    </div>
+    <div class="seat-info">
+      <h3 id="toggle-seat-info">Seat Availability <i class="fas fa-chevron-down"></i></h3>
+      <ul id="seat-list" style="display: none;"></ul>
+    </div>
+  </div>
+{% endblock %}
