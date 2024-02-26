@@ -11,6 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
     <link rel="stylesheet" href="/static/lib/bootstrap/bootstrap.min.css" />
+    
     <link rel="stylesheet" href="/static/css/base.css" />
     <link rel="stylesheet" href="/static/css/login-modal.css" />
 
@@ -43,9 +44,16 @@
                   </li>
 
                   <li class="nav-item{% if active == 'Events' %} active{% endif %}">
-                    <a class="nav-link" href="/events">Events</a>
+                    <a class="nav-link" href="/events">All Events</a>
                   </li>
+                  <li>
+                  <form id="searchEvents" action="/events" method="GET" >
+                        <input type="text" class="form-control" id="search_events" name="search_events" required placeholder="Search by Event Name, City or Artist..." />
+                        <button type="submit" class="btn btn-primary">Search Events</button>
+                  </form>
+                  </li> 
                 </ul>
+ 
               </div>
 
               <div class="header-user-profile my-auto ml-4 mr-2 d-flex">
@@ -71,6 +79,7 @@
             </nav>
           </div>
         </div>
+        
       </div>
     </header>
 

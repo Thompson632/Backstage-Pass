@@ -8,7 +8,8 @@ class Database:
         # Get Event Data
         self.GET_ALL_EVENTS = """
                     SELECT 
-                        e.event_name
+                        e.id AS event_id
+                    ,   e.event_name
                     ,	e.artist
                     ,	e.start_date
                     ,	e.end_date
@@ -23,7 +24,17 @@ class Database:
                     FROM event e 
                     INNER JOIN venue v ON e.venue_id = v.id 
                     INNER JOIN venue_image img ON v.venue_image_id = img.id
+                    WHERE e.start_date >= date('now')
                 """
+        self.SEARCH_CRITERIA = """
+                 AND  e.event_name LIKE '%' || ?  || '%'
+                 OR     e.artist LIKE '%' || ?  || '%'
+                 OR     v.city LIKE '%' || ?  || '%' 
+                """
+        self.ORDER_BY = """
+                 ORDER BY e.start_date DESC
+                """
+  
         # end: Get Event Data
     
     def select(self, sql, parameters=[]):
@@ -133,23 +144,29 @@ class Database:
         }
 
     # Get All events
-    def get_all_events(self):
-        data = self.select(self.GET_ALL_EVENTS)
+    def get_all_events(self, search_criteria):
+        
+        if search_criteria != "" :
+            data = self.select(self.GET_ALL_EVENTS + self.SEARCH_CRITERIA + self.ORDER_BY, [search_criteria ,search_criteria,search_criteria])
+        else:
+            data = self.select(self.GET_ALL_EVENTS + self.ORDER_BY)
+        
         print (data)
         if data:
             return [{
-                'event_name': d[0],
-                'artist': d[1],
-                'start_date': d[2],
-                'end_date': d[3],
-                'start_time': d[4],
-                'end_time': d[5],
-                'event_image': d[6],
-                'city': d[7],
-                'zip_code': d[8],
-                'state': d[9],
-                'number_of_seats': d[10],
-                'venue_img': d[11]
+                'event_id': d[0],
+                'event_name': d[1],
+                'artist': d[2],
+                'start_date': d[3],
+                'end_date': d[4],
+                'start_time': d[5],
+                'end_time': d[6],
+                'event_image': d[7],
+                'city': d[8],
+                'zip_code': d[9],
+                'state': d[10],
+                'number_of_seats': d[11],
+                'venue_img': d[12]
             } for d in data]
         else:
             return None
