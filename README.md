@@ -15,15 +15,6 @@ cd dev
 sqlite3 backstage_pass.db < create_db.txt
 ```
 
-### Create a Database with Mock Data
-
-This will insert all data necessary to end-to-end test the application without needing to complete additional steps
-
-```bash
-cd dev
-sqlite3 backstage_pass.db < create_mock_db.txt
-```
-
 ## Execute
 
 In order to start the web-application, you will need to run the following command

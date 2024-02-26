@@ -70,5 +70,11 @@ CREATE TABLE IF NOT EXISTS ticket_order_details (
 	foreign key(seat_id) references seat(id)
 );
 
-
 .mode csv
+.import ../mock_data/mock_user.csv user
+.import ../mock_data/mock_venue.csv venue
+.import ../mock_data/mock_venue_image.csv venue_image
+.import ../mock_data/mock_event.csv event
+.import ../mock_data/mock_event_seat.csv event_seat
+.import ../mock_data/mock_ticket_orders.csv ticket_orders
+.import ../mock_data/mock_ticket_order_details.csv ticket_order_details
