@@ -207,16 +207,30 @@ def my_tickets():
 # Start: Get Events
 @app.route("/events", methods=["GET"])
 def all_events():
-    return render_template("events.html")
+    search_events = request.args.get('search_events','')
+    return render_template("events/events.html", search_events=search_events)
 
 def generate_response(args):
+    search_events = request.args.get('search_events')
+    if search_events :
+        search_events = search_events
+        print("Search Criteria Found")
+    else:
+        print("Search Criteria NOT Found")
+        search_events = ''
+
     return jsonify({
-        'events': get_db().get_all_events()
+        'events': get_db().get_all_events(search_events)
     })
 
 @app.route('/api/get_events', methods=['GET'])
 def api_get_events():
     return generate_response(request.form)
+
+
+@app.route('/test', methods=['GET'])
+def api_test():
+    return render_template("events/test.html")
 
 # End: Get Events
 def is_valid_data(parameters=[]):
@@ -224,7 +238,6 @@ def is_valid_data(parameters=[]):
         if param is None:
             return False
     return True
-
 
 if __name__ == "__main__":
     app.run(host="localhost", port=8080, debug=True)
