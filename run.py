@@ -214,9 +214,9 @@ def generate_response(args):
     search_events = request.args.get('search_events')
     if search_events :
         search_events = search_events
-        print("Search Criteria Found")
+        # print("Search Criteria Found")
     else:
-        print("Search Criteria NOT Found")
+        # print("Search Criteria NOT Found")
         search_events = ''
 
     return jsonify({
@@ -233,6 +233,21 @@ def api_test():
     return render_template("events/test.html")
 
 # End: Get Events
+
+# Begin Contact Us 
+@app.route('/contactus', methods=['POST'])
+def submit_contactus():
+# Error validation pending
+    first_name = request.form.get('first_name_input')
+    last_name = request.form.get('last_name_input')
+    email_id = request.form.get('email_id_input')
+    phone = request.form.get('phone_input')
+    question = request.form.get('query_input')
+    get_db().insert_contact_us(first_name, last_name, email_id, phone, question)
+    return redirect ('/')
+
+# End Contact Us
+
 def is_valid_data(parameters=[]):
     for param in parameters:
         if param is None:
