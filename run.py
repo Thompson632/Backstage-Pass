@@ -190,69 +190,74 @@ def edit_user_address():
             return ("Error: Failed to update user address", 404)
     else:
         redirect("/")
+
+
 # End: Account Profile
+
 
 # Start: Account Tickets
 @app.route("/account/tickets", methods=["GET"])
 def my_tickets():
     if "user" in session:
-        user_id = session['user']['id']
+        user_id = session["user"]["id"]
         user_ticket_data = get_db().get_user_tickets(user_id)
         print(user_ticket_data)
-        return render_template("account/tickets.html", user_ticket_data=user_ticket_data)
+        return render_template(
+            "account/tickets.html", user_ticket_data=user_ticket_data
+        )
     else:
         redirect("/")
+
+
 # End: Account Tickets
+
 
 # Start: Get Events
 @app.route("/events", methods=["GET"])
 def all_events():
-    search_events = request.args.get('search_events','')
+    search_events = request.args.get("search_events", "")
     return render_template("events/events.html", search_events=search_events)
 
+
 def generate_response(args):
-    search_events = request.args.get('search_events')
-    if search_events :
+    search_events = request.args.get("search_events")
+    if search_events:
         search_events = search_events
-        # print("Search Criteria Found")
     else:
-        # print("Search Criteria NOT Found")
-        search_events = ''
+        search_events = ""
 
-    return jsonify({
-        'events': get_db().get_all_events(search_events)
-    })
+    return jsonify({"events": get_db().get_all_events(search_events)})
 
-@app.route('/api/get_events', methods=['GET'])
+
+@app.route("/api/get_events", methods=["GET"])
 def api_get_events():
     return generate_response(request.form)
 
 
-@app.route('/test', methods=['GET'])
-def api_test():
-    return render_template("events/test.html")
-
 # End: Get Events
 
-# Begin Contact Us 
-@app.route('/contactus', methods=['POST'])
-def submit_contactus():
-# Error validation pending
-    first_name = request.form.get('first_name_input')
-    last_name = request.form.get('last_name_input')
-    email_id = request.form.get('email_id_input')
-    phone = request.form.get('phone_input')
-    question = request.form.get('query_input')
+
+# Begin Contact Us
+@app.route("/contactus", methods=["POST"])
+def submit_contact_us():
+    first_name = request.form.get("first_name_input")
+    last_name = request.form.get("last_name_input")
+    email_id = request.form.get("email_id_input")
+    phone = request.form.get("phone_input")
+    question = request.form.get("query_input")
     get_db().insert_contact_us(first_name, last_name, email_id, phone, question)
-    return redirect ('/')
+    return redirect("/")
+
 
 # End Contact Us
+
 
 def is_valid_data(parameters=[]):
     for param in parameters:
         if param is None:
             return False
     return True
+
 
 if __name__ == "__main__":
     app.run(host="localhost", port=8080, debug=True)

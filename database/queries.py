@@ -1,12 +1,16 @@
 # Start: User Queries
-CREATE_USER = "INSERT INTO user (first_name, last_name, username, password) VALUES (?, ?, ?, ?)"
+CREATE_USER = (
+    "INSERT INTO user (first_name, last_name, username, password) VALUES (?, ?, ?, ?)"
+)
 GET_USER_BY_USERNAME = "SELECT * FROM user WHERE username=?"
 GET_USER_BY_ID = "SELECT * FROM user where id=?"
 UPDATE_USER_INFO = "UPDATE user SET first_name=?, last_name=? WHERE id=?"
 UPDATE_EMAIL_ADDRESS = "UPDATE user SET email_address=? WHERE id=?"
 UPDATE_PASSWORD = "UPDATE user SET password=? WHERE id=?"
 UPDATE_PHONE_NUMBER = "UPDATE user SET phone_number=? WHERE id=?"
-UPDATE_ADDRESS = "UPDATE user SET street=?, city=?, state=?, zip_code=?, country=? WHERE id=?"
+UPDATE_ADDRESS = (
+    "UPDATE user SET street=?, city=?, state=?, zip_code=?, country=? WHERE id=?"
+)
 # End: User Queries
 
 # Start: User Ticket Queries
@@ -44,3 +48,42 @@ GET_TICKETS_BY_USER_ID = """
         u.id = ?;
 """
 # End: User Ticket Queries
+
+# Start: Get Events/Search Queries
+GET_ALL_EVENTS = """
+                    SELECT 
+                        e.id AS event_id
+                    ,   e.event_name
+                    ,	e.artist
+                    ,	e.start_date
+                    ,	e.end_date
+                    ,	e.start_time
+                    ,	e.end_time
+                    ,	e.event_image
+                    ,	v.city
+                    ,	v.zip_code
+                    ,	v.state
+                    ,	v.number_of_seats
+                    ,	img.image as venue_img
+                    FROM event e 
+                    INNER JOIN venue v ON e.venue_id = v.id 
+                    INNER JOIN venue_image img ON v.venue_image_id = img.id
+                    WHERE e.start_date >= date('now')
+                """
+SEARCH_CRITERIA = """
+        AND  e.event_name LIKE '%' || ?  || '%'
+        OR     e.artist LIKE '%' || ?  || '%'
+        OR     v.city LIKE '%' || ?  || '%' 
+    """
+ORDER_BY = """
+        ORDER BY e.start_date DESC
+    """
+# End: Get Events/Search Queries
+
+# Start: Contact Us Queries
+INSERT_CONTACT_US = """
+                INSERT INTO contact_us ( first_name , last_name ,   email_id,  phone , question)
+                VALUES (?, ?, ?, ?, ?)
+                ;
+                """
+# End: Contact Us Queries

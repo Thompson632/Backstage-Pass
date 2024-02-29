@@ -1,47 +1,10 @@
 import sqlite3
 from .queries import *
 
+
 class Database:
     def __init__(self, SQLITE_PATH="./dev/backstage_pass.db"):
         self.conn = sqlite3.connect(SQLITE_PATH)
-
-        # Get Event Data
-        self.GET_ALL_EVENTS = """
-                    SELECT 
-                        e.id AS event_id
-                    ,   e.event_name
-                    ,	e.artist
-                    ,	e.start_date
-                    ,	e.end_date
-                    ,	e.start_time
-                    ,	e.end_time
-                    ,	e.event_image
-                    ,	v.city
-                    ,	v.zip_code
-                    ,	v.state
-                    ,	v.number_of_seats
-                    ,	img.image as venue_img
-                    FROM event e 
-                    INNER JOIN venue v ON e.venue_id = v.id 
-                    INNER JOIN venue_image img ON v.venue_image_id = img.id
-                    WHERE e.start_date >= date('now')
-                """
-        self.SEARCH_CRITERIA = """
-                 AND  e.event_name LIKE '%' || ?  || '%'
-                 OR     e.artist LIKE '%' || ?  || '%'
-                 OR     v.city LIKE '%' || ?  || '%' 
-                """
-        self.ORDER_BY = """
-                 ORDER BY e.start_date DESC
-                """
-  
-        # end: Get Event Data
-
-        self.INSERT_CONTACT_US = """
-                INSERT INTO contact_us ( first_name , last_name ,   email_id,  phone , question)
-                VALUES (?, ?, ?, ?, ?)
-                ;
-                """
 
     def select(self, sql, parameters=[]):
         c = self.conn.cursor()
@@ -149,39 +112,47 @@ class Database:
             "seat_number": ticket[19],
         }
 
-    # Get All events
+    # End: User Ticket Functions
+
+    # Start: Event / Search Functions
     def get_all_events(self, search_criteria):
-        
-        if search_criteria != "" :
-            data = self.select(self.GET_ALL_EVENTS + self.SEARCH_CRITERIA + self.ORDER_BY, [search_criteria ,search_criteria,search_criteria])
+        if search_criteria != "":
+            data = self.select(
+                GET_ALL_EVENTS + SEARCH_CRITERIA + ORDER_BY,
+                [search_criteria, search_criteria, search_criteria],
+            )
         else:
-            data = self.select(self.GET_ALL_EVENTS + self.ORDER_BY)
-        
-        print (data)
+            data = self.select(GET_ALL_EVENTS + ORDER_BY)
+
+        print(data)
         if data:
-            return [{
-                'event_id': d[0],
-                'event_name': d[1],
-                'artist': d[2],
-                'start_date': d[3],
-                'end_date': d[4],
-                'start_time': d[5],
-                'end_time': d[6],
-                'event_image': d[7],
-                'city': d[8],
-                'zip_code': d[9],
-                'state': d[10],
-                'number_of_seats': d[11],
-                'venue_img': d[12]
-            } for d in data]
+            return [
+                {
+                    "event_id": d[0],
+                    "event_name": d[1],
+                    "artist": d[2],
+                    "start_date": d[3],
+                    "end_date": d[4],
+                    "start_time": d[5],
+                    "end_time": d[6],
+                    "event_image": d[7],
+                    "city": d[8],
+                    "zip_code": d[9],
+                    "state": d[10],
+                    "number_of_seats": d[11],
+                    "venue_img": d[12],
+                }
+                for d in data
+            ]
         else:
             return None
 
-    # End: User Ticket Functions
+    # End: Event / Search Functions
 
-    # Insert into Contact Us
+    # Start: Insert into Contact Us
     def insert_contact_us(self, first_name, last_name, email_id, phone, question):
         self.execute(
-            self.INSERT_CONTACT_US, [first_name, last_name, email_id, phone, question]
+            INSERT_CONTACT_US, [first_name, last_name, email_id, phone, question]
         )
+
     # End : Insert into Contact Us
