@@ -4,11 +4,11 @@ function Events() {
         const t_headers = $(`
             <tr>
                 <th scope="col">Image</th>
-                <th scope="col">Event Name  <img></th>
-                <th scope="col">City        <img></th>
+                <th data-field="name" data-filter-control="select" scope="col">Event Name  <img></th>
+                <th data-field="city" data-filter-control="select" scope="col">City        <img></th>
                 <th scope="col">From        <img></th>
                 <th scope="col">To          <img></th>
-                <th scope="col">Artist      <img></th>
+                <th data-field="artist" data-filter-control="select" scope="col" scope="col">Artist      <img></th>
             <tr>`);
         if (events.length > 0) {
             const thead = $(`<thead class="thead-light"></thead>`);
@@ -58,7 +58,7 @@ function Events() {
               }
 
             function getCellValue(row, index){ return $(row).children('td').eq(index).text() }
-
+      
         }
         else {
                 const noDataFound = $(`
@@ -66,10 +66,9 @@ function Events() {
             `);
             $('#maintable').append(noDataFound);
         }
+
     }
-
     
-
     this.update = (data) => {
         this.updateRowData(data.events);
     }
@@ -81,4 +80,5 @@ function Events() {
             this.update(data);
         });
     }
+
 }

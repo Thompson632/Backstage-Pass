@@ -83,7 +83,13 @@ class Database:
                 """
   
         # end: Get Event Data
-    
+
+        self.INSERT_CONTACT_US = """
+                INSERT INTO contact_us ( first_name , last_name ,   email_id,  phone , question)
+                VALUES (?, ?, ?, ?, ?)
+                ;
+                """
+
     def select(self, sql, parameters=[]):
         c = self.conn.cursor()
         c.execute(sql, parameters)
@@ -221,3 +227,10 @@ class Database:
             return None
 
     # End: User Ticket Functions
+
+    # Insert into Contact Us
+    def insert_contact_us(self, first_name, last_name, email_id, phone, question):
+        self.execute(
+            self.INSERT_CONTACT_US, [first_name, last_name, email_id, phone, question]
+        )
+    # End : Insert into Contact Us

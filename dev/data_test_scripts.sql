@@ -51,3 +51,7 @@ SELECT
 FROM event e 
 INNER JOIN venue v ON e.venue_id = v.id 
 INNER JOIN venue_image img ON v.venue_image_id = img.id
+
+
+INSERt into contact_us (first_name, last_name,email_id, phone, question ) values 
+('a', 'b', 'c@email.com', '2649283744', 'the question')

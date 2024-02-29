@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% set active = 'Home' %}
+
+{% block title %}
+  Home
+{% endblock %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/bootstrap-table.min.js"></script>
+{% block content %}
+  <section class="jumbotron">
+    <div class="text-center">
+      <h1 class="jumbotron-heading">Backstage Pass</h1>
+      <p class="lead text-muted">Your Backstage Ticket to the Extraordinary.</p>
+      <p>
+        <img class="img-fluid" src="/static/img/backdrop-2.png" />
+      </p>
+    </div>
+  </section>
+
+  <div id="filter">
+    <select class="form-control bootstrap-table-filter-control-name">
+      <option value=""></option>
+    </select>
+    <select class="form-control bootstrap-table-filter-control-city">
+        <option value=""></option>
+    </select>
+  </div>
+  <table id="maintable" class ="table table-striped"> 
+    <tr>
+      <th scope="col">Image</th>
+      <th data-field="name" data-filter-control="select" scope="col">Event Name  <img></th>
+      <th data-field="city" data-filter-control="select" scope="col">City        <img></th>
+      <th scope="col">From        <img></th>
+      <th scope="col">To          <img></th>
+      <th data-field="artist" data-filter-control="select" scope="col" scope="col">Artist      <img></th>
+      <tbody>
+      <tr>
+    <tr >
+      <td></td>
+      <td>abc</a></td>
+      <td>dedf</td>
+      <td>adsfasf</td>
+      <td>asdfadsfa</td>
+      <td>art1</td>
+    </tr>
+    <tr >
+      <td></td>
+      <td>abc</a></td>
+      <td>dedf</td>
+      <td>adsfasf</td>
+      <td>asdfadsfa</td>
+      <td>art1</td>
+    </tr>
+    <tr >
+      <td></td>
+      <td>abc2</a></td>
+      <td>dedf2</td>
+      <td>adsfasf2</td>
+      <td>asdfadsfa2</td>
+      <td>art2</td>
+    </tr>
+    <tr >
+      <td></td>
+      <td>abc4</a></td>
+      <td>dedf4</td>
+      <td>adsfasf5</td>
+      <td>asdfadsfa6</td>
+      <td>art4</td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}
