@@ -1,6 +1,9 @@
 from flask import Flask, g, render_template, redirect, request, session, jsonify
 from database.database import Database
 from passlib.hash import pbkdf2_sha256
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 app.secret_key = "backstage_pass_cs530"
@@ -280,4 +283,11 @@ def is_valid_data(parameters=[]):
 
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=8080, debug=True)
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", type=str, default="127.0.0.1")
+
+    args = parser.parse_args()
+
+    app.run(debug=True, host=args.host, port=8080)
