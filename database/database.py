@@ -1,6 +1,7 @@
 import sqlite3
 from .queries import *
 
+
 class Database:
     def __init__(self, SQLITE_PATH="./dev/backstage_pass.db"):
         self.conn = sqlite3.connect(SQLITE_PATH)
@@ -112,3 +113,46 @@ class Database:
         }
 
     # End: User Ticket Functions
+
+    # Start: Event / Search Functions
+    def get_all_events(self, search_criteria):
+        if search_criteria != "":
+            data = self.select(
+                GET_ALL_EVENTS + SEARCH_CRITERIA + ORDER_BY,
+                [search_criteria, search_criteria, search_criteria],
+            )
+        else:
+            data = self.select(GET_ALL_EVENTS + ORDER_BY)
+
+        print(data)
+        if data:
+            return [
+                {
+                    "event_id": d[0],
+                    "event_name": d[1],
+                    "artist": d[2],
+                    "start_date": d[3],
+                    "end_date": d[4],
+                    "start_time": d[5],
+                    "end_time": d[6],
+                    "event_image": d[7],
+                    "city": d[8],
+                    "zip_code": d[9],
+                    "state": d[10],
+                    "number_of_seats": d[11],
+                    "venue_img": d[12],
+                }
+                for d in data
+            ]
+        else:
+            return None
+
+    # End: Event / Search Functions
+
+    # Start: Insert into Contact Us
+    def insert_contact_us(self, first_name, last_name, email_id, phone, question):
+        self.execute(
+            INSERT_CONTACT_US, [first_name, last_name, email_id, phone, question]
+        )
+
+    # End : Insert into Contact Us
