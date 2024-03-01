@@ -156,3 +156,50 @@ class Database:
         )
 
     # End : Insert into Contact Us
+    # Start: Event Details Functions
+    def get_ticket_details(self, event_id):
+        data = self.select(GET_EVENT_DETAILS_BY_EVENT_ID, [event_id])
+
+        if data:
+            return self.build_ticket_details(data)
+        else:
+            return None
+
+    def build_ticket_details(self, ticket_details):
+        event_info = self.build_ticket_detail(ticket_details[0])
+        event_info["seats"] = [
+            self.build_ticket_detail(row, only_seat=True) for row in ticket_details
+        ]
+        
+        return event_info
+
+    def build_ticket_detail(self, ticket_detail, only_seat=False):
+        if only_seat:
+            return {
+                "seat_id": ticket_detail[16],
+                "seat_number": ticket_detail[17],
+                "seat_price": ticket_detail[18],
+                "booking_status": ticket_detail[19],
+            }
+        else:
+            return {
+                "event_id": ticket_detail[0],
+                "event_name": ticket_detail[1],
+                "artist": ticket_detail[2],
+                "start_date": ticket_detail[3],
+                "end_date": ticket_detail[4],
+                "start_time": ticket_detail[5],
+                "end_time": ticket_detail[6],
+                "event_image": ticket_detail[7],
+                "venue_name": ticket_detail[8],
+                "venue_street": ticket_detail[9],
+                "venue_city": ticket_detail[10],
+                "venue_state": ticket_detail[11],
+                "venue_zip": ticket_detail[12],
+                "venue_country": ticket_detail[13],
+                "number_of_seats": ticket_detail[14],
+                "venue_image": ticket_detail[15],
+                "seats": [],
+            }
+
+    # End: Event Details Functions

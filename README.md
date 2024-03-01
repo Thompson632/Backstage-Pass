@@ -11,8 +11,14 @@ The purpose of this repository is to hold our Term Project called "Backstage Pas
 This will insert all necessary initialization data
 
 ```bash
-cd dev
+cd app/dev
 sqlite3 backstage_pass.db < create_db.txt
+```
+
+## Installing Dependencies
+```bash
+cd app/
+pip install -r requirements.txt
 ```
 
 ## Execute
@@ -20,10 +26,22 @@ sqlite3 backstage_pass.db < create_db.txt
 In order to start the web-application, you will need to run the following command
 
 ```bash
+cd app/
 python run.py
 ```
 
 Once running, you will need to open your browser and navigate to `http://localhost:8080`
+
+## Docker
+### Build
+```bash
+docker-compose build
+```
+
+### Run
+```bash
+docker-compose up
+```
 
 # Authors
 - [Dheeraj Kaul](dk989@drexel.edu)

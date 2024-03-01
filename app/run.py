@@ -1,6 +1,9 @@
 from flask import Flask, g, render_template, redirect, request, session, jsonify
 from database.database import Database
 from passlib.hash import pbkdf2_sha256
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 app.secret_key = "backstage_pass_cs530"
@@ -219,7 +222,7 @@ def all_events():
     return render_template("events/events.html", search_events=search_events)
 
 
-def generate_response(args):
+def generate_response(_):
     search_events = request.args.get("search_events")
     if search_events:
         search_events = search_events
@@ -252,6 +255,26 @@ def submit_contact_us():
 # End Contact Us
 
 
+# Start: Event Details
+@app.route("/events/event_details", methods=["GET"])
+def get_event_details():
+    event_id = request.args.get("event_id")
+    print(request)
+    print(request.form)
+    print("Querying for:", event_id)
+    event_details_data = get_db().get_ticket_details(event_id)
+    return render_template(
+        "events/event_details.html", event_details_data=event_details_data
+    )
+
+
+@app.route("/api/event_details/test", methods=["GET"])
+def test_get_event_details():
+    event_details_data = get_db().get_ticket_details("1")
+    return jsonify(event_details_data)
+
+
+# End: Event Details
 def is_valid_data(parameters=[]):
     for param in parameters:
         if param is None:
@@ -260,4 +283,11 @@ def is_valid_data(parameters=[]):
 
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=8080, debug=True)
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", type=str, default="127.0.0.1")
+
+    args = parser.parse_args()
+
+    app.run(debug=True, host=args.host, port=8080)
