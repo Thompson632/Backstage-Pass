@@ -40,9 +40,10 @@ tbody tr {
 
 .carousel-item img { 
   max-height: 1000px; 
-  max-width: 1000px;
-  /* width: 200px; Maintain aspect ratio */
-  margin: auto; 
+  max-width: 1000px; 
+  /* width: 400px; 
+  height: 800px; */
+  margin: auto;  
  }
 
 .carousel-control-prev,

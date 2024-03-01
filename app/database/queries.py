@@ -50,8 +50,9 @@ GET_TICKETS_BY_USER_ID = """
 # End: User Ticket Queries
 
 # Start: Get Events/Search Queries
-GET_ALL_EVENTS = """
-                    SELECT 
+        # Get Event Data
+EVENT_TABLE_COLUMNS = """
+                SELECT 
                         e.id AS event_id
                     ,   e.event_name
                     ,	e.artist
@@ -64,21 +65,58 @@ GET_ALL_EVENTS = """
                     ,	v.zip_code
                     ,	v.state
                     ,	v.number_of_seats
-                    ,	img.image as venue_img
-                    FROM event e 
-                    INNER JOIN venue v ON e.venue_id = v.id 
-                    INNER JOIN venue_image img ON v.venue_image_id = img.id
-                    WHERE e.start_date >= date('now')
-                """
+                    ,	img.image as venue_img 
+            """
+
+DISTINCT_EVENT_NAME = """
+            SELECT DISTINCT   e.event_name
+            """   
+
+DISTINCT_CITY_NAME = """
+            SELECT DISTINCT   v.city
+            """  
+
+DISTINCT_ARTIST_NAME = """
+            SELECT DISTINCT   e.artist
+            """  
+                        
+EVENT_JOINS = """
+            FROM event e 
+            INNER JOIN venue v ON e.venue_id = v.id 
+            INNER JOIN venue_image img ON v.venue_image_id = img.id
+        """
+    # WHERE e.start_date >= date('now')
+
+FILTER_CRITERIA_EVENT_NAMES ="""
+            AND e.event_name IN (?)
+        """
+
+FILTER_CRITERIA_CITY ="""
+            AND v.city IN (?)
+        """
+
+FILTER_CRITERIA_ARTISTS ="""
+            AND e.artist IN (?)
+        """
+
+FILTER_CRITERIA_FROM_DATE ="""
+        AND   e.start_date >= ?
+        """
+
+FILTER_CRITERIA_TO_DATE ="""
+        AND   e.end_date <= ?
+        """                                
 SEARCH_CRITERIA = """
-        AND  e.event_name LIKE '%' || ?  || '%'
-        OR     e.artist LIKE '%' || ?  || '%'
-        OR     v.city LIKE '%' || ?  || '%' 
-    """
+            AND  (e.event_name LIKE '%' || ?  || '%'
+            OR     e.artist LIKE '%' || ?  || '%'
+            OR     v.city LIKE '%' || ?  || '%' )
+        """
 ORDER_BY = """
-        ORDER BY e.start_date DESC
-    """
-# End: Get Events/Search Queries
+            ORDER BY e.start_date DESC
+        """
+
+
+# end: Get Event Data
 
 # Start: Contact Us Queries
 INSERT_CONTACT_US = """
@@ -87,6 +125,7 @@ INSERT_CONTACT_US = """
                 ;
                 """
 # End: Contact Us Queries
+
 # Start: Event Details Queries
 GET_EVENT_DETAILS_BY_EVENT_ID = """
     SELECT 

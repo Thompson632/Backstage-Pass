@@ -214,31 +214,53 @@ def my_tickets():
 
 # End: Account Tickets
 
-
 # Start: Get Events
-@app.route("/events", methods=["GET"])
+@app.route("/events", methods=["GET","POST"])
 def all_events():
-    search_events = request.args.get("search_events", "")
-    return render_template("events/events.html", search_events=search_events)
+    search_events = request.args.get('search_events','')
+    
+    filter_event_name = request.form.getlist('formControlEventName')
+    filter_city = request.form.getlist('formControlCity')
+    filter_artist = request.form.getlist('formControlArtist')
+    filter_from_date = request.form.get('fromDate')
+    filter_to_date = request.form.getlist('toDate')
+    # print (filter_event_name)
+    
+    return render_template("events/events.html", search_events=search_events, filter_event_name=filter_event_name)
 
-
-def generate_response(_):
-    search_events = request.args.get("search_events")
-    if search_events:
+def generate_response(args):
+    search_events = request.args.get('search_events')
+    filter_event_name = request.form.getlist('filter_event_name')
+    if search_events :
         search_events = search_events
+        # print("Search Criteria Found")
     else:
-        search_events = ""
+        # print("Search Criteria NOT Found")
+        search_events = ''
 
-    return jsonify({"events": get_db().get_all_events(search_events)})
+    return jsonify({
+        'events': get_db().get_events(search_events, filter_event_name),
+        'event_names' : get_db().get_distinct_events(search_events,filter_event_name),
+        'city_names' : get_db().get_distinct_cities(search_events,filter_event_name),
+        'artist_names' : get_db().get_distinct_artists(search_events, filter_event_name)
+    })
 
-
-@app.route("/api/get_events", methods=["GET"])
+@app.route('/api/get_events', methods=['GET','POST'])
 def api_get_events():
+    
+    filter_event_name = request.args.get('filter_event_name')
+    print(filter_event_name)
+    # print(len(filter_event_name))
+    if filter_event_name:
+        lst = filter_event_name.split(',')
+        print("*****************************")
+        print(lst)
+
+    
+    # print(len(filter_event_name))
     return generate_response(request.form)
 
-
 # End: Get Events
-
 
 # Begin Contact Us
 @app.route("/contactus", methods=["POST"])
