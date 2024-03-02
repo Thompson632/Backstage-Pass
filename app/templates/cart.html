@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% set active = 'Cart' %}
+
+{% block title %}
+  Cart
+{% endblock %}
+
+{% block header %}
+  <link rel="stylesheet" href="/static/css/cart-tickets.css" />
+  <script src="/static/js/cart.js"></script>
+
+  <script>
+    const cartView = new CartView();
+    cartView.load();
+  </script>
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="cart-header d-flex justify-content-between align-items-center mb-3">
+      <h2 id="cartHeader">My Cart</h2>
+      <div class="cart-controls d-flex flex-column align-items-end">
+        <div id="cartTotal" class="text-secondary mb-2">Total Price: $0.00</div>
+        <a href="#" id="checkoutButton" class="btn btn-primary">Checkout</a>
+      </div>
+    </div>
+
+    <div id="cartTableContainer">
+      <table class="table" id="cartTable"></table>
+    </div>
+
+    <nav>
+      <ul id="paginationList" class="pagination justify-content-center"></ul>
+    </nav>
+  </div>
+{% endblock %}

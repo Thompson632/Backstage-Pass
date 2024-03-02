@@ -35,7 +35,7 @@ GET_TICKETS_BY_USER_ID = """
         ticket_orders.ticket_order_date AS ticket_order_date,
         ticket_orders.ticket_order_price AS ticket_order_price,
         es.seat_price AS seat_price,
-        s.seat_id AS seat_number,
+        s.id AS seat_number,
         ss.id AS section_id,
         ss.section_name AS section_name,
         ss.section_image AS section_image
@@ -152,7 +152,7 @@ GET_EVENT_DETAILS_BY_EVENT_ID = """
         v.street AS venue_street,
         v.city AS venue_city,
         v.state AS venue_state,
-        v.zip_code AS venue_zip,
+        v.zip_code AS venue_zip_code,
         v.country AS venue_country,
         v.number_of_seats,
         vi.image AS venue_image,
@@ -178,3 +178,25 @@ GET_EVENT_DETAILS_BY_EVENT_ID = """
     WHERE 
         e.id = ?;
 """
+# End: Event Details Queries
+
+# Start: Checkout Queries
+INSERT_TICKET_ORDER = """
+    INSERT INTO
+        ticket_orders (user_id, ticket_order_date, ticket_order_price)
+    VALUES (?, ?, ?);
+"""
+
+INSERT_TICKET_ORDER_DETAILS = """
+    INSERT INTO
+        ticket_order_details (ticket_order_id, event_seat_id, quantity)
+    VALUES (?, ?, ?);
+"""
+
+UPDATE_EVENT_SEAT_BOOKING_STATUS = """
+    UPDATE event_seat
+    SET booking_status = 1
+    WHERE id = ?;
+"""
+
+# End: Checkout Queries

@@ -33,7 +33,6 @@ CREATE TABLE IF NOT EXISTS venue_image (
 
 CREATE TABLE IF NOT EXISTS seat (
 	id integer primary key,
-	seat_id integer not null,
 	venue_id integer not null,
 	seat_section_id integer not null,
 	foreign key (venue_id) references venue(id),

@@ -317,7 +317,7 @@ class Database:
                 "venue_street": ticket_detail[9],
                 "venue_city": ticket_detail[10],
                 "venue_state": ticket_detail[11],
-                "venue_zip": ticket_detail[12],
+                "venue_zip_code": ticket_detail[12],
                 "venue_country": ticket_detail[13],
                 "number_of_seats": ticket_detail[14],
                 "venue_image": ticket_detail[15],
@@ -325,3 +325,26 @@ class Database:
             }
 
     # End: Event Details Functions
+
+    # Begin: Checkout Functions
+    def checkout(self, user_id, ticket_details, ticket_order_price):
+        ticket_order_date = "2024-03-04"
+        
+        self.execute(INSERT_TICKET_ORDER, [user_id, ticket_order_date, ticket_order_price])
+        ticket_order_id = self.get_last_inserted_id()
+
+        for ticket_detail in ticket_details:
+            event_seat_id = ticket_detail["seat_id"]
+            quantity = ticket_detail["quantity"]
+            self.execute(
+                INSERT_TICKET_ORDER_DETAILS, [ticket_order_id, event_seat_id, quantity]
+            )
+
+            self.execute(UPDATE_EVENT_SEAT_BOOKING_STATUS, [event_seat_id])
+
+
+    def get_last_inserted_id(self):
+        c = self.conn.cursor()
+        c.execute("SELECT last_insert_rowid()")
+        return c.fetchone()[0]
+# End: Checkout Functions
