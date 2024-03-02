@@ -71,8 +71,10 @@ class EventDetailsView {
 
   populateSeatList(seats) {
     var seatList = $("#seat-list").empty();
+    seats.sort((a, b) => a.seat_id - b.seat_id);
     seats.forEach((seat) => seatList.append(this.createSeatListItem(seat)));
   }
+  
 
   initializeCollapsibleSections() {
     this.initializeCollapsibleSection("#toggle-venue-image", "#venue-img");

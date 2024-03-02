@@ -17,9 +17,10 @@ UPDATE_ADDRESS = (
 GET_TICKETS_BY_USER_ID = """
     SELECT
         u.id AS user_id,
-        tod.id AS ticket_id,
+        ticket_orders.id AS ticket_id,
         e.id AS event_id,
         e.event_name AS event_name,
+        v.id AS venue_id,
         v.venue_name AS venue_name,
         v.street AS venue_street,
         v.city AS venue_city,
@@ -45,7 +46,7 @@ GET_TICKETS_BY_USER_ID = """
     INNER JOIN ticket_order_details tod ON ticket_orders.id = tod.ticket_order_id
     INNER JOIN event_seat es ON tod.event_seat_id = es.id
     INNER JOIN seat s ON es.seat_id = s.id
-    INNER JOIN event e ON es.event_id = e.id
+    INNER JOIN event e ON tod.event_id = e.id
     INNER JOIN venue v ON e.venue_id = v.id
     LEFT JOIN venue_image vi ON v.venue_image_id = vi.id
     INNER JOIN seat_section ss ON s.seat_section_id = ss.id
@@ -55,7 +56,7 @@ GET_TICKETS_BY_USER_ID = """
 # End: User Ticket Queries
 
 # Start: Get Events/Search Queries
-        # Get Event Data
+# Get Event Data
 EVENT_TABLE_COLUMNS = """
                 SELECT 
                         e.id AS event_id
@@ -76,47 +77,47 @@ QRY_COLS_EVENT_COUNT = """ SELECT COUNT(1) AS total_event_count """
 
 DISTINCT_EVENT_NAME = """
             SELECT DISTINCT   e.event_name
-            """   
+            """
 
 DISTINCT_CITY_NAME = """
             SELECT DISTINCT   v.city
-            """  
+            """
 
 DISTINCT_ARTIST_NAME = """
             SELECT DISTINCT   e.artist
-            """  
-                        
+            """
+
 EVENT_JOINS = """
             FROM event e 
             INNER JOIN venue v ON e.venue_id = v.id 
             INNER JOIN venue_image img ON v.venue_image_id = img.id
             WHERE 1=1
         """
-    # WHERE e.start_date >= date('now')
+# WHERE e.start_date >= date('now')
 
-FILTER_CRITERIA_EVENT_NAMES ="""
+FILTER_CRITERIA_EVENT_NAMES = """
             e.event_name = ?
         """
-ORDER_BY_FOR_FILTER ="""
+ORDER_BY_FOR_FILTER = """
             ORDER BY 1 ASC
         """
 QRY_LIMIT_OFFSET_EVENT = """ LIMIT ? OFFSET ? """
 
-FILTER_CRITERIA_CITY ="""
+FILTER_CRITERIA_CITY = """
             v.city = ?
         """
 
-FILTER_CRITERIA_ARTISTS ="""
+FILTER_CRITERIA_ARTISTS = """
             e.artist = ?
         """
 
-FILTER_CRITERIA_FROM_DATE ="""
+FILTER_CRITERIA_FROM_DATE = """
           e.start_date >= ?
         """
 
-FILTER_CRITERIA_TO_DATE ="""
+FILTER_CRITERIA_TO_DATE = """
           e.end_date <= ?
-        """                                
+        """
 SEARCH_CRITERIA = """
              (e.event_name LIKE '%' || ?  || '%'
             OR     e.artist LIKE '%' || ?  || '%'
@@ -127,7 +128,7 @@ ORDER_BY = """
         """
 
 
-# end: Get Event Data
+# End: Get Event Data
 
 # Start: Contact Us Queries
 INSERT_CONTACT_US = """
@@ -141,6 +142,7 @@ INSERT_CONTACT_US = """
 GET_EVENT_DETAILS_BY_EVENT_ID = """
     SELECT 
         e.id AS event_id,
+        e.venue_id, 
         e.event_name,
         e.artist,
         e.start_date,
@@ -161,8 +163,8 @@ GET_EVENT_DETAILS_BY_EVENT_ID = """
         es.seat_price,
         es.booking_status,
         ss.id AS section_id,
-        ss.section_name AS section_name,
-        ss.section_image AS seat_image
+        ss.section_name,
+        ss.section_image
     FROM 
         event e
     INNER JOIN 
@@ -189,8 +191,8 @@ INSERT_TICKET_ORDER = """
 
 INSERT_TICKET_ORDER_DETAILS = """
     INSERT INTO
-        ticket_order_details (ticket_order_id, event_seat_id, quantity)
-    VALUES (?, ?, ?);
+        ticket_order_details (ticket_order_id, event_id, event_seat_id, quantity)
+    VALUES (?, ?, ?, ?);
 """
 
 UPDATE_EVENT_SEAT_BOOKING_STATUS = """

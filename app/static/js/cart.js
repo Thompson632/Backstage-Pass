@@ -44,13 +44,11 @@ function CartView() {
     for (let index = 0; index < eventTicketDetails.length; index++) {
       let event_ticket = eventTicketDetails[index];
 
-      if (
-        this.equalIds(eventId, event_ticket["event_id"]) &&
-        this.equalIds(seatId, event_ticket["seat_id"])
-      ) {
+      if (this.equalIds(eventId, event_ticket["event_id"]) &&
+          this.equalIds(seatId, event_ticket["seat_id"])) {
         event_ticket["quantity"] = parseInt(event_ticket["quantity"]) + 1;
         event_ticket["total_price"] =
-          event_ticket["seat_price"] * event_ticket["quantity"];
+        event_ticket["seat_price"] * event_ticket["quantity"];
         break;
       }
     }
@@ -62,16 +60,11 @@ function CartView() {
     for (let index = 0; index < eventTicketDetails.length; index++) {
       let event_ticket = eventTicketDetails[index];
 
-      if (
-        this.equalIds(eventId, event_ticket["event_id"]) &&
-        this.equalIds(seatId, event_ticket["seat_id"])
-      ) {
-        event_ticket["quantity"] = Math.max(
-          0,
-          parseInt(event_ticket["quantity"]) - 1
-        );
+      if (this.equalIds(eventId, event_ticket["event_id"]) &&
+          this.equalIds(seatId, event_ticket["seat_id"])) {
+        event_ticket["quantity"] = Math.max(0, parseInt(event_ticket["quantity"]) - 1);
         event_ticket["total_price"] =
-          event_ticket["seat_price"] * event_ticket["quantity"];
+        event_ticket["seat_price"] * event_ticket["quantity"];
         break;
       }
     }
@@ -87,6 +80,14 @@ function CartView() {
     $("#cartTable").empty();
     let cartTotal = 0;
     let totalTickets = 0;
+
+    // Calculate total and quantity here so it persists between paginated pages
+    cartData.forEach((ticket) => {
+      const quantity = parseInt(ticket.quantity) || 0;
+      totalTickets += quantity;
+      const seatPrice = parseFloat(ticket.seat_price) || 0;
+      cartTotal += seatPrice * quantity;
+    });
 
     const paginatedData = this.paginateCartData(cartData);
     const tableBody = $('<tbody id="cartBody"></tbody>');
@@ -106,14 +107,9 @@ function CartView() {
 
       const seatPrice = parseFloat(ticket.seat_price) || 0;
       const quantity = parseInt(ticket.quantity) || 0;
-      totalTickets += quantity;
       const totalPrice = seatPrice * quantity;
-      cartTotal += totalPrice;
 
-      const eventDate =
-        convertDateToHumanReadable(ticket.start_date) +
-        " at " +
-        convertTo12HourFormat(ticket.start_time);
+      const eventDate = this.formatDate(ticket.start_date) +" at " + this.formatTime(ticket.start_time);
       const venueInfo = `${ticket.venue_name} - ${ticket.venue_street}, ${ticket.venue_city}, ${ticket.venue_state}, ${ticket.venue_zip_code}`;
 
       const row = $(`
@@ -121,36 +117,20 @@ function CartView() {
                 <td>
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
-                            <a href="/events/event_details?event_id=${
-                              ticket.event_id
-                            }" title="Go to event">
-                                <img src="/static/img/events/${
-                                  ticket.event_image
-                                }" alt="Event Image" style="width: 100px; height: auto; margin-right: 20px;">
+                            <a href="/events/event_details?event_id=${ticket.event_id}" title="Go to event">
+                                <img src="/static/img/events/${ticket.event_image}" alt="Event Image" style="width: 100px; height: auto; margin-right: 20px;">
                             </a>
                             <div>
                                 <h5>${ticket.event_name} - ${ticket.artist}</h5>
                                 <p>${venueInfo}<br>${eventDate}</p>
-                                <p>Section: ${ticket.section_name}, Seat: ${
-        ticket.seat_id
-      }<br>Price: $${seatPrice.toFixed(2)}, Quantity: ${quantity}</p>
+                                <p>Section: ${ticket.section_name}, Seat: ${ticket.seat_id}<br>Price: $${seatPrice.toFixed(2)}, Quantity: ${quantity}</p>
                             </div>
                         </div>
                         <div>
-                            <p><strong>Price: $${totalPrice.toFixed(
-                              2
-                            )}</strong></p>
+                            <p><strong>Price: $${totalPrice.toFixed(2)}</strong></p>
                             <div class="ticket-actions">
-                                <button class="minus btn btn-secondary" ${
-                                  quantity <= 0 ? "disabled" : ""
-                                } data-event-id="${
-        ticket.event_id
-      }" data-seat-id="${ticket.seat_id}">${MINUS_TEXT}</button>
-                                <button class="plus btn btn-secondary" data-event-id="${
-                                  ticket.event_id
-                                }" data-seat-id="${
-        ticket.seat_id
-      }">${PLUS_TEXT}</button>
+                                <button class="minus btn btn-secondary" ${quantity <= 0 ? "disabled" : ""} data-event-id="${ticket.event_id}" data-seat-id="${ticket.seat_id}">${MINUS_TEXT}</button>
+                                <button class="plus btn btn-secondary" data-event-id="${ticket.event_id}" data-seat-id="${ticket.seat_id}">${PLUS_TEXT}</button>
                             </div>
                         </div>
                     </div>
@@ -180,12 +160,9 @@ function CartView() {
     });
 
     $("#cartTable").append(tableBody);
+
     // Update display with the total cart price and items
-    $("#cartTotal").html(
-      `Subtotal (${totalTickets} items): <strong>$${cartTotal.toFixed(
-        2
-      )}</strong>`
-    );
+    $("#cartTotal").html(`Subtotal (${totalTickets} items): <strong>$${cartTotal.toFixed(2)}</strong>`);
     // Set the width of the button to match the subtotal
     $("#checkoutButton").css("width", $("#cartTotal").width());
   };
@@ -221,21 +198,32 @@ function CartView() {
 
   this.handleCheckout = () => {
     if (confirm(CHECKOUT_QUESTION)) {
-      // TODO: Let the server handle the redirect
       $.post({
         url: "/checkout",
-        data: JSON.stringify({ cart: this.eventTicketDetails }),
+        // Make sure we pass the whole cart here
+        data: JSON.stringify({ cart: eventTicketDetails }),
         contentType: "application/json",
-        success: function (_) {
-          console.log("Checkout successful");
-          window.location.href = "/account/tickets";
+        success: function (response) {
+          if (response.success) {
+            alert(response.success);
+            window.location.href = "/account/tickets";
+          }          
         },
-        error: function (error) {
-          console.error("Error during checkout:", error);
-          alert("An error occurred during checkout. Please try again later.");
+        error: function (xhr) {
+          console.error("Error Occurred:", xhr.responseText);
+          const response = JSON.parse(xhr.responseText);
+          alert(`${response.error}`);
         },
       });
     }
+  };
+
+  this.formatTime = (time) => {
+    return convertTo12HourFormat(time);
+  };
+
+  this.formatDate = (dateString) => {
+    return convertDateToHumanReadable(dateString);
   };
 }
 
