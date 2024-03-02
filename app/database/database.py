@@ -1,4 +1,6 @@
 import sqlite3
+
+from flask import jsonify
 from .queries import *
 
 
@@ -110,6 +112,9 @@ class Database:
             "ticket_order_price": ticket[17],
             "seat_price": ticket[18],
             "seat_number": ticket[19],
+            "section_id": ticket[20],
+            "section_name": ticket[21],
+            "section_image": ticket[22],
         }
 
   # End: User Ticket Functions
@@ -284,16 +289,19 @@ class Database:
         event_info["seats"] = [
             self.build_ticket_detail(row, only_seat=True) for row in ticket_details
         ]
-        
+
         return event_info
 
     def build_ticket_detail(self, ticket_detail, only_seat=False):
         if only_seat:
             return {
-                "seat_id": ticket_detail[16],
-                "seat_number": ticket_detail[17],
+                "event_seat_id": ticket_detail[16],
+                "seat_id": ticket_detail[17],
                 "seat_price": ticket_detail[18],
                 "booking_status": ticket_detail[19],
+                "section_id": ticket_detail[20],
+                "section_name": ticket_detail[21],
+                "seat_image": ticket_detail[22],
             }
         else:
             return {

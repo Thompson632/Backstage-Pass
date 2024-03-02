@@ -1,26 +1,28 @@
+const NO_TICKETS_PURCHASED = "No Tickets Purchased";
+const MY_TICKETS = "My Tickets";
+
 class TicketsView {
-  constructor(user_ticket_data, itemsPerPage = 5) {
-    this.user_ticket_data = user_ticket_data;
+  constructor(userTicketData, itemsPerPage = 5) {
+    this.userTicketData = userTicketData;
     this.currentPage = 1;
     this.itemsPerPage = itemsPerPage;
-    this.totalPages = Math.ceil(this.groupTicketsByEvent().length / this.itemsPerPage);
     this.initialize();
   }
 
   initialize() {
-    this.updateHeader();
+    if (!this.userTicketData || this.userTicketData.length === 0) {
+      $("#ticketHeader").text(NO_TICKETS_PURCHASED);
+      return;
+    } else {
+      $("#ticketHeader").text(MY_TICKETS);
+    }
+
+    console.log(JSON.stringify(this.userTicketData, null, 2));
+
     this.renderTable();
     this.initializeVenueModal();
     this.initializeToggleDetails();
     this.updatePagination();
-  }
-
-  updateHeader() {
-    if (this.user_ticket_data.length === 0) {
-      $("#ticketHeader").text("No Tickets Purchased");
-    } else {
-      $("#ticketHeader").text("My Tickets");
-    }
   }
 
   renderTable() {
@@ -31,13 +33,17 @@ class TicketsView {
     if (this.shouldRenderTable(paginatedTickets)) {
       return;
     }
-  
-    const tableBody = $('<tbody id="ticketsTableBody"></tbody>').appendTo($ticketsTable);
-  
+
+    const tableBody = $('<tbody id="ticketsTableBody"></tbody>').appendTo(
+      $ticketsTable
+    );
+
     for (const group of paginatedTickets) {
       tableBody.append(this.createEventRow(group));
-      group.forEach((ticket) => tableBody.append(this.createTicketDetailsRow(ticket)));
-    };
+      group.forEach((ticket) =>
+        tableBody.append(this.createTicketDetailsRow(ticket))
+      );
+    }
   }
 
   shouldRenderTable(paginatedTickets) {
@@ -47,14 +53,19 @@ class TicketsView {
   paginateTickets() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    const paginatedGroups = this.groupTicketsByEvent().slice(startIndex, endIndex);
+    const paginatedGroups = this.groupTicketsByEvent().slice(
+      startIndex,
+      endIndex
+    );
     return paginatedGroups;
   }
 
   groupTicketsByEvent() {
     return Object.values(
-      this.user_ticket_data.reduce((account, ticket) => {
-        (account[ticket.event_id] = account[ticket.event_id] || []).push(ticket);
+      this.userTicketData.reduce((account, ticket) => {
+        (account[ticket.event_id] = account[ticket.event_id] || []).push(
+          ticket
+        );
         return account;
       }, {})
     );
@@ -69,16 +80,24 @@ class TicketsView {
         <td>
           <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
-              <img src="/static/img/events/${firstTicket.event_image}" alt="Event Image" style="width: 100px; height: auto; margin-right: 20px;">
+              <img src="/static/img/events/${
+                firstTicket.event_image
+              }" alt="Event Image" style="width: 100px; height: auto; margin-right: 20px;">
               <div>
                 <h5>${firstTicket.event_name} - ${firstTicket.artist}</h5>
-                <p>${venueInfo}<br>${this.formatDate(firstTicket.start_date)} at ${this.formatTime(firstTicket.start_time)}</p>
-                <button type="button" class="btn btn-link toggle-details" data-event-name="${firstTicket.event_name}">
+                <p>${venueInfo}<br>${this.formatDate(
+      firstTicket.start_date
+    )} at ${this.formatTime(firstTicket.start_time)}</p>
+                <button type="button" class="btn btn-link toggle-details" data-event-name="${
+                  firstTicket.event_name
+                }">
                   <i class="fas fa-caret-down"></i> View Details
                 </button>
               </div>
             </div>
-            <div class="total-price"><strong>Total Price: $${this.calculateTotalPrice(group)}</strong></div>
+            <div class="total-price"><strong>Total Price: $${this.calculateTotalPrice(
+              group
+            )}</strong></div>
           </div>
         </td>
       </tr>
@@ -94,7 +113,9 @@ class TicketsView {
 
   createTicketDetailsRow(ticket) {
     return $(`
-      <tr class="details-row" data-event-name="${ticket.event_name}" style="display: none;">
+      <tr class="details-row" data-event-name="${
+        ticket.event_name
+      }" style="display: none;">
         <td>${this.buildTicketDetails(ticket)}</td>
       </tr>
     `);
@@ -102,13 +123,23 @@ class TicketsView {
 
   buildTicketDetails(ticket) {
     return `
-      <div class="details-content">
+      <div class="details-content d-flex align-items-center">
+      <div class="ticket-image-container mr-3">
+        <img src="/static/img/seats/${
+          ticket.section_image
+        }" alt="Section Image" style="width: 100px; height: auto;">
+      </div>
+      <div class="ticket-details">
         <p><strong>Ticket ID:</strong> ${ticket.ticket_id}</p>
         <p><strong>Order Date:</strong> ${ticket.ticket_order_date}</p>
         <p><strong>Seat Number:</strong> ${ticket.seat_number}</p>
+        <p><strong>Section:</strong> ${
+          ticket.section_name
+        }</p> <!-- Assuming section_name is available -->
         <p><strong>Seat Price:</strong> $${ticket.seat_price.toFixed(2)}</p>
         <p><strong>Quantity:</strong> ${ticket.quantity}</p>
       </div>
+    </div>
     `;
   }
 
@@ -130,17 +161,19 @@ class TicketsView {
   }
 
   createPageLink(text, toPage, active, disabled) {
-    const link = $(`<li class="page-item"><a class="page-link">${text}</a></li>`);
+    const link = $(
+      `<li class="page-item"><a class="page-link">${text}</a></li>`
+    );
 
     if (active) {
-      link.addClass('active');
-    }
-    
-    if (disabled) {
-      link.addClass('disabled');
+      link.addClass("active");
     }
 
-    link.find('.page-link').on('click', () => {
+    if (disabled) {
+      link.addClass("disabled");
+    }
+
+    link.find(".page-link").on("click", () => {
       if (!disabled) {
         this.currentPage = toPage;
         this.renderTable();
@@ -153,16 +186,32 @@ class TicketsView {
 
   updatePagination() {
     if (this.totalPages > 1) {
-      const pagination = $('#paginationList').empty();
-      pagination.append(this.createPageLink('Previous', this.currentPage - 1, false, this.currentPage === 1));
-  
+      const pagination = $("#paginationList").empty();
+      pagination.append(
+        this.createPageLink(
+          "Previous",
+          this.currentPage - 1,
+          false,
+          this.currentPage === 1
+        )
+      );
+
       for (let page = 1; page <= this.totalPages; page++) {
-        pagination.append(this.createPageLink(page, page, page === this.currentPage, false));
+        pagination.append(
+          this.createPageLink(page, page, page === this.currentPage, false)
+        );
       }
-  
-      pagination.append(this.createPageLink('Next', this.currentPage + 1, false, this.currentPage === this.totalPages));
+
+      pagination.append(
+        this.createPageLink(
+          "Next",
+          this.currentPage + 1,
+          false,
+          this.currentPage === this.totalPages
+        )
+      );
     } else {
-      $('#paginationList').hide();
+      $("#paginationList").hide();
     }
   }
 

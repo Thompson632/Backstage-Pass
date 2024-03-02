@@ -203,7 +203,6 @@ def my_tickets():
     if "user" in session:
         user_id = session["user"]["id"]
         user_ticket_data = get_db().get_user_tickets(user_id)
-        print(user_ticket_data)
         return render_template(
             "account/tickets.html", user_ticket_data=user_ticket_data
         )

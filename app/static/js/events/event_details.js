@@ -1,14 +1,21 @@
+const ERROR_LOG = "Error: No event details found - check the server logs";
+
 class EventDetailsView {
-  constructor(event_details_data) {
-    this.event_details_data = event_details_data;
+  constructor(eventDetailsData) {
+    this.eventDetailsData = eventDetailsData;
     this.initialize();
   }
 
   initialize() {
-    if (this.event_details_data) {
-      this.updatePageWithEventDetails(this.event_details_data);
-      this.initializeCollapsibleSections();
+    if (!this.eventDetailsData) {
+      alert(ERROR_LOG);
+      console.error(ERROR_LOG);
     }
+
+    console.log(JSON.stringify(this.eventDetailsData, null, 2));
+
+    this.updatePageWithEventDetails(this.eventDetailsData);
+    this.initializeCollapsibleSections();
   }
 
   updatePageWithEventDetails(data) {
@@ -16,6 +23,15 @@ class EventDetailsView {
     this.setVenueImage(data.venue_image, data.venue_name);
     this.setEventImage(data.event_image, data.event_name);
     this.populateSeatList(data.seats);
+
+    // Calculate available seats
+    const availableSeats = data.seats.filter(
+      (seat) => seat.booking_status === 0
+    ).length;
+    this.setTextContent(
+      "#seats-available",
+      `Seats Available: ${availableSeats}`
+    );
   }
 
   setEventInfo(data) {
@@ -33,10 +49,6 @@ class EventDetailsView {
     this.setTextContent(
       "#event-address",
       `Address: ${this.formatAddress(data)}`
-    );
-    this.setTextContent(
-      "#seats-available",
-      `Seats Available: ${data.number_of_seats}`
     );
   }
 
@@ -66,11 +78,6 @@ class EventDetailsView {
     this.initializeCollapsibleSection("#toggle-seat-info", "#seat-list");
   }
 
-  handleEventDetailsError(error) {
-    alert(error);
-    console.error("Error fetching event details:", error);
-  }
-
   setTextContent(selector, text) {
     $(selector).text(text);
   }
@@ -97,12 +104,27 @@ class EventDetailsView {
     return `${venue_street}, ${venue_city}, ${venue_state}, ${venue_zip}, ${venue_country}`;
   }
 
-  createSeatListItem({ seat_number, seat_price, booking_status }) {
-    return $("<li>").text(
-      `Seat ${seat_number}: $${seat_price} - ${
-        booking_status === 0 ? "Available" : "Booked"
-      }`
-    );
+  createSeatListItem(seat) {
+    const item = $("<li>")
+      .text(`Seat ${seat.seat_id}: $${seat.seat_price.toFixed(2)}`)
+      .css({
+        cursor: seat.booking_status === 0 ? "pointer" : "not-allowed",
+        opacity: seat.booking_status === 0 ? 1 : 0.6,
+      });
+
+    if (seat.booking_status === 0) {
+      item.on("click", () => this.openSeatDetailsModal(seat));
+    }
+
+    return item;
+  }
+
+  openSeatDetailsModal(seat) {
+    $("#modal-seat-number").html(`<strong>Seat Number:</strong> ${seat.seat_id}`);
+    $("#modal-seat-section").html(`<strong>Seat Section:</strong> ${seat.section_name}`);
+    $("#modal-seat-price").html(`<strong>Price:</strong> $${seat.seat_price.toFixed(2)}`);
+    $("#modal-seat-image").attr("src", `/static/img/seats/${seat.seat_image}`);
+    $("#seatDetailsModal").modal("show");
   }
 
   initializeCollapsibleSection(toggleSelector, targetSelector) {

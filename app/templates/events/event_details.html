@@ -11,8 +11,6 @@
   <script>
     var event_details_data = {{ event_details_data | tojson | safe }};
 
-    console.log(JSON.stringify(event_details_data, null, 2))
-    
     document.addEventListener("DOMContentLoaded", function () {
       new EventDetailsView(event_details_data);
     });
@@ -65,6 +63,28 @@
     <div class="seat-info">
       <h3 id="toggle-seat-info">Seat Availability <i class="fas fa-chevron-down"></i></h3>
       <ul id="seat-list" style="display: none;"></ul>
+    </div>
+  </div>
+
+  <div class="modal fade" id="seatDetailsModal" tabindex="-1" aria-labelledby="seatDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="seatDetailsModalLabel">Seat Details</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p id="modal-seat-number"></p>
+          <p id="modal-seat-section"></p>
+          <p id="modal-seat-price"></p>
+        </div>
+        <div class="modal-body">
+          <img id="modal-seat-image" src="" alt="Seat Section Image" style="width: 100%; height: auto;" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Add to Cart</button>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}

@@ -35,15 +35,20 @@ GET_TICKETS_BY_USER_ID = """
         ticket_orders.ticket_order_date AS ticket_order_date,
         ticket_orders.ticket_order_price AS ticket_order_price,
         es.seat_price AS seat_price,
-        es.seat_number AS seat_number
+        s.seat_id AS seat_number,
+        ss.id AS section_id,
+        ss.section_name AS section_name,
+        ss.section_image AS section_image
     FROM
         ticket_orders
     INNER JOIN user u ON ticket_orders.user_id = u.id
     INNER JOIN ticket_order_details tod ON ticket_orders.id = tod.ticket_order_id
-    INNER JOIN event_seat es ON tod.seat_id = es.id -- Correct reference to event_seat table
+    INNER JOIN event_seat es ON tod.event_seat_id = es.id
+    INNER JOIN seat s ON es.seat_id = s.id
     INNER JOIN event e ON es.event_id = e.id
     INNER JOIN venue v ON e.venue_id = v.id
     LEFT JOIN venue_image vi ON v.venue_image_id = vi.id
+    INNER JOIN seat_section ss ON s.seat_section_id = ss.id
     WHERE
         u.id = ?;
 """
@@ -151,15 +156,25 @@ GET_EVENT_DETAILS_BY_EVENT_ID = """
         v.country AS venue_country,
         v.number_of_seats,
         vi.image AS venue_image,
-        es.id AS seat_id,
-        es.seat_number,
+        es.id AS event_seat_id,
+        s.id AS seat_id,
         es.seat_price,
-        es.booking_status
+        es.booking_status,
+        ss.id AS section_id,
+        ss.section_name AS section_name,
+        ss.section_image AS seat_image
     FROM 
         event e
-    INNER JOIN venue v ON e.venue_id = v.id
-    INNER JOIN venue_image vi ON v.venue_image_id = vi.id
-    INNER JOIN event_seat es ON e.id = es.event_id
+    INNER JOIN 
+        venue v ON e.venue_id = v.id
+    INNER JOIN 
+        venue_image vi ON v.venue_image_id = vi.id
+    INNER JOIN 
+        event_seat es ON e.id = es.event_id
+    INNER JOIN 
+        seat s ON es.seat_id = s.id
+    INNER JOIN 
+        seat_section ss ON s.seat_section_id = ss.id
     WHERE 
         e.id = ?;
 """
