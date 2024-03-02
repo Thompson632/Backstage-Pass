@@ -5,8 +5,18 @@
 {% endblock %}
 
 {% block header %}
-  <script type="module" src="/static/js/events/event_details.js"></script>
   <link rel="stylesheet" href="/static/css/event_details.css" />
+  <script src="/static/js/events/event_details.js"></script>
+
+  <script>
+    var event_details_data = {{ event_details_data | tojson | safe }};
+
+    console.log(JSON.stringify(event_details_data, null, 2))
+    
+    document.addEventListener("DOMContentLoaded", function () {
+      new EventDetailsView(event_details_data);
+    });
+  </script>
 {% endblock %}
 
 {% block content %}

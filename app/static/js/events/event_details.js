@@ -1,125 +1,138 @@
-import { convertTo12HourFormat, convertDateToHumanReadable } from "../utils.js";
+class EventDetailsView {
+  constructor(event_details_data) {
+    this.event_details_data = event_details_data;
+    this.initialize();
+  }
 
-$(document).ready(function () {
-  initializeEventDetailsPage();
-});
+  initialize() {
+    if (this.event_details_data) {
+      this.updatePageWithEventDetails(this.event_details_data);
+      this.initializeCollapsibleSections();
+    }
+  }
 
-function initializeEventDetailsPage() {
-  getEventDetails();
-  initializeCollapsibleSections();
+  updatePageWithEventDetails(data) {
+    this.setEventInfo(data);
+    this.setVenueImage(data.venue_image, data.venue_name);
+    this.setEventImage(data.event_image, data.event_name);
+    this.populateSeatList(data.seats);
+  }
+
+  setEventInfo(data) {
+    this.setTextContent("#event-name", data.event_name);
+    this.setTextContent("#artist-name", data.artist);
+    this.setTextContent(
+      "#event-date",
+      `Date: ${this.getHumanReadableDateRange(data.start_date, data.end_date)}`
+    );
+    this.setTextContent(
+      "#event-time",
+      `Time: ${this.getEventTimeRange(data.start_time, data.end_time)}`
+    );
+    this.setTextContent("#event-venue", `Venue: ${data.venue_name}`);
+    this.setTextContent(
+      "#event-address",
+      `Address: ${this.formatAddress(data)}`
+    );
+    this.setTextContent(
+      "#seats-available",
+      `Seats Available: ${data.number_of_seats}`
+    );
+  }
+
+  setVenueImage(src, alt) {
+    this.setImageAttributes(
+      "#venue-img",
+      `/static/img/venues/${src}`,
+      `Image of venue: ${alt}`
+    );
+  }
+
+  setEventImage(src, alt) {
+    this.setImageAttributes(
+      "#event-header img",
+      `/static/img/events/${src}`,
+      `Image of event: ${alt}`
+    );
+  }
+
+  populateSeatList(seats) {
+    var seatList = $("#seat-list").empty();
+    seats.forEach((seat) => seatList.append(this.createSeatListItem(seat)));
+  }
+
+  initializeCollapsibleSections() {
+    this.initializeCollapsibleSection("#toggle-venue-image", "#venue-img");
+    this.initializeCollapsibleSection("#toggle-seat-info", "#seat-list");
+  }
+
+  handleEventDetailsError(error) {
+    alert(error);
+    console.error("Error fetching event details:", error);
+  }
+
+  setTextContent(selector, text) {
+    $(selector).text(text);
+  }
+
+  setImageAttributes(selector, src, alt) {
+    $(selector).attr("src", src).attr("alt", alt);
+  }
+
+  getHumanReadableDateRange(startDate, endDate) {
+    return `${this.formatDate(startDate)} to ${this.formatDate(endDate)}`;
+  }
+
+  getEventTimeRange(startTime, endTime) {
+    return `${this.formatTime(startTime)} - ${this.formatTime(endTime)}`;
+  }
+
+  formatAddress({
+    venue_street,
+    venue_city,
+    venue_state,
+    venue_zip,
+    venue_country,
+  }) {
+    return `${venue_street}, ${venue_city}, ${venue_state}, ${venue_zip}, ${venue_country}`;
+  }
+
+  createSeatListItem({ seat_number, seat_price, booking_status }) {
+    return $("<li>").text(
+      `Seat ${seat_number}: $${seat_price} - ${
+        booking_status === 0 ? "Available" : "Booked"
+      }`
+    );
+  }
+
+  initializeCollapsibleSection(toggleSelector, targetSelector) {
+    $(toggleSelector).click(function () {
+      $(targetSelector).slideToggle();
+      $(this).find("i").toggleClass("fa-chevron-down fa-chevron-up");
+    });
+  }
+
+  formatTime(time) {
+    return convertTo12HourFormat(time);
+  }
+
+  formatDate(dateString) {
+    return convertDateToHumanReadable(dateString);
+  }
 }
 
-function getEventDetails() {
-  $.ajax({
-    // TODO: Change to this when Dheeraj is done
-    // url: "/events/event_details"
-    url: "/api/event_details/test",
-    type: "GET",
-    dataType: "json",
-    success: updatePageWithEventDetails,
-    error: handleEventDetailsError,
-  });
+function convertTo12HourFormat(time) {
+  const [hour, minute] = time.split(":");
+  const suffix = +hour < 12 ? "AM" : "PM";
+  const hours12 = +hour % 12 || 12;
+  return `${hours12}:${minute} ${suffix}`;
 }
 
-function updatePageWithEventDetails(data) {
-  setEventInfo(data);
-  setVenueImage(data.venue_image, data.venue_name);
-  setEventImage(data.event_image, data.event_name);
-  populateSeatList(data.seats);
-}
-
-function setEventInfo(data) {
-  setTextContent("#event-name", data.event_name);
-  setTextContent("#artist-name", data.artist);
-  setTextContent(
-    "#event-date",
-    `Date: ${getHumanReadableDateRange(data.start_date, data.end_date)}`
-  );
-  setTextContent(
-    "#event-time",
-    `Time: ${getEventTimeRange(data.start_time, data.end_time)}`
-  );
-  setTextContent("#event-venue", `Venue: ${data.venue_name}`);
-  setTextContent("#event-address", `Address: ${formatAddress(data)}`);
-  setTextContent(
-    "#seats-available",
-    `Seats Available: ${data.number_of_seats}`
-  );
-}
-
-function setVenueImage(src, alt) {
-  setImageAttributes(
-    "#venue-img",
-    `/static/img/venues/${src}`,
-    `Image of venue: ${alt}`
-  );
-}
-
-function setEventImage(src, alt) {
-  setImageAttributes(
-    "#event-header img",
-    `/static/img/events/${src}`,
-    `Image of event: ${alt}`
-  );
-}
-
-function populateSeatList(seats) {
-  var seatList = $("#seat-list").empty();
-  seats.forEach((seat) => seatList.append(createSeatListItem(seat)));
-}
-
-function initializeCollapsibleSections() {
-  initializeCollapsibleSection("#toggle-venue-image", "#venue-img");
-  initializeCollapsibleSection("#toggle-seat-info", "#seat-list");
-}
-
-// Utility Functions
-function handleEventDetailsError(error) {
-  alert(error);
-  console.error("Error fetching event details:", error);
-}
-
-function setTextContent(selector, text) {
-  $(selector).text(text);
-}
-
-function setImageAttributes(selector, src, alt) {
-  $(selector).attr("src", src).attr("alt", alt);
-}
-
-function getHumanReadableDateRange(startDate, endDate) {
-  return `${convertDateToHumanReadable(
-    startDate
-  )} to ${convertDateToHumanReadable(endDate)}`;
-}
-
-function getEventTimeRange(startTime, endTime) {
-  return `${convertTo12HourFormat(startTime)} - ${convertTo12HourFormat(
-    endTime
-  )}`;
-}
-
-function formatAddress({
-  venue_street,
-  venue_city,
-  venue_state,
-  venue_zip,
-  venue_country,
-}) {
-  return `${venue_street}, ${venue_city}, ${venue_state}, ${venue_zip}, ${venue_country}`;
-}
-
-function createSeatListItem({ seat_number, seat_price, booking_status }) {
-  return $("<li>").text(
-    `Seat ${seat_number}: $${seat_price} - ${
-      booking_status === 0 ? "Available" : "Booked"
-    }`
-  );
-}
-
-function initializeCollapsibleSection(toggleSelector, targetSelector) {
-  $(toggleSelector).click(function () {
-    $(targetSelector).slideToggle();
-    $(this).find("i").toggleClass("fa-chevron-down fa-chevron-up");
+function convertDateToHumanReadable(dateStr) {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 }

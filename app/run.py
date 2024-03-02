@@ -277,8 +277,6 @@ def submit_contact_us():
 @app.route("/events/event_details", methods=["GET"])
 def get_event_details():
     event_id = request.args.get("event_id")
-    print(request)
-    print(request.form)
     print("Querying for:", event_id)
     event_details_data = get_db().get_ticket_details(event_id)
     return render_template(

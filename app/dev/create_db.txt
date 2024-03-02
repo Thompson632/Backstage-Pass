@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS venue_image (
 );
 
 CREATE TABLE IF NOT EXISTS event (
-	id primary key,
+	id integer primary key,
 	venue_id integer not null,
 	event_name text not null,
 	artist text not null,
@@ -70,14 +70,14 @@ CREATE TABLE IF NOT EXISTS ticket_order_details (
 	foreign key(seat_id) references seat(id)
 );
 
-CREATE TABLE contact_us (
-    id INTEGER PRIMARY KEY,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    email_id TEXT NOT NULL,
-    phone TEXT,
-    question TEXT NOT NULL,
-    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE IF NOT EXISTS contact_us (
+    id integer primary key,
+    first_name text not null,
+    last_name text not null,
+    email_id text not null,
+    phone text,
+    question text not null,
+    CreatedDate datetime DEFAULT CURRENT_TIMESTAMP
 );
 
 .mode csv
