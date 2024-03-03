@@ -1,24 +1,25 @@
-from flask import Flask, g, render_template, redirect, request, session, jsonify
+from flask import (
+    Flask,
+    g,
+    make_response,
+    render_template,
+    redirect,
+    request,
+    session,
+    jsonify,
+)
 from database.database import Database
 from passlib.hash import pbkdf2_sha256
+from werkzeug.datastructures import MultiDict
 import logging
+
+from errors import *
 
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 app.secret_key = "backstage_pass_cs530"
 DATABASE_PATH = "./dev/backstage_pass.db"
-
-# Start: Login Messages
-SUCCESSFUL_LOGIN = "You were successfully logged in!"
-ACCOUNT_CREATION = "Account successfully created!"
-ERROR_USER_HAS_ACCOUNT = "Username entered already has an account."
-ERROR_INVALID_DATA = "One or more fields entered is invalid."
-ERROR_UNKNOWN_USER = "Unknown username, please try again."
-ERROR_INVALID_PASSWORD = "Invalid password, please try again."
-ERROR_MISSING_USERNAME = "Missing username, please try again"
-ERROR_MISSING_PASSWORD = "Missing password, please try again"
-# End: Login Message
 
 
 def get_db():
@@ -31,6 +32,7 @@ def get_db():
 @app.route("/")
 def home():
     return render_template("home.html")
+
 
 @app.route("/about")
 def about():
@@ -105,7 +107,7 @@ def my_profile():
         user_data = get_db().get_user_by_username(session["user"]["username"])
         return render_template("account/profile.html", user=user_data)
     else:
-        redirect("/")
+        return redirect("/")
 
 
 @app.route("/api/profile/edit/info", methods=["GET", "POST"])
@@ -120,9 +122,9 @@ def edit_user_info():
         if user_data:
             return render_template("account/profile.html", user=user_data)
         else:
-            return ("Error: Failed to update user info", 404)
+            return jsonify({"error": FAILED_TO_UPDATE_USER_INFO}), 404
     else:
-        redirect("/")
+        return redirect("/")
 
 
 @app.route("/api/profile/edit/email_address", methods=["POST"])
@@ -136,7 +138,7 @@ def edit_user_email_address():
         if user_data:
             return render_template("account/profile.html", user=user_data)
         else:
-            return ("Error: Failed to update user email address", 404)
+            return jsonify({"error": FAILED_TO_UPDATE_USER_EMAIL_ADDRESS}), 404
     else:
         return redirect("/")
 
@@ -153,9 +155,9 @@ def edit_user_password():
         if user_data:
             return render_template("account/profile.html", user=user_data)
         else:
-            return ("Error: Failed to update user password", 404)
+            return jsonify({"error": FAILED_TO_UPDATE_USER_PASSWORD}), 404
     else:
-        redirect("/")
+        return redirect("/")
 
 
 @app.route("/api/profile/edit/phone_number", methods=["POST"])
@@ -169,9 +171,9 @@ def edit_user_phone_number():
         if user_data:
             return render_template("account/profile.html", user=user_data)
         else:
-            return ("Error: Failed to update user phone number", 404)
+            return jsonify({"error": FAILED_TO_UPDATE_USER_PHONE_NUMBER}), 404
     else:
-        redirect("/")
+        return redirect("/")
 
 
 @app.route("/api/profile/edit/address", methods=["POST"])
@@ -189,9 +191,9 @@ def edit_user_address():
         if user_data:
             return render_template("account/profile.html", user=user_data)
         else:
-            return ("Error: Failed to update user address", 404)
+            return jsonify({"error": FAILED_TO_UPDATE_USER_ADDRESS}), 404
     else:
-        redirect("/")
+        return redirect("/")
 
 
 # End: Account Profile
@@ -201,64 +203,121 @@ def edit_user_address():
 @app.route("/account/tickets", methods=["GET"])
 def my_tickets():
     if "user" in session:
-        user_id = session["user"]["id"]
-        user_ticket_data = get_db().get_user_tickets(user_id)
-        return render_template(
-            "account/tickets.html", user_ticket_data=user_ticket_data
-        )
+        return render_template("account/tickets.html")
     else:
-        redirect("/")
+        return redirect("/")
+
+
+@app.route("/api/account/tickets", methods=["GET"])
+def get_my_tickets():
+    if "user" in session:
+        user_id = session["user"]["id"]
+        print("Getting Tickets for:", user_id)
+        user_ticket_data = get_db().get_user_tickets(user_id)
+        return {"user_ticket_data": user_ticket_data}
+    else:
+        return redirect("/")
+
 
 # End: Account Tickets
 
+
 # Start: Get Events
-@app.route("/events", methods=["GET","POST"])
+@app.route("/events", methods=["GET", "POST"])
 def all_events():
-    search_events = request.args.get('search_events','')
-    
-    filter_event_name = request.form.getlist('formControlEventName')
-    filter_city = request.form.getlist('formControlCity')
-    filter_artist = request.form.getlist('formControlArtist')
-    filter_from_date = request.form.get('fromDate', '')
-    filter_to_date = request.form.get('toDate', '')
-    
-    return render_template("events/events.html", search_events=search_events
-                           , filter_event_name=filter_event_name
-                           , filter_city_name = filter_city
-                           , filter_artist_name = filter_artist
-                           , filter_from_date = filter_from_date
-                           , filter_to_date = filter_to_date
-                           )
+    search_events = request.args.get("search_events", "")
+
+    filter_event_name = request.form.getlist("formControlEventName")
+    filter_city = request.form.getlist("formControlCity")
+    filter_artist = request.form.getlist("formControlArtist")
+    filter_from_date = request.form.get("fromDate", "")
+    filter_to_date = request.form.get("toDate", "")
+
+    return render_template(
+        "events/events.html",
+        search_events=search_events,
+        filter_event_name=filter_event_name,
+        filter_city_name=filter_city,
+        filter_artist_name=filter_artist,
+        filter_from_date=filter_from_date,
+        filter_to_date=filter_to_date,
+    )
+
 
 def generate_response(args):
-    n = request.args.get('n', default=5)
-    offset = request.args.get('offset', default=0)
-    # print(n)
-    # print(offset)
-    search_events = request.args.get('search_events')
-    filter_event_name = request.form.getlist('filter_event_name[]')
-    filter_city_name = request.form.getlist('filter_city_name[]')
-    filter_artist_name = request.form.getlist('filter_artist_name[]')
-    filter_from_date = request.form.get('filter_from_date')
-    filter_to_date = request.form.get('filter_to_date')
-    if search_events :
+    n = request.args.get("n", default=5)
+    offset = request.args.get("offset", default=0)
+    search_events = request.args.get("search_events")
+    filter_event_name = request.form.getlist("filter_event_name[]")
+    filter_city_name = request.form.getlist("filter_city_name[]")
+    filter_artist_name = request.form.getlist("filter_artist_name[]")
+    filter_from_date = request.form.get("filter_from_date")
+    filter_to_date = request.form.get("filter_to_date")
+    if search_events:
         search_events = search_events
     else:
-        search_events = ''
+        search_events = ""
 
-    return jsonify({
-        'events': get_db().get_events(search_events, filter_event_name,filter_city_name,filter_artist_name, filter_from_date, filter_to_date, n, offset),
-        'event_names' : get_db().get_distinct_events(search_events,filter_event_name),
-        'city_names' : get_db().get_distinct_cities(search_events,filter_event_name),
-        'artist_names' : get_db().get_distinct_artists(search_events, filter_event_name),
-        'total' : get_db().get_event_count(search_events, filter_event_name,filter_city_name,filter_artist_name, filter_from_date, filter_to_date),
-    })
+    return jsonify(
+        {
+            "events": get_db().get_events(
+                search_events,
+                filter_event_name,
+                filter_city_name,
+                filter_artist_name,
+                filter_from_date,
+                filter_to_date,
+                n,
+                offset,
+            ),
+            "event_names": get_db().get_distinct_events(
+                search_events, filter_event_name
+            ),
+            "city_names": get_db().get_distinct_cities(
+                search_events, filter_event_name
+            ),
+            "artist_names": get_db().get_distinct_artists(
+                search_events, filter_event_name
+            ),
+            "total": get_db().get_event_count(
+                search_events,
+                filter_event_name,
+                filter_city_name,
+                filter_artist_name,
+                filter_from_date,
+                filter_to_date,
+            ),
+        }
+    )
 
-@app.route('/api/get_events', methods=['GET','POST'])
+
+@app.route("/api/get_events", methods=["GET", "POST"])
 def api_get_events():
     return generate_response(request.form)
 
+
 # End: Get Events
+
+
+# Start: Checkout
+@app.route("/checkout", methods=["POST"])
+def checkout():
+    if "user" in session:
+        user_id = session["user"]["id"]
+
+        total = 0
+        for ticket in session["event_details_cart"]:
+            total += float(ticket["total_price"])
+
+        get_db().checkout(user_id, session["event_details_cart"], total)
+        session["event_details_cart"] = []
+        return jsonify({"success": SUCCESSFUL_CHECKOUT})
+    else:
+        return jsonify({"error": USER_NOT_LOGGED_IN}), 401
+
+
+# End: Checkout
+
 
 # Begin Contact Us
 @app.route("/contactus", methods=["POST"])
@@ -270,7 +329,10 @@ def submit_contact_us():
     question = request.form.get("query_input")
     get_db().insert_contact_us(first_name, last_name, email_id, phone, question)
     return redirect("/")
+
+
 # End Contact Us
+
 
 # Start: Event Details
 @app.route("/events/event_details", methods=["GET"])
@@ -283,13 +345,182 @@ def get_event_details():
     )
 
 
-@app.route("/api/event_details/test", methods=["GET"])
-def test_get_event_details():
-    event_details_data = get_db().get_ticket_details("1")
-    return jsonify(event_details_data)
-
-
 # End: Event Details
+
+
+# Start: Cart
+@app.route("/cart")
+def cart():
+    return render_template("cart.html")
+
+
+@app.route("/api/cart", methods=["GET"])
+def get_cart():
+    if "event_details_cart" in session:
+        return {"cart": session["event_details_cart"]}
+    else:
+        return {"cart": []}
+
+
+@app.route("/api/cart/add", methods=["POST"])
+def add_to_cart():
+    event_details = build_event_details_dict(request.form)
+
+    # If there is not a cart or if that cart is empty, add our event details
+    if "event_details_cart" not in session or not session["event_details_cart"]:
+        session["event_details_cart"] = [event_details]
+    else:
+        event_details_cart = session["event_details_cart"]
+        seat_ids = get_seat_ids(event_details_cart)
+
+        if event_details["seat_id"] in seat_ids:
+            original_ticket = get_original_ticket(
+                event_details["event_id"], event_details["seat_id"], event_details_cart
+            )
+
+            if original_ticket:
+                # Remove the original so we can update
+                event_details_cart.remove(original_ticket)
+
+                original_ticket["quantity"] = int(original_ticket["quantity"]) + 1
+                original_ticket["total_price"] = float(
+                    original_ticket["seat_price"]
+                ) * int(original_ticket["quantity"])
+
+                # Add it back with our updated seat price and quantity
+                event_details_cart.append(original_ticket)
+        else:
+            event_details_cart.append(event_details)
+
+        session["event_details_cart"] = event_details_cart
+
+    return make_response()
+
+
+def build_event_details_dict(form):
+    event_id = form.get("event_details[event_id]")
+    event_name = form.get("event_details[event_name]")
+    venue_name = form.get("event_details[venue_name]")
+    venue_street = form.get("event_details[venue_street]")
+    venue_city = form.get("event_details[venue_city]")
+    venue_state = form.get("event_details[venue_state]")
+    venue_zip_code = form.get("event_details[venue_zip_code]")
+    venue_country = form.get("event_details[venue_country]")
+    venue_image = form.get("event_details[venue_image]")
+    artist = form.get("event_details[artist]")
+    start_date = form.get("event_details[start_date]")
+    start_time = form.get("event_details[start_time]")
+    event_image = form.get("event_details[event_image]")
+    seat_id = form.get("event_details[seat][seat_id]")
+    section_name = form.get("event_details[seat][section_name]")
+    seat_price = form.get("event_details[seat][seat_price]")
+
+    return MultiDict(
+        [
+            ("event_id", event_id),
+            ("event_name", event_name),
+            ("venue_name", venue_name),
+            ("venue_street", venue_street),
+            ("venue_city", venue_city),
+            ("venue_state", venue_state),
+            ("venue_zip_code", venue_zip_code),
+            ("venue_country", venue_country),
+            ("venue_image", venue_image),
+            ("artist", artist),
+            ("start_date", start_date),
+            ("start_time", start_time),
+            ("event_image", event_image),
+            ("seat_id", seat_id),
+            ("section_name", section_name),
+            ("seat_price", seat_price),
+            ("total_price", seat_price),
+            ("quantity", 1),
+        ]
+    )
+
+
+def get_original_ticket(event_id, seat_id, cart_with_tickets):
+    for ticket in cart_with_tickets:
+        if ticket["event_id"] == event_id and ticket["seat_id"] == seat_id:
+            return ticket
+
+
+def get_seat_ids(event_details_cart):
+    seat_ids = []
+    for ticket in event_details_cart:
+        seat_ids.append(ticket["seat_id"])
+    return seat_ids
+
+
+@app.route("/api/update_cart", methods=["POST"])
+def update_cart():
+    event_details_cart = []
+    session["event_details_cart"] = event_details_cart
+
+    num_tickets = int(request.form.get("num_tickets"))
+
+    for current_index in range(num_tickets):
+        event_details = build_cart_event_details(str(current_index), request.form)
+        # Only add if there is at least a quantity of one
+        if event_details:
+            event_details_cart.append(
+                build_cart_event_details(str(current_index), request.form)
+            )
+
+    session["event_details_cart"] = event_details_cart
+    return {"cart": event_details_cart}
+
+
+def build_cart_event_details(current_index, form):
+    event_id = form.get("cart" + "[" + current_index + "][event_id]")
+    event_name = form.get("cart" + "[" + current_index + "][event_name]")
+    venue_name = form.get("cart" + "[" + current_index + "][venue_name]")
+    venue_street = form.get("cart" + "[" + current_index + "][venue_street]")
+    venue_city = form.get("cart" + "[" + current_index + "][venue_city]")
+    venue_state = form.get("cart" + "[" + current_index + "][venue_state]")
+    venue_zip_code = form.get("cart" + "[" + current_index + "][venue_zip_code]")
+    venue_country = form.get("cart" + "[" + current_index + "][venue_country]")
+    venue_image = form.get("cart" + "[" + current_index + "][venue_image]")
+    artist = form.get("cart" + "[" + current_index + "][artist]")
+    start_date = form.get("cart" + "[" + current_index + "][start_date]")
+    start_time = form.get("cart" + "[" + current_index + "][start_time]")
+    event_image = form.get("cart" + "[" + current_index + "][event_image]")
+    seat_id = form.get("cart" + "[" + current_index + "][seat_id]")
+    section_name = form.get("cart" + "[" + current_index + "][section_name]")
+    seat_price = form.get("cart" + "[" + current_index + "][seat_price]")
+    quantity = form.get("cart" + "[" + current_index + "][quantity]")
+    total_price = form.get("cart" + "[" + current_index + "][total_price]")
+
+    # We don't want to keep the ticket in the list
+    # if the quantity is less than 1
+    if int(quantity) >= 1:
+        return MultiDict(
+            [
+                ("event_id", event_id),
+                ("event_name", event_name),
+                ("venue_name", venue_name),
+                ("venue_street", venue_street),
+                ("venue_city", venue_city),
+                ("venue_state", venue_state),
+                ("venue_zip_code", venue_zip_code),
+                ("venue_country", venue_country),
+                ("venue_image", venue_image),
+                ("artist", artist),
+                ("start_date", start_date),
+                ("start_time", start_time),
+                ("event_image", event_image),
+                ("seat_id", seat_id),
+                ("section_name", section_name),
+                ("seat_price", seat_price),
+                ("total_price", total_price),
+                ("quantity", quantity),
+            ]
+        )
+    else:
+        return None
+
+
+# End: Cart
 def is_valid_data(parameters=[]):
     for param in parameters:
         if param is None:

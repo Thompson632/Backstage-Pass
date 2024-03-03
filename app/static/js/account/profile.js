@@ -53,12 +53,13 @@ document.addEventListener("DOMContentLoaded", function () {
       url: actionUrl + `?user_id=${userId}`,
       type: "POST",
       data: form.serialize(),
-      success: function (response) {
+      success: function (_) {       
         alert("Updated successfully!", response);
       },
-      error: function (error) {
-        alert("Error occurred!", error);
-        console.error(error);
+      error: function (xhr) {
+        console.error("Error Occurred:", xhr.responseText);
+        const response = JSON.parse(xhr.responseText);
+        alert(`${response.error}`);
       },
     }).done(() => {
       location.reload();

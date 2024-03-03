@@ -1,7 +1,7 @@
 import sqlite3
 
-from flask import jsonify
 from .queries import *
+from datetime import datetime
 
 
 class Database:
@@ -96,49 +96,68 @@ class Database:
             "ticket_id": ticket[1],
             "event_id": ticket[2],
             "event_name": ticket[3],
-            "venue_name": ticket[4],
-            "venue_street": ticket[5],
-            "venue_city": ticket[6],
-            "venue_state": ticket[7],
-            "venue_zip_code": ticket[8],
-            "venue_country": ticket[9],
-            "venue_image": ticket[10],
-            "artist": ticket[11],
-            "start_date": ticket[12],
-            "start_time": ticket[13],
-            "event_image": ticket[14],
-            "quantity": ticket[15],
-            "ticket_order_date": ticket[16],
-            "ticket_order_price": ticket[17],
-            "seat_price": ticket[18],
-            "seat_number": ticket[19],
-            "section_id": ticket[20],
-            "section_name": ticket[21],
-            "section_image": ticket[22],
+            "venue_id": ticket[4],
+            "venue_name": ticket[5],
+            "venue_street": ticket[6],
+            "venue_city": ticket[7],
+            "venue_state": ticket[8],
+            "venue_zip_code": ticket[9],
+            "venue_country": ticket[10],
+            "venue_image": ticket[11],
+            "artist": ticket[12],
+            "start_date": ticket[13],
+            "start_time": ticket[14],
+            "event_image": ticket[15],
+            "quantity": ticket[16],
+            "ticket_order_date": ticket[17],
+            "ticket_order_price": ticket[18],
+            "seat_price": ticket[19],
+            "seat_number": ticket[20],
+            "section_id": ticket[21],
+            "section_name": ticket[22],
+            "section_image": ticket[23],
         }
 
-  # End: User Ticket Functions
+    # End: User Ticket Functions
 
-  # Get All events
-    def get_events(self, search_criteria, filter_event_name, filter_city_name
-                   , filter_artist_name, filter_from_date, filter_to_date
-                   , n, offset):
-        
-        QUERY_STR = EVENT_TABLE_COLUMNS + EVENT_JOINS 
+    # Get All events
+    def get_events(
+        self,
+        search_criteria,
+        filter_event_name,
+        filter_city_name,
+        filter_artist_name,
+        filter_from_date,
+        filter_to_date,
+        n,
+        offset,
+    ):
+
+        QUERY_STR = EVENT_TABLE_COLUMNS + EVENT_JOINS
         AND_CLAUSE = ""
         criteria_list = []
-        QUERY_STR = QUERY_STR + self.format_filter_query_lists(FILTER_CRITERIA_EVENT_NAMES,filter_event_name,criteria_list)
-        QUERY_STR = QUERY_STR + self.format_filter_query_lists(FILTER_CRITERIA_CITY,filter_city_name,criteria_list)
-        QUERY_STR = QUERY_STR + self.format_filter_query_lists(FILTER_CRITERIA_ARTISTS,filter_artist_name,criteria_list)
-        QUERY_STR = QUERY_STR + self.format_filter_query_string(FILTER_CRITERIA_FROM_DATE,filter_from_date,criteria_list)
-        QUERY_STR = QUERY_STR + self.format_filter_query_string(FILTER_CRITERIA_TO_DATE,filter_to_date,criteria_list)
+        QUERY_STR = QUERY_STR + self.format_filter_query_lists(
+            FILTER_CRITERIA_EVENT_NAMES, filter_event_name, criteria_list
+        )
+        QUERY_STR = QUERY_STR + self.format_filter_query_lists(
+            FILTER_CRITERIA_CITY, filter_city_name, criteria_list
+        )
+        QUERY_STR = QUERY_STR + self.format_filter_query_lists(
+            FILTER_CRITERIA_ARTISTS, filter_artist_name, criteria_list
+        )
+        QUERY_STR = QUERY_STR + self.format_filter_query_string(
+            FILTER_CRITERIA_FROM_DATE, filter_from_date, criteria_list
+        )
+        QUERY_STR = QUERY_STR + self.format_filter_query_string(
+            FILTER_CRITERIA_TO_DATE, filter_to_date, criteria_list
+        )
 
-        if search_criteria != "" :
+        if search_criteria != "":
             criteria_list.append(search_criteria)
             criteria_list.append(search_criteria)
             criteria_list.append(search_criteria)
             AND_CLAUSE = " AND " + AND_CLAUSE + SEARCH_CRITERIA
-        
+
         criteria_list.append(n)
         criteria_list.append(offset)
 
@@ -147,29 +166,47 @@ class Database:
             data = self.select(QUERY_STR, criteria_list)
         else:
             data = self.select(QUERY_STR + ORDER_BY + QRY_LIMIT_OFFSET_EVENT)
-        
+
         if data:
-            return self.format_events (data)
+            return self.format_events(data)
         else:
             return None
 
-    def get_event_count(self, search_criteria, filter_event_name, filter_city_name, filter_artist_name, filter_from_date, filter_to_date):
-        
-        QUERY_STR = QRY_COLS_EVENT_COUNT + EVENT_JOINS 
+    def get_event_count(
+        self,
+        search_criteria,
+        filter_event_name,
+        filter_city_name,
+        filter_artist_name,
+        filter_from_date,
+        filter_to_date,
+    ):
+
+        QUERY_STR = QRY_COLS_EVENT_COUNT + EVENT_JOINS
         AND_CLAUSE = ""
         criteria_list = []
-        QUERY_STR = QUERY_STR + self.format_filter_query_lists(FILTER_CRITERIA_EVENT_NAMES,filter_event_name,criteria_list)
-        QUERY_STR = QUERY_STR + self.format_filter_query_lists(FILTER_CRITERIA_CITY,filter_city_name,criteria_list)
-        QUERY_STR = QUERY_STR + self.format_filter_query_lists(FILTER_CRITERIA_ARTISTS,filter_artist_name,criteria_list)
-        QUERY_STR = QUERY_STR + self.format_filter_query_string(FILTER_CRITERIA_FROM_DATE,filter_from_date,criteria_list)
-        QUERY_STR = QUERY_STR + self.format_filter_query_string(FILTER_CRITERIA_TO_DATE,filter_to_date,criteria_list)
+        QUERY_STR = QUERY_STR + self.format_filter_query_lists(
+            FILTER_CRITERIA_EVENT_NAMES, filter_event_name, criteria_list
+        )
+        QUERY_STR = QUERY_STR + self.format_filter_query_lists(
+            FILTER_CRITERIA_CITY, filter_city_name, criteria_list
+        )
+        QUERY_STR = QUERY_STR + self.format_filter_query_lists(
+            FILTER_CRITERIA_ARTISTS, filter_artist_name, criteria_list
+        )
+        QUERY_STR = QUERY_STR + self.format_filter_query_string(
+            FILTER_CRITERIA_FROM_DATE, filter_from_date, criteria_list
+        )
+        QUERY_STR = QUERY_STR + self.format_filter_query_string(
+            FILTER_CRITERIA_TO_DATE, filter_to_date, criteria_list
+        )
 
-        if search_criteria != "" :
+        if search_criteria != "":
             criteria_list.append(search_criteria)
             criteria_list.append(search_criteria)
             criteria_list.append(search_criteria)
             AND_CLAUSE = " AND " + AND_CLAUSE + SEARCH_CRITERIA
-        
+
         if criteria_list != None:
             QUERY_STR = QUERY_STR + AND_CLAUSE + ORDER_BY
             data = self.select(QUERY_STR, criteria_list)
@@ -177,103 +214,110 @@ class Database:
             data = self.select(QUERY_STR + ORDER_BY)
 
         if data:
-            return [{
-                'total_event_count': d[0]
-            } for d in data]
+            return [{"total_event_count": d[0]} for d in data]
         else:
             return None
-        
+
     def get_distinct_events(self, search_criteria, filter_event_name):
-        QUERY_STR = DISTINCT_EVENT_NAME + EVENT_JOINS 
-        if search_criteria != "" :
-                QUERY_STR = QUERY_STR + SEARCH_CRITERIA + ORDER_BY_FOR_FILTER
-                data = self.select(QUERY_STR, [search_criteria,search_criteria,search_criteria])
+        QUERY_STR = DISTINCT_EVENT_NAME + EVENT_JOINS
+        if search_criteria != "":
+            QUERY_STR = QUERY_STR + SEARCH_CRITERIA + ORDER_BY_FOR_FILTER
+            data = self.select(
+                QUERY_STR, [search_criteria, search_criteria, search_criteria]
+            )
         else:
             data = self.select(QUERY_STR + ORDER_BY_FOR_FILTER)
         if data:
-            return [{
-                'event_name': d[0]
-            } for d in data]
+            return [{"event_name": d[0]} for d in data]
         else:
             return None
 
     def get_distinct_cities(self, search_criteria, filter_event_name):
-        QUERY_STR = DISTINCT_CITY_NAME + EVENT_JOINS 
-        if search_criteria != "" :
-                QUERY_STR = QUERY_STR + SEARCH_CRITERIA + ORDER_BY_FOR_FILTER
-                data = self.select(QUERY_STR, [search_criteria,search_criteria,search_criteria])
+        QUERY_STR = DISTINCT_CITY_NAME + EVENT_JOINS
+        if search_criteria != "":
+            QUERY_STR = QUERY_STR + SEARCH_CRITERIA + ORDER_BY_FOR_FILTER
+            data = self.select(
+                QUERY_STR, [search_criteria, search_criteria, search_criteria]
+            )
         else:
             data = self.select(QUERY_STR + ORDER_BY_FOR_FILTER)
 
         if data:
-            return [{
-                'city': d[0]
-            } for d in data]
+            return [{"city": d[0]} for d in data]
         else:
             return None
 
     def get_distinct_artists(self, search_criteria, filter_event_name):
-        QUERY_STR = DISTINCT_ARTIST_NAME + EVENT_JOINS 
-        if search_criteria != "" :
-                QUERY_STR = QUERY_STR + SEARCH_CRITERIA + ORDER_BY_FOR_FILTER
-                data = self.select(QUERY_STR, [search_criteria,search_criteria,search_criteria])
+        QUERY_STR = DISTINCT_ARTIST_NAME + EVENT_JOINS
+        if search_criteria != "":
+            QUERY_STR = QUERY_STR + SEARCH_CRITERIA + ORDER_BY_FOR_FILTER
+            data = self.select(
+                QUERY_STR, [search_criteria, search_criteria, search_criteria]
+            )
         else:
             data = self.select(QUERY_STR + ORDER_BY_FOR_FILTER)
         if data:
-            return [{
-                'artist': d[0]
-            } for d in data]
+            return [{"artist": d[0]} for d in data]
         else:
             return None
 
-    def format_events (self,data):
-        return [{
-                'event_id': d[0],
-                'event_name': d[1],
-                'artist': d[2],
-                'start_date': d[3],
-                'end_date': d[4],
-                'start_time': d[5],
-                'end_time': d[6],
-                'event_image': d[7],
-                'city': d[8],
-                'zip_code': d[9],
-                'state': d[10],
-                'number_of_seats': d[11],
-                'venue_img': d[12]
-            } for d in data]
+    def format_events(self, data):
+        return [
+            {
+                "event_id": d[0],
+                "event_name": d[1],
+                "artist": d[2],
+                "start_date": d[3],
+                "end_date": d[4],
+                "start_time": d[5],
+                "end_time": d[6],
+                "event_image": d[7],
+                "city": d[8],
+                "zip_code": d[9],
+                "state": d[10],
+                "number_of_seats": d[11],
+                "venue_img": d[12],
+            }
+            for d in data
+        ]
 
-    def format_filter_query_lists(self, filter_criteria_query, filter_list, criteria_list):
-        
+    def format_filter_query_lists(
+        self, filter_criteria_query, filter_list, criteria_list
+    ):
+
         AND_CLAUSE = ""
-        if filter_list != None and filter_list != "" and len(filter_list) !=0:
-            AND_CLAUSE = " AND ("  
-            
+        if filter_list != None and filter_list != "" and len(filter_list) != 0:
+            AND_CLAUSE = " AND ("
+
             for item in filter_list:
                 AND_CLAUSE = AND_CLAUSE + filter_criteria_query + " OR "
                 criteria_list.append(item)
-        
+
             # To remove last OR Clause
             AND_CLAUSE = AND_CLAUSE[:-3]
             AND_CLAUSE = AND_CLAUSE + ")"
         return AND_CLAUSE
-    
-    def format_filter_query_string(self, filter_criteria_query, filter_string, criteria_list):
-        
+
+    def format_filter_query_string(
+        self, filter_criteria_query, filter_string, criteria_list
+    ):
+
         AND_CLAUSE = ""
-        if filter_string != None and filter_string != "" and len(filter_string) !=0:
-            AND_CLAUSE = " AND ("  
-            AND_CLAUSE = AND_CLAUSE + filter_criteria_query 
+        if filter_string != None and filter_string != "" and len(filter_string) != 0:
+            AND_CLAUSE = " AND ("
+            AND_CLAUSE = AND_CLAUSE + filter_criteria_query
             criteria_list.append(filter_string)
             AND_CLAUSE = AND_CLAUSE + ")"
         return AND_CLAUSE
-   # End: Event / Search Functions
+
+    # End: Event / Search Functions
 
     # Start: Insert into Contact Us
     def insert_contact_us(self, first_name, last_name, email_id, phone, question):
         self.execute(
             INSERT_CONTACT_US, [first_name, last_name, email_id, phone, question]
         )
+
     # End : Insert into Contact Us
     # Start: Event Details Functions
     def get_ticket_details(self, event_id):
@@ -295,33 +339,62 @@ class Database:
     def build_ticket_detail(self, ticket_detail, only_seat=False):
         if only_seat:
             return {
-                "event_seat_id": ticket_detail[16],
-                "seat_id": ticket_detail[17],
-                "seat_price": ticket_detail[18],
-                "booking_status": ticket_detail[19],
-                "section_id": ticket_detail[20],
-                "section_name": ticket_detail[21],
-                "seat_image": ticket_detail[22],
+                "event_seat_id": ticket_detail[17],
+                "seat_id": ticket_detail[18],
+                "seat_price": ticket_detail[19],
+                "booking_status": ticket_detail[20],
+                "section_id": ticket_detail[21],
+                "section_name": ticket_detail[22],
+                "seat_image": ticket_detail[23],
             }
         else:
             return {
                 "event_id": ticket_detail[0],
-                "event_name": ticket_detail[1],
-                "artist": ticket_detail[2],
-                "start_date": ticket_detail[3],
-                "end_date": ticket_detail[4],
-                "start_time": ticket_detail[5],
-                "end_time": ticket_detail[6],
-                "event_image": ticket_detail[7],
-                "venue_name": ticket_detail[8],
-                "venue_street": ticket_detail[9],
-                "venue_city": ticket_detail[10],
-                "venue_state": ticket_detail[11],
-                "venue_zip": ticket_detail[12],
-                "venue_country": ticket_detail[13],
-                "number_of_seats": ticket_detail[14],
-                "venue_image": ticket_detail[15],
+                "venue_id": ticket_detail[1],
+                "event_name": ticket_detail[2],
+                "artist": ticket_detail[3],
+                "start_date": ticket_detail[4],
+                "end_date": ticket_detail[5],
+                "start_time": ticket_detail[6],
+                "end_time": ticket_detail[7],
+                "event_image": ticket_detail[8],
+                "venue_name": ticket_detail[9],
+                "venue_street": ticket_detail[10],
+                "venue_city": ticket_detail[11],
+                "venue_state": ticket_detail[12],
+                "venue_zip_code": ticket_detail[13],
+                "venue_country": ticket_detail[14],
+                "number_of_seats": ticket_detail[15],
+                "venue_image": ticket_detail[16],
                 "seats": [],
             }
 
     # End: Event Details Functions
+
+    # Begin: Checkout Functions
+    def checkout(self, user_id, ticket_details, ticket_order_price):
+        # Get the current date in the format YYYY-MM-DD
+        ticket_order_date = datetime.now().strftime("%Y-%m-%d")
+
+        self.execute(
+            INSERT_TICKET_ORDER, [user_id, ticket_order_date, ticket_order_price]
+        )
+        ticket_order_id = self.get_last_inserted_id()
+
+        for ticket_detail in ticket_details:
+            event_id = ticket_detail["event_id"]
+            event_seat_id = ticket_detail["seat_id"]
+            quantity = ticket_detail["quantity"]
+            self.execute(
+                INSERT_TICKET_ORDER_DETAILS, [ticket_order_id, event_id, event_seat_id, quantity]
+            )
+
+            self.execute(UPDATE_EVENT_SEAT_BOOKING_STATUS, [event_seat_id])
+
+    def get_last_inserted_id(self):
+        c = self.conn.cursor()
+        c.execute("SELECT last_insert_rowid()")
+        return c.fetchone()[0]
+
+
+# End: Checkout Functions

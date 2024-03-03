@@ -33,7 +33,6 @@ CREATE TABLE IF NOT EXISTS venue_image (
 
 CREATE TABLE IF NOT EXISTS seat (
 	id integer primary key,
-	seat_id integer not null,
 	venue_id integer not null,
 	seat_section_id integer not null,
 	foreign key (venue_id) references venue(id),
@@ -43,7 +42,9 @@ CREATE TABLE IF NOT EXISTS seat (
 CREATE TABLE IF NOT EXISTS seat_section (
 	id integer primary key,
 	section_name text not null,
-	section_image text not null
+	section_image text not null,
+	venue_id integer not null,
+	foreign key (venue_id) references venue(id)
 );
 
 CREATE TABLE IF NOT EXISTS event (
@@ -74,15 +75,17 @@ CREATE TABLE IF NOT EXISTS ticket_orders (
     user_id integer not null,
     ticket_order_date date not null,
     ticket_order_price integer not null,
-    foreign key(user_id) references user(id)
+    foreign key (user_id) references user(id)
 );
 
 CREATE TABLE IF NOT EXISTS ticket_order_details (
     id integer primary key,
     ticket_order_id integer not null,
+	event_id integer not null,
     event_seat_id integer not null,
     quantity integer not null,
     foreign key(ticket_order_id) references ticket_orders(id),
+	foreign key (event_id) references event(id),
     foreign key(event_seat_id) references event_seat(id)
 );
 
@@ -97,13 +100,12 @@ CREATE TABLE IF NOT EXISTS contact_us (
 );
 
 .mode csv
-.import ../mock_data/mock_user.csv user
-.import ../mock_data/mock_ticket_orders.csv ticket_orders
-.import ../mock_data/mock_ticket_order_details.csv ticket_order_details
+.import ../mock_data/user.csv user
 
-.import ../mock_data/rob/venue.csv venue
-.import ../mock_data/rob/venue_image.csv venue_image
-.import ../mock_data/rob/event.csv event
-.import ../mock_data/rob/event_seats.csv event_seat
-.import ../mock_data/rob/seats.csv seat
-.import ../mock_data/rob/seat_sections.csv seat_section
+.import ../mock_data/venue.csv venue
+.import ../mock_data/venue_image.csv venue_image
+.import ../mock_data/seats.csv seat
+.import ../mock_data/seat_sections.csv seat_section
+
+.import ../mock_data/event.csv event
+.import ../mock_data/event_seats.csv event_seat

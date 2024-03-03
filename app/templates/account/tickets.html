@@ -5,14 +5,11 @@
 {% endblock %}
 
 {% block header %}
-  <link rel="stylesheet" href="/static/css/tickets.css" />
+  <link rel="stylesheet" href="/static/css/cart-tickets.css" />
   <script src="/static/js/account/tickets.js"></script>
   <script>
-  var user_ticket_data = {{ user_ticket_data | tojson | safe }};
-  
-  document.addEventListener("DOMContentLoaded", function () {
-    new TicketsView(user_ticket_data);
-  });
+    const ticketView = new TicketsView();
+    ticketView.load();
 </script>
 {% endblock %}
 
