@@ -36,7 +36,8 @@
     <div class="modal-content">
       <form action="/events" method="post">
           <div class="modal-header">
-            <h5 class="modal-title" id="filterModalLabel">Filters</h5>
+            <h5 class="modal-title" id="filterModalLabel">Filter By:</h5>
+            <button type="button" class="btn btn-secondary" id="clearAllButton">Clear All</button>
           </div>
           <div class="modal-body">
               <div class="form-group">
@@ -58,7 +59,7 @@
                     </select>
                   </div>
                 </div>
-
+                <div class="row"><div class="col-md-12"><p>&nbsp;</p></div></div>  
                 <div class="row">
                     <div class="col-md-4">
                         <label for="fromDate">From Date:</label>
@@ -80,6 +81,27 @@
   </div>
 </div>
 <script>
+  $(document).ready(function() {
+        clearAllButton.addEventListener('click', function() {
+            // Get the parent modal body element
+            var modalBody = document.querySelector('.modal-body');
+
+            // Find all select elements within the modal body
+            var selectElements = modalBody.querySelectorAll('select');
+            selectElements.forEach(element => {
+              for (var i = 0; i < element.options.length; i++) {
+                element.options[i].selected = false;
+              }              
+            });
+
+            // Get all <input> elements
+            var inputElements = modalBody.querySelectorAll('input');
+            // Loop through each <input> element
+            inputElements.forEach(element => {
+                element.value = "";
+            });
+        });
+  });
 
 $(function() {
   //Can we limit this to have dates that are present in the system instead of all 

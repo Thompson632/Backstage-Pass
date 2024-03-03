@@ -232,10 +232,10 @@ def all_events():
                            )
 
 def generate_response(args):
-    n = args.get('n', default=5)
-    offset = args.get('offset', default=0)
-    print(n)
-    print(offset)
+    n = request.args.get('n', default=5)
+    offset = request.args.get('offset', default=0)
+    # print(n)
+    # print(offset)
     search_events = request.args.get('search_events')
     filter_event_name = request.form.getlist('filter_event_name[]')
     filter_city_name = request.form.getlist('filter_city_name[]')

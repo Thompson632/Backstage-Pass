@@ -148,7 +148,7 @@ this.updatePagination = (total, search_events     , filter_event_name , filter_c
 
 
   this.build = (data , search_events     , filter_event_name , filter_city_name
-    , filter_artist_name, filter_from_date  , filter_to_date) => {
+                     , filter_artist_name, filter_from_date  , filter_to_date) => {
         this.buildEventTable(data.events);
         this.buildFilterEvents(data.event_names);
         this.buildFilterCity(data.city_names);
@@ -157,8 +157,8 @@ this.updatePagination = (total, search_events     , filter_event_name , filter_c
             , filter_artist_name, filter_from_date  , filter_to_date)
   }
 
-  this.load = ( search_events       ,filter_event_name  ,filter_city_name
-                ,filter_artist_name ,filter_from_date   ,filter_to_date) => {
+  this.load = (     search_events      ,   filter_event_name  , filter_city_name
+                ,   filter_artist_name ,    filter_from_date  , filter_to_date) => {
       var filter_event_par = []
       var filter_city_par = []
       var filter_artist_par = []
@@ -189,11 +189,14 @@ this.updatePagination = (total, search_events     , filter_event_name , filter_c
                 ,   filter_artist_name: filter_artist_par
                 ,   filter_from_date: filter_from_date
                 ,   filter_to_date: filter_to_date
-            }, (data) => {
-                this.build(data);
+            }
+        , (data) => {
+                this.build(data
+                    , search_events     , [] , []
+                    , [], ""  , "");
             });
       else
-          $.post('/api/get_events', {
+        $.post('/api/get_events', {
                     n: EVENTS_PER_PAGE
                 ,   offset: (this.currentPage - 1) * EVENTS_PER_PAGE
                 ,   search_events: search_events 
@@ -203,10 +206,11 @@ this.updatePagination = (total, search_events     , filter_event_name , filter_c
                 ,   filter_from_date: filter_from_date
                 ,   filter_to_date: filter_to_date
 
-          }, (data) => {
-              this.build(data
-                , search_events     , filter_event_par , filter_city_par
-                , filter_artist_par, filter_from_date  , filter_to_date);
+            }
+        , (data) => {
+                this.build(data
+                    , search_events     , filter_event_name , filter_city_name
+                    , filter_artist_name, filter_from_date  , filter_to_date);
           });            
   }
 
