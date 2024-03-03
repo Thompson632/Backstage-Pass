@@ -2,25 +2,146 @@
 {% set active = 'Events' %}
 
 {% block title %}
-  Events
+  Live Events
 {% endblock %}
-
 {% block header %}
-  <link rel="stylesheet" href="/static/css/events.css" />
-  <script src="/static/js/events/events.js"></script>
+<link rel="stylesheet" href="/static/css/events.css" />
+<script src="/static/js/events/events.js"></script>
+<!-- Should we download the js file or just use the online version 
+    This is required for date picker
+  -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
 {% endblock %}
-
 {% block content %}
+<h1>Events</h1>
+<nav>
+  <ul id="paginator" class="pagination justify-content-center">
+  </ul>
+</nav>
+<!-- Modal code begins -->
+<div class="row mb-3 form-group">
+  <div class="col-md-7">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#all_filter_modal">
+        Filter Events
+    </button>
+  </div>
+  <div class="col-md-5"></div>
+</div>
 
-  <h1>Events</h1>
-  <!-- <p>Search query: {{ search_criteria }}</p> -->
-  <table id="maintable" class="table table-striped"></table>
-  <script>
-    $(() => {
-      var search_events = '{{ search_events }}'
-      const events = new Events()
-      events.load(search_events)
-    })
-  </script>
-  
+<div class="modal fade custom-modal-bg" tabindex="-1" role="dialog" id="all_filter_modal" aria-labelledby="filterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <form action="/events" method="post">
+          <div class="modal-header">
+            <h5 class="modal-title" id="filterModalLabel">Filter By:</h5>
+            <button type="button" class="btn btn-secondary" id="clearAllButton">Clear All</button>
+          </div>
+          <div class="modal-body">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-4">
+                    <label for="formControlEventName">Event Name</label>
+                    <select multiple class="form-control" id="formControlEventName" name="formControlEventName">
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <label for="formControlCity">City</label>
+                    <select multiple class="form-control" id="formControlCity" name="formControlCity">
+                    </select>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="formControlArtist">Artist</label>
+                    <select multiple class="form-control" id="formControlArtist" name="formControlArtist">
+                    </select>
+                  </div>
+                </div>
+                <div class="row"><div class="col-md-12"><p>&nbsp;</p></div></div>  
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="fromDate">From Date:</label>
+                        <input type="text" id="fromDate" name="fromDate" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="toDate">To Date:</label>
+                        <input type="text" id="toDate" name="toDate" class="form-control">
+                    </div>
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer form-group">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+        clearAllButton.addEventListener('click', function() {
+            // Get the parent modal body element
+            var modalBody = document.querySelector('.modal-body');
+
+            // Find all select elements within the modal body
+            var selectElements = modalBody.querySelectorAll('select');
+            selectElements.forEach(element => {
+              for (var i = 0; i < element.options.length; i++) {
+                element.options[i].selected = false;
+              }              
+            });
+
+            // Get all <input> elements
+            var inputElements = modalBody.querySelectorAll('input');
+            // Loop through each <input> element
+            inputElements.forEach(element => {
+                element.value = "";
+            });
+        });
+  });
+
+$(function() {
+  //Can we limit this to have dates that are present in the system instead of all 
+    $("#fromDate").datepicker({
+        dateFormat: "yy-mm-dd",
+        onSelect: function(selectedDate) {
+            $("#toDate").datepicker("option", "minDate", selectedDate);
+        }
+    });
+    $("#toDate").datepicker({
+        dateFormat: "yy-mm-dd",
+        onSelect: function(selectedDate) {
+            $("#fromDate").datepicker("option", "maxDate", selectedDate);
+        }
+    });
+    });
+</script>
+<!-- Modal code Ends -->
+
+<table id="maintable" class ="table table-striped"> </table>
+<script>
+
+  $(() => {
+      var search_events = "{{ search_events }}";
+      var filter_event_name = JSON.parse('{{ filter_event_name | tojson | safe}}');
+      var filter_city_name = JSON.parse('{{ filter_city_name | tojson | safe}}');
+      var filter_artist_name = JSON.parse('{{ filter_artist_name | tojson | safe}}');
+      var filter_from_date = "{{ filter_from_date }}";
+      var filter_to_date = "{{ filter_to_date }}";
+      const events = new Events(5);
+      events.load(  search_events
+                  , filter_event_name
+                  , filter_city_name
+                  , filter_artist_name
+                  , filter_from_date
+                  , filter_to_date
+                  );
+  });
+</script>
+
+
+
 {% endblock %}

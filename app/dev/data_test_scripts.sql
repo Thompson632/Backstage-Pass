@@ -55,3 +55,33 @@ INNER JOIN venue_image img ON v.venue_image_id = img.id
 
 INSERt into contact_us (first_name, last_name,email_id, phone, question ) values 
 ('a', 'b', 'c@email.com', '2649283744', 'the question')
+
+
+  SELECT 
+        e.id AS event_id,
+        e.event_name,
+        e.artist,
+        e.start_date,
+        e.end_date,
+        e.start_time,
+        e.end_time,
+        e.event_image,
+        v.venue_name,
+        v.street AS venue_street,
+        v.city AS venue_city,
+        v.state AS venue_state,
+        v.zip_code AS venue_zip,
+        v.country AS venue_country,
+        v.number_of_seats,
+        vi.image AS venue_image,
+        es.id AS seat_id,
+        es.seat_number,
+        es.seat_price,
+        es.booking_status
+    FROM 
+        event e
+    INNER JOIN venue v ON e.venue_id = v.id
+    INNER JOIN venue_image vi ON v.venue_image_id = vi.id
+    INNER JOIN event_seat es ON e.id = es.event_id
+    WHERE 
+        e.id = 1

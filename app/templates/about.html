@@ -6,6 +6,11 @@
 {% endblock %}
 
 {% block content %}
+<script>
+  var error_value = "{{error_data}}";
+  if (error_value != "")
+    alert( error_value );
+</script>
 <div id="carousel_aboutus" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
     <li data-target="#carousel_aboutus" data-slide-to="0" class="active"></li>
