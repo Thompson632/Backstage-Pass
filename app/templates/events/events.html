@@ -17,15 +17,18 @@
 {% endblock %}
 {% block content %}
 <h1>Events</h1>
-
+<nav>
+  <ul id="paginator" class="pagination justify-content-center">
+  </ul>
+</nav>
 <!-- Modal code begins -->
 <div class="row mb-3 form-group">
-  <div class="col-md-5"></div>
   <div class="col-md-7">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#all_filter_modal">
         Filter Events
     </button>
   </div>
+  <div class="col-md-5"></div>
 </div>
 
 <div class="modal fade custom-modal-bg" tabindex="-1" role="dialog" id="all_filter_modal" aria-labelledby="filterModalLabel" aria-hidden="true">
@@ -102,9 +105,21 @@ $(function() {
   $(() => {
       var search_events = "{{ search_events }}";
       var filter_event_name = JSON.parse('{{ filter_event_name | tojson | safe}}');
-      const events = new Events();
-      events.load(search_events, filter_event_name);
+      var filter_city_name = JSON.parse('{{ filter_city_name | tojson | safe}}');
+      var filter_artist_name = JSON.parse('{{ filter_artist_name | tojson | safe}}');
+      var filter_from_date = "{{ filter_from_date }}";
+      var filter_to_date = "{{ filter_to_date }}";
+      const events = new Events(5);
+      events.load(  search_events
+                  , filter_event_name
+                  , filter_city_name
+                  , filter_artist_name
+                  , filter_from_date
+                  , filter_to_date
+                  );
   });
 </script>
+
+
 
 {% endblock %}

@@ -32,7 +32,6 @@ def get_db():
 def home():
     return render_template("home.html")
 
-
 @app.route("/about")
 def about():
     return render_template("about.html")
@@ -211,7 +210,6 @@ def my_tickets():
     else:
         redirect("/")
 
-
 # End: Account Tickets
 
 # Start: Get Events
@@ -222,42 +220,43 @@ def all_events():
     filter_event_name = request.form.getlist('formControlEventName')
     filter_city = request.form.getlist('formControlCity')
     filter_artist = request.form.getlist('formControlArtist')
-    filter_from_date = request.form.get('fromDate')
-    filter_to_date = request.form.getlist('toDate')
-    # print (filter_event_name)
+    filter_from_date = request.form.get('fromDate', '')
+    filter_to_date = request.form.get('toDate', '')
     
-    return render_template("events/events.html", search_events=search_events, filter_event_name=filter_event_name)
+    return render_template("events/events.html", search_events=search_events
+                           , filter_event_name=filter_event_name
+                           , filter_city_name = filter_city
+                           , filter_artist_name = filter_artist
+                           , filter_from_date = filter_from_date
+                           , filter_to_date = filter_to_date
+                           )
 
 def generate_response(args):
+    n = args.get('n', default=5)
+    offset = args.get('offset', default=0)
+    print(n)
+    print(offset)
     search_events = request.args.get('search_events')
-    filter_event_name = request.form.getlist('filter_event_name')
+    filter_event_name = request.form.getlist('filter_event_name[]')
+    filter_city_name = request.form.getlist('filter_city_name[]')
+    filter_artist_name = request.form.getlist('filter_artist_name[]')
+    filter_from_date = request.form.get('filter_from_date')
+    filter_to_date = request.form.get('filter_to_date')
     if search_events :
         search_events = search_events
-        # print("Search Criteria Found")
     else:
-        # print("Search Criteria NOT Found")
         search_events = ''
 
     return jsonify({
-        'events': get_db().get_events(search_events, filter_event_name),
+        'events': get_db().get_events(search_events, filter_event_name,filter_city_name,filter_artist_name, filter_from_date, filter_to_date, n, offset),
         'event_names' : get_db().get_distinct_events(search_events,filter_event_name),
         'city_names' : get_db().get_distinct_cities(search_events,filter_event_name),
-        'artist_names' : get_db().get_distinct_artists(search_events, filter_event_name)
+        'artist_names' : get_db().get_distinct_artists(search_events, filter_event_name),
+        'total' : get_db().get_event_count(search_events, filter_event_name,filter_city_name,filter_artist_name, filter_from_date, filter_to_date),
     })
 
 @app.route('/api/get_events', methods=['GET','POST'])
 def api_get_events():
-    
-    filter_event_name = request.args.get('filter_event_name')
-    print(filter_event_name)
-    # print(len(filter_event_name))
-    if filter_event_name:
-        lst = filter_event_name.split(',')
-        print("*****************************")
-        print(lst)
-
-    
-    # print(len(filter_event_name))
     return generate_response(request.form)
 
 # End: Get Events
@@ -272,10 +271,7 @@ def submit_contact_us():
     question = request.form.get("query_input")
     get_db().insert_contact_us(first_name, last_name, email_id, phone, question)
     return redirect("/")
-
-
 # End Contact Us
-
 
 # Start: Event Details
 @app.route("/events/event_details", methods=["GET"])

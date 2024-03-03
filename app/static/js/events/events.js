@@ -1,4 +1,7 @@
-function Events() {
+function Events(numRows) {
+
+  const EVENTS_PER_PAGE = numRows;
+
   this.buildEventTable = (events) => {
       $('#maintable').empty();
       const t_headers = $(`
@@ -103,37 +106,107 @@ function Events() {
       });
   }    
   
-  this.build = (data) => {
-      this.buildEventTable(data.events);
-      this.buildFilterEvents(data.event_names);
-      this.buildFilterCity(data.city_names);
-      this.buildFilterArtist(data.artist_names);
+
+  const createPageLink = (text, toPage, active, disabled, search_events     , filter_event_name , filter_city_name
+    , filter_artist_name, filter_from_date  , filter_to_date) => {
+    const link = $(`
+        <li class="page-item">
+            <a class="page-link">${text}</a>
+        </li>
+    `);
+    $(link).find('.page-link').on('click', _ => {
+        this.currentPage = toPage;
+        this.load(search_events     , filter_event_name , filter_city_name
+            , filter_artist_name, filter_from_date  , filter_to_date);
+    });
+    if (active)
+        link.addClass('active');
+    if (disabled)
+        link.addClass('disabled');
+    return link;
+}
+
+this.currentPage = 1;
+
+this.updatePagination = (total, search_events     , filter_event_name , filter_city_name
+    , filter_artist_name, filter_from_date  , filter_to_date) => {
+    let pages = Math.ceil(total[0].total_event_count / EVENTS_PER_PAGE);
+    $('#paginator').empty().append(
+        createPageLink('Previous', this.currentPage - 1, false, this.currentPage == 1, search_events     , filter_event_name , filter_city_name
+        , filter_artist_name, filter_from_date  , filter_to_date)
+    );
+    for (let page = 1; page <= pages; page++)
+        $('#paginator').append(
+            createPageLink(page, page, page == this.currentPage, false, search_events     , filter_event_name , filter_city_name
+                , filter_artist_name, filter_from_date  , filter_to_date)
+        );
+    $('#paginator').append(
+        createPageLink('Next', this.currentPage + 1, false, this.currentPage == pages, search_events     , filter_event_name , filter_city_name
+        , filter_artist_name, filter_from_date  , filter_to_date)
+    );
+}
+
+
+  this.build = (data , search_events     , filter_event_name , filter_city_name
+    , filter_artist_name, filter_from_date  , filter_to_date) => {
+        this.buildEventTable(data.events);
+        this.buildFilterEvents(data.event_names);
+        this.buildFilterCity(data.city_names);
+        this.buildFilterArtist(data.artist_names);
+        this.updatePagination(data.total, search_events     , filter_event_name , filter_city_name
+            , filter_artist_name, filter_from_date  , filter_to_date)
   }
 
-  this.load = (search_events, filter_event_name) => {
-      // alert(filter_event_name)
-      var filter_par = []
+  this.load = ( search_events       ,filter_event_name  ,filter_city_name
+                ,filter_artist_name ,filter_from_date   ,filter_to_date) => {
+      var filter_event_par = []
+      var filter_city_par = []
+      var filter_artist_par = []
+
       filter_event_name.forEach(function(item){
-          filter_par.push(item)
-          alert(item)
+        filter_event_par.push(item)
       });
       
-      // filter_par.push('Hi')
-      // filter_par.push('There')
-      // alert(filter_par_e)
-      if (filter_event_name.length == 0)
-          $.get('/api/get_events', {
-              search_events: search_events,               
-              filter_event_name: filter_par.join(',')
-          }, (data) => {
-              this.build(data);
-          });
+      filter_city_name.forEach(function(item){
+        filter_city_par.push(item)
+      });
+
+      filter_artist_name.forEach(function(item){
+        filter_artist_par.push(item)
+      });
+
+      filter_from_date_par = filter_from_date
+    //   alert(EVENTS_PER_PAGE);
+      if (filter_event_name.length == 0 && filter_city_name.length == 0 
+        && filter_artist_name.length == 0  
+        && filter_from_date.length == 0  && filter_to_date.length == 0 )
+        $.get('/api/get_events', {
+                    n: EVENTS_PER_PAGE
+                ,   offset: (this.currentPage - 1) * EVENTS_PER_PAGE
+                ,   search_events: search_events              
+                ,   filter_event_name: filter_event_par
+                ,   filter_city_name: filter_city_par
+                ,   filter_artist_name: filter_artist_par
+                ,   filter_from_date: filter_from_date
+                ,   filter_to_date: filter_to_date
+            }, (data) => {
+                this.build(data);
+            });
       else
           $.post('/api/get_events', {
-              search_events: search_events,
-              filter_event_name: filter_par.join(',')
+                    n: EVENTS_PER_PAGE
+                ,   offset: (this.currentPage - 1) * EVENTS_PER_PAGE
+                ,   search_events: search_events 
+                ,   filter_event_name: filter_event_par
+                ,   filter_city_name: filter_city_par
+                ,   filter_artist_name: filter_artist_par
+                ,   filter_from_date: filter_from_date
+                ,   filter_to_date: filter_to_date
+
           }, (data) => {
-              this.build(data);
+              this.build(data
+                , search_events     , filter_event_par , filter_city_par
+                , filter_artist_par, filter_from_date  , filter_to_date);
           });            
   }
 

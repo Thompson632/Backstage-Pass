@@ -67,6 +67,7 @@ EVENT_TABLE_COLUMNS = """
                     ,	v.number_of_seats
                     ,	img.image as venue_img 
             """
+QRY_COLS_EVENT_COUNT = """ SELECT COUNT(1) AS total_event_count """
 
 DISTINCT_EVENT_NAME = """
             SELECT DISTINCT   e.event_name
@@ -84,30 +85,35 @@ EVENT_JOINS = """
             FROM event e 
             INNER JOIN venue v ON e.venue_id = v.id 
             INNER JOIN venue_image img ON v.venue_image_id = img.id
+            WHERE 1=1
         """
     # WHERE e.start_date >= date('now')
 
 FILTER_CRITERIA_EVENT_NAMES ="""
-            AND e.event_name IN (?)
+            e.event_name = ?
         """
+ORDER_BY_FOR_FILTER ="""
+            ORDER BY 1 ASC
+        """
+QRY_LIMIT_OFFSET_EVENT = """ LIMIT ? OFFSET ? """
 
 FILTER_CRITERIA_CITY ="""
-            AND v.city IN (?)
+            v.city = ?
         """
 
 FILTER_CRITERIA_ARTISTS ="""
-            AND e.artist IN (?)
+            e.artist = ?
         """
 
 FILTER_CRITERIA_FROM_DATE ="""
-        AND   e.start_date >= ?
+          e.start_date >= ?
         """
 
 FILTER_CRITERIA_TO_DATE ="""
-        AND   e.end_date <= ?
+          e.end_date <= ?
         """                                
 SEARCH_CRITERIA = """
-            AND  (e.event_name LIKE '%' || ?  || '%'
+             (e.event_name LIKE '%' || ?  || '%'
             OR     e.artist LIKE '%' || ?  || '%'
             OR     v.city LIKE '%' || ?  || '%' )
         """
