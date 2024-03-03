@@ -203,7 +203,6 @@ def my_tickets():
     if "user" in session:
         user_id = session["user"]["id"]
         user_ticket_data = get_db().get_user_tickets(user_id)
-        print(user_ticket_data)
         return render_template(
             "account/tickets.html", user_ticket_data=user_ticket_data
         )
@@ -277,8 +276,6 @@ def submit_contact_us():
 @app.route("/events/event_details", methods=["GET"])
 def get_event_details():
     event_id = request.args.get("event_id")
-    print(request)
-    print(request.form)
     print("Querying for:", event_id)
     event_details_data = get_db().get_ticket_details(event_id)
     return render_template(

@@ -31,8 +31,23 @@ CREATE TABLE IF NOT EXISTS venue_image (
 	image text
 );
 
+CREATE TABLE IF NOT EXISTS seat (
+	id integer primary key,
+	seat_id integer not null,
+	venue_id integer not null,
+	seat_section_id integer not null,
+	foreign key (venue_id) references venue(id),
+	foreign key (seat_section_id) references seat_section(id)
+);
+
+CREATE TABLE IF NOT EXISTS seat_section (
+	id integer primary key,
+	section_name text not null,
+	section_image text not null
+);
+
 CREATE TABLE IF NOT EXISTS event (
-	id primary key,
+	id integer primary key,
 	venue_id integer not null,
 	event_name text not null,
 	artist text not null,
@@ -47,44 +62,48 @@ CREATE TABLE IF NOT EXISTS event (
 CREATE TABLE IF NOT EXISTS event_seat (
 	id integer primary key,
 	event_id integer not null,
-	seat_number integer not null,
+	seat_id integer not null,
 	seat_price real not null,
 	booking_status integer not null,
-	foreign key (event_id) references event(id)
+	foreign key (event_id) references event(id),
+	foreign key (seat_id) references seat(id)
 );
 
 CREATE TABLE IF NOT EXISTS ticket_orders (
-	id integer primary key,
-	user_id integer not null,
-	ticket_order_date date not null,
-	ticket_order_price integer not null,
-	foreign key(user_id) references user(id)
+    id integer primary key,
+    user_id integer not null,
+    ticket_order_date date not null,
+    ticket_order_price integer not null,
+    foreign key(user_id) references user(id)
 );
 
 CREATE TABLE IF NOT EXISTS ticket_order_details (
-	id integer primary key,
-	ticket_order_id integer not null,
-	seat_id integer not null,
-	quantity integer not null,
-	foreign key(ticket_order_id) references ticket_orders(id),
-	foreign key(seat_id) references seat(id)
+    id integer primary key,
+    ticket_order_id integer not null,
+    event_seat_id integer not null,
+    quantity integer not null,
+    foreign key(ticket_order_id) references ticket_orders(id),
+    foreign key(event_seat_id) references event_seat(id)
 );
 
-CREATE TABLE contact_us (
-    id INTEGER PRIMARY KEY,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    email_id TEXT NOT NULL,
-    phone TEXT,
-    question TEXT NOT NULL,
-    CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE IF NOT EXISTS contact_us (
+    id integer primary key,
+    first_name text not null,
+    last_name text not null,
+    email_id text not null,
+    phone text,
+    question text not null,
+    CreatedDate datetime DEFAULT CURRENT_TIMESTAMP
 );
 
 .mode csv
 .import ../mock_data/mock_user.csv user
-.import ../mock_data/mock_venue.csv venue
-.import ../mock_data/mock_venue_image.csv venue_image
-.import ../mock_data/mock_event.csv event
-.import ../mock_data/mock_event_seat.csv event_seat
 .import ../mock_data/mock_ticket_orders.csv ticket_orders
 .import ../mock_data/mock_ticket_order_details.csv ticket_order_details
+
+.import ../mock_data/rob/venue.csv venue
+.import ../mock_data/rob/venue_image.csv venue_image
+.import ../mock_data/rob/event.csv event
+.import ../mock_data/rob/event_seats.csv event_seat
+.import ../mock_data/rob/seats.csv seat
+.import ../mock_data/rob/seat_sections.csv seat_section
