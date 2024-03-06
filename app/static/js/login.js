@@ -10,11 +10,7 @@ $(document).ready(function () {
     $(".alert-danger").remove();
   }
 
-  function updateModalTitle(title) {
-    $("#modalTitle").text(title);
-  }
-
-  $("#registerForm, #loginForm").on("submit", function (event) {
+  $("#signUpForm, #signInForm").on("submit", function (event) {
     event.preventDefault();
 
     var form = $(this);
@@ -29,7 +25,6 @@ $(document).ready(function () {
       dataType: DEFAULT_DATA_TYPE,
       success: function (response) {
         if (response.success) {
-          alert(response.message);
           window.location.href = BASE_HOME_REDIRECT;
         } else {
           form.prepend(
@@ -45,27 +40,17 @@ $(document).ready(function () {
     });
   });
 
-  $("#showRegisterForm").click(function () {
-    $("#loginForm").hide();
-    $("#registerForm").show();
-    updateModalTitle(CREATE_ACCOUNT_HEADER);
-    clearErrorMessage();
+  $("#showSignInModalContentBtn, #signInSwitch").click(function() {
+    $("#signUpModalContent").hide();
+    $('#signUpForm')[0].reset();
+    $("#signInModalContent").show();
+    $("#authModal").modal('show');
   });
 
-  $("#showLoginForm").click(function () {
-    $("#registerForm").hide();
-    $("#loginForm").show();
-    updateModalTitle(LOGIN_HEADER);
-    clearErrorMessage();
-  });
-
-  $("#openModal").click(function () {
-    $("#loginModal").show();
-    clearErrorMessage();
-  });
-
-  $(".close-button").click(function () {
-    $("#loginModal").hide();
-    clearErrorMessage();
+  $("#showSignUpModalContentBtn, #signUpSwitch").click(function() {
+    $("#signInModalContent").hide();
+    $("#signInForm")[0].reset();
+    $("#signUpModalContent").show();
+    $("#authModal").modal('show');
   });
 });

@@ -1,5 +1,6 @@
 from flask import (
     Flask,
+    flash,
     g,
     make_response,
     render_template,
@@ -78,6 +79,7 @@ def login():
                 if user:
                     if pbkdf2_sha256.verify(password, user["password"]):
                         session["user"] = user
+                        flash(SUCCESSFUL_LOGIN, "success")
                         return jsonify({"success": True, "message": SUCCESSFUL_LOGIN})
                     else:
                         error_message = ERROR_INVALID_PASSWORD

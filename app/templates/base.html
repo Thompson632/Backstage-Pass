@@ -42,6 +42,9 @@
                   <li class="nav-item{% if active == 'About' %} active{% endif %}">
                     <a class="nav-link" href="/about">About Us</a>
                   </li>
+                  <li class="nav-item{% if active == 'Events' %} active{% endif %}">
+                    <a class="nav-link" href="/events">Find Events</a>
+                  </li>
                 </ul>
 
                 <div class="header-user-profile my-auto mr-2 d-flex">
@@ -59,50 +62,118 @@
                       </div>
                     </div>
                   {% else %}
-                    <div class="mx-2 d-flex flex-column">
-                      <button id="openModal" type="button" class="btn btn-primary px-4">Sign in</button>
+                    <div class="mt-2 mt-md-0 px-3 px-md-0 d-flex flex-column flex-md-row">
+                      <button id="showSignInModalContentBtn" type="button" class="mb-2 mb-md-0 mr-md-2 btn btn-outline-secondary px-4" data-toggle="modal">Sign in</button>
+                      <button id="showSignUpModalContentBtn" type="button" class="btn btn-primary px-4" data-toggle="modal">Sign up</button>
                     </div>
                   {% endif %}
                 </div>
               </div>
 
-             
+              <!-- <div class="cart-icon ml-auto">
+                <a href="/cart" class="position-relative">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                  </svg>
+                </a>
+              </div>
+             -->
             </nav>
+            <!-- Success flash messages from the server-side -->
+            {% with messages = get_flashed_messages(category_filter=["success"], with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+              <div class="position-sticky w-100 text-center alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
         </div>
       </div>
     </header>
 
-    <!-- Start: Login/Register Modal -->
-    <div id="loginModal" class="modal">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <span class="close-button">&times;</span>
+    <!-- Modal -->
+    <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div id="signInModalContent" class="modal-content">
 
-          <form method="POST" action="/login">
-            <div id="loginForm">
-              <h2>Login</h2>
-              <input type="text" placeholder="Username" name="username" required />
-              <input type="password" placeholder="Password" name="password" required />
-              <button type="submit" id="loginButton" class="btn btn-primary login-button">Login</button>
-              <button type="button" id="showRegisterForm" class="btn btn-secondary create-account-button">Create Account</button>
-            </div>
-          </form>
+          <div class="modal-header">
+            <h5 class="modal-title">Sign In</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
 
-          <form method="POST" action="/create_account">
-            <div id="registerForm" style="display:none;">
-              <h2>Create Account</h2>
-              <input type="text" placeholder="First Name" name="firstName" required />
-              <input type="text" placeholder="Last Name" name="lastName" required />
-              <input type="text" placeholder="Username" name="username" required />
-              <input type="password" placeholder="Password" name="password" required />
-              <input type="password" placeholder="Re-type Password" name="retypedPassword" required />
-              <button type="submit" id="createAccountButton" class="btn btn-secondary create-account-button">Create Account</button>
-              <button type="button" id="showLoginForm" class="btn btn-primary login-button">Back to Login</button>
+          <div class="modal-body">
+            <form id="signInForm" action="/login">
+              <div class="form-group">
+                <label for="signInUsernameInput">Username</label>
+                <input id="signInUsernameInput" type="username" class="form-control" name="username">
+              </div>
+              <div class="form-group mb-1">
+                <label for="signInPasswordInput">Password</label>
+                <input id="signInPasswordInput" type="password" class="form-control" name="password">
+              </div>
+              <small id="signInHelp" class="mb-2 form-text text-muted"><a href="#">Having trouble signing in?</a></small>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <div class="w-100 d-flex flex-column">
+              <button type="submit" form="signInForm" class="mb-3 btn btn-primary btn-block">Sign In</button>
+              <button id="signUpSwitch" type="button" class="mb-3 btn btn-link btn-block">Don't have an account? Sign up</button>
             </div>
-          </form>
+          </div>
+
         </div>
+
+        <div id="signUpModalContent" class="modal-content" style="display: none;">
+
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Sign Up</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <form id="signUpForm" action="/create_account">
+              <div class="form-group">
+                <label for="signUpFirstNameInput">First Name</label>
+                <input id="signUpFirstNameInput" class="form-control" name="firstName">
+              </div>
+              <div class="form-group">
+                <label for="signUpLastNameInput">Last Name</label>
+                <input id="signUpLastNameInput" class="form-control" name="lastName">
+              </div>
+              <div class="form-group">
+                <label for="signUpUsernameInput">Username</label>
+                <input id="signUpUsernameInput" type="username" class="form-control" name="username">
+              </div>
+              <div class="form-group">
+                <label for="signUpPasswordInput">Password</label>
+                <input id="signUpPasswordInput" type="password" class="form-control" name="password">
+              </div>
+              <div class="form-group">
+                <label for="signUpRetypedPasswordInput">Re-type Password</label>
+                <input id="signUpRetypedPasswordInput" type="password" class="form-control" name="retypedPassword">
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <div class="w-100 d-flex flex-column">
+              <button type="submit" form="signUpForm" class="mb-3 btn btn-primary btn-block">Sign Up</button>
+              <button id="signInSwitch" type="button" class="mb-3 btn btn-link btn-block">Already have an account? Sign in</button>
+            </div>
+          </div>
+
+        </div> 
       </div>
-      <!-- End: Login/Register Modal -->
     </div>
 
     <main>
