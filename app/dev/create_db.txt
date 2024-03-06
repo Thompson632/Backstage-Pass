@@ -22,7 +22,6 @@ CREATE TABLE IF NOT EXISTS venue (
 	state text not null,
 	zip_code text not null,
 	country text not null,
-	number_of_seats integer not null,
 	foreign key (venue_image_id) references venue_image(id)
 );
 
@@ -104,8 +103,8 @@ CREATE TABLE IF NOT EXISTS contact_us (
 
 .import ../mock_data/venue.csv venue
 .import ../mock_data/venue_image.csv venue_image
-.import ../mock_data/seats.csv seat
-.import ../mock_data/seat_sections.csv seat_section
+.import ../mock_data/seat.csv seat
+.import ../mock_data/seat_section.csv seat_section
 
 .import ../mock_data/event.csv event
-.import ../mock_data/event_seats.csv event_seat
+.import ../mock_data/event_seat.csv event_seat

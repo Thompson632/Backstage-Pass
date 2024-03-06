@@ -70,7 +70,6 @@ EVENT_TABLE_COLUMNS = """
                     ,	v.city
                     ,	v.zip_code
                     ,	v.state
-                    ,	v.number_of_seats
                     ,	img.image as venue_img 
             """
 QRY_COLS_EVENT_COUNT = """ SELECT COUNT(1) AS total_event_count """
@@ -156,7 +155,6 @@ GET_EVENT_DETAILS_BY_EVENT_ID = """
         v.state AS venue_state,
         v.zip_code AS venue_zip_code,
         v.country AS venue_country,
-        v.number_of_seats,
         vi.image AS venue_image,
         es.id AS event_seat_id,
         s.id AS seat_id,

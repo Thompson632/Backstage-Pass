@@ -46,7 +46,6 @@ SELECT
 ,	v.city
 ,	v.zip_code
 ,	v.state
-,	v.number_of_seats
 ,	img.image as venue_img
 FROM event e 
 INNER JOIN venue v ON e.venue_id = v.id 
@@ -72,7 +71,6 @@ INSERt into contact_us (first_name, last_name,email_id, phone, question ) values
         v.state AS venue_state,
         v.zip_code AS venue_zip,
         v.country AS venue_country,
-        v.number_of_seats,
         vi.image AS venue_image,
         es.id AS seat_id,
         es.seat_number,

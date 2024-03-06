@@ -240,8 +240,7 @@ class Database:
                 'city': d[8],
                 'zip_code': d[9],
                 'state': d[10],
-                'number_of_seats': d[11],
-                'venue_img': d[12]
+                'venue_img': d[11]
             } for d in data]
 
     def format_filter_query_lists(self, filter_criteria_query, filter_list, criteria_list):
@@ -297,13 +296,13 @@ class Database:
     def build_ticket_detail(self, ticket_detail, only_seat=False):
         if only_seat:
             return {
-                "event_seat_id": ticket_detail[17],
-                "seat_id": ticket_detail[18],
-                "seat_price": ticket_detail[19],
-                "booking_status": ticket_detail[20],
-                "section_id": ticket_detail[21],
-                "section_name": ticket_detail[22],
-                "seat_image": ticket_detail[23],
+                "event_seat_id": ticket_detail[16],
+                "seat_id": ticket_detail[17],
+                "seat_price": ticket_detail[18],
+                "booking_status": ticket_detail[19],
+                "section_id": ticket_detail[20],
+                "section_name": ticket_detail[21],
+                "seat_image": ticket_detail[22],
             }
         else:
             return {
@@ -322,8 +321,7 @@ class Database:
                 "venue_state": ticket_detail[12],
                 "venue_zip_code": ticket_detail[13],
                 "venue_country": ticket_detail[14],
-                "number_of_seats": ticket_detail[15],
-                "venue_image": ticket_detail[16],
+                "venue_image": ticket_detail[15],
                 "seats": [],
             }
 
