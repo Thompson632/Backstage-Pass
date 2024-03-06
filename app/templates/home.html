@@ -18,12 +18,16 @@
     <div class="container-fluid">
       <div class="hero-section">
 
-        <div class="hero-text">
+        <div class="hero-info">
           <h1 class="jumbotron-heading">Feel what it's like to be in the room</h1>
           <p class="lead">
             Find tickets for reasonable prices and know what your view from your seat
             will be like before even getting to the venue.
           </p>
+          <form class="form-inline" id="searchEvents" action="/events" method="GET">
+            <input type="text" class="form-control d-sm-flex mr-sm-2" id="search_events" name="search_events" required placeholder="Search by Event Name, City or Artist..." />
+            <button type="submit" class="btn btn-primary">Find Events!</button>
+          </form>
         </div>
 
         <div class="hero-img">

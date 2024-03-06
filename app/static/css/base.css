@@ -63,7 +63,7 @@ header {
   width: 100%;
 }
 
-.hero-text {
+.hero-info {
   margin-right: 32px;
   width: 50%;
 }
@@ -83,7 +83,7 @@ header {
     flex-direction: column;
   }
 
-  .hero-text {
+  .hero-info {
     width: 100%;
     text-align: center;
   }
@@ -91,4 +91,12 @@ header {
   .hero-img {
     width: 100%;
   }
+}
+
+.page-link, .page-link:hover {
+  color: #204C19;
+}
+
+.home-search {
+  
 }

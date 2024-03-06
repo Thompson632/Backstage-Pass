@@ -11,7 +11,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
     <link rel="stylesheet" href="/static/lib/bootstrap/bootstrap.min.css" />
-
     <link rel="stylesheet" href="/static/css/base.css" />
     <link rel="stylesheet" href="/static/css/login-modal.css" />
 
@@ -42,15 +41,6 @@
                   </li>
                   <li class="nav-item{% if active == 'About' %} active{% endif %}">
                     <a class="nav-link" href="/about">About Us</a>
-                  </li>
-                  <li class="nav-item{% if active == 'Events' %} active{% endif %}">
-                    <a class="nav-link" href="/events">All Events</a>
-                  </li>
-                  <li>
-                    <form id="searchEvents" action="/events" method="GET">
-                      <input type="text" class="form-control" id="search_events" name="search_events" required placeholder="Search by Event Name, City or Artist..." />
-                      <button type="submit" class="btn btn-primary">Search Events</button>
-                    </form>
                   </li>
                 </ul>
 
@@ -83,16 +73,14 @@
     </header>
 
     <!-- Start: Login/Register Modal -->
-    <div id="loginModal" class="modal login-modal">
+    <div id="loginModal" class="modal">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content login-modal-content">
-          <div class="modal-header">
-            <h2 id="modalTitle">Login</h2>
-            <span class="close-button">&times;</span>
-          </div>
+        <div class="modal-content">
+          <span class="close-button">&times;</span>
 
-          <form id="loginForm" method="POST" action="/login">
-            <div>
+          <form method="POST" action="/login">
+            <div id="loginForm">
+              <h2>Login</h2>
               <input type="text" placeholder="Username" name="username" required />
               <input type="password" placeholder="Password" name="password" required />
               <button type="submit" id="loginButton" class="btn btn-primary login-button">Login</button>
@@ -100,8 +88,9 @@
             </div>
           </form>
 
-          <form id="registerForm" method="POST" action="/create_account" style="display:none;">
-            <div>
+          <form method="POST" action="/create_account">
+            <div id="registerForm" style="display:none;">
+              <h2>Create Account</h2>
               <input type="text" placeholder="First Name" name="firstName" required />
               <input type="text" placeholder="Last Name" name="lastName" required />
               <input type="text" placeholder="Username" name="username" required />
@@ -113,8 +102,8 @@
           </form>
         </div>
       </div>
+      <!-- End: Login/Register Modal -->
     </div>
-    <!-- End: Login/Register Modal -->
 
     <main>
       <div class="container-fluid content">
