@@ -97,6 +97,7 @@ header {
   color: #204C19;
 }
 
-.home-search {
-  
+.card img {
+  height: 200px;
+  width: auto;
 }

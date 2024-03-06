@@ -6,6 +6,7 @@ const CREATE_ACCOUNT_HEADER = "Create Account";
 const LOGIN_HEADER = "Login";
 
 $(document).ready(function () {
+
   function clearErrorMessage() {
     $(".alert-danger").remove();
   }
@@ -43,6 +44,7 @@ $(document).ready(function () {
   $("#showSignInModalContentBtn, #signInSwitch").click(function() {
     $("#signUpModalContent").hide();
     $('#signUpForm')[0].reset();
+    clearErrorMessage();
     $("#signInModalContent").show();
     $("#authModal").modal('show');
   });
@@ -50,6 +52,7 @@ $(document).ready(function () {
   $("#showSignUpModalContentBtn, #signUpSwitch").click(function() {
     $("#signInModalContent").hide();
     $("#signInForm")[0].reset();
+    clearErrorMessage();
     $("#signUpModalContent").show();
     $("#authModal").modal('show');
   });

@@ -32,7 +32,8 @@ def get_db():
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    events = get_db().get_events("", [], [], [], "", "", 4, 0)
+    return render_template("home.html", events=events)
 
 
 @app.route("/about")
