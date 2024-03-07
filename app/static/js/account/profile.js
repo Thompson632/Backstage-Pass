@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
       type: "POST",
       data: form.serialize(),
       success: function (_) {       
-        alert("Updated successfully!", response);
+        alert("Updated successfully!");
       },
       error: function (xhr) {
         console.error("Error Occurred:", xhr.responseText);

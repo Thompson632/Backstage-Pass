@@ -10,6 +10,7 @@ function CartView() {
   this.load = () => {
     $.get("/api/cart", (data) => {
       eventTicketDetails = data["cart"];
+      console.log(JSON.stringify(eventTicketDetails, null, 2))
       this.update(data);
     });
   };

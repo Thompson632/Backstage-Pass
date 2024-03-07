@@ -18,38 +18,34 @@ GET_TICKETS_BY_USER_ID = """
     SELECT
         u.id AS user_id,
         ticket_orders.id AS ticket_id,
-        e.id AS event_id,
-        e.event_name AS event_name,
-        v.id AS venue_id,
-        v.venue_name AS venue_name,
-        v.street AS venue_street,
-        v.city AS venue_city,
-        v.state AS venue_state,
-        v.zip_code AS venue_zip_code,
-        v.country AS venue_country,
-        vi.image AS venue_image,
-        e.artist AS artist,
-        e.start_date AS start_date,
-        e.start_time AS start_time,
-        e.event_image AS event_image,
+        de.event_id AS event_id,
+        de.event_name AS event_name,
+        de.venue_id AS venue_id,
+        de.venue_name AS venue_name,
+        de.street AS venue_street,
+        de.city AS venue_city,
+        de.state AS venue_state,
+        de.zip_code AS venue_zip_code,
+        de.country AS venue_country,
+        de.venue_image AS venue_image,
+        de.artist AS artist,
+        de.start_date AS start_date,
+        de.start_time AS start_time,
+        de.event_image AS event_image,
         tod.quantity AS quantity,
         ticket_orders.ticket_order_date AS ticket_order_date,
         ticket_orders.ticket_order_price AS ticket_order_price,
         es.seat_price AS seat_price,
-        s.id AS seat_number,
-        ss.id AS section_id,
-        ss.section_name AS section_name,
-        ss.section_image AS section_image
+        es.seat_id AS seat_number,
+        es.seat_section_id AS section_id,
+        es.section_name AS section_name,
+        es.section_image AS section_image
     FROM
         ticket_orders
     INNER JOIN user u ON ticket_orders.user_id = u.id
     INNER JOIN ticket_order_details tod ON ticket_orders.id = tod.ticket_order_id
-    INNER JOIN event_seat es ON tod.event_seat_id = es.id
-    INNER JOIN seat s ON es.seat_id = s.id
-    INNER JOIN event e ON tod.event_id = e.id
-    INNER JOIN venue v ON e.venue_id = v.id
-    LEFT JOIN venue_image vi ON v.venue_image_id = vi.id
-    INNER JOIN seat_section ss ON s.seat_section_id = ss.id
+    INNER JOIN event_seat es ON tod.event_seat_id = es.event_seat_id
+    INNER JOIN denormalized_event de ON tod.event_id = de.event_id
     WHERE
         u.id = ?;
 """
@@ -140,43 +136,35 @@ INSERT_CONTACT_US = """
 # Start: Event Details Queries
 GET_EVENT_DETAILS_BY_EVENT_ID = """
     SELECT 
-        e.id AS event_id,
-        e.venue_id, 
-        e.event_name,
-        e.artist,
-        e.start_date,
-        e.end_date,
-        e.start_time,
-        e.end_time,
-        e.event_image,
-        v.venue_name,
-        v.street AS venue_street,
-        v.city AS venue_city,
-        v.state AS venue_state,
-        v.zip_code AS venue_zip_code,
-        v.country AS venue_country,
-        vi.image AS venue_image,
-        es.id AS event_seat_id,
-        s.id AS seat_id,
+        de.event_id,
+        de.venue_id, 
+        de.event_name,
+        de.artist,
+        de.start_date,
+        de.end_date,
+        de.start_time,
+        de.end_time,
+        de.event_image,
+        de.venue_name,
+        de.street AS venue_street,
+        de.city AS venue_city,
+        de.state AS venue_state,
+        de.zip_code AS venue_zip_code,
+        de.country AS venue_country,
+        de.venue_image,
+        es.event_seat_id,
+        es.seat_id,
         es.seat_price,
         es.booking_status,
-        ss.id AS section_id,
-        ss.section_name,
-        ss.section_image
+        es.seat_section_id AS section_id,
+        es.section_name,
+        es.section_image
     FROM 
-        event e
+        denormalized_event de
     INNER JOIN 
-        venue v ON e.venue_id = v.id
-    INNER JOIN 
-        venue_image vi ON v.venue_image_id = vi.id
-    INNER JOIN 
-        event_seat es ON e.id = es.event_id
-    INNER JOIN 
-        seat s ON es.seat_id = s.id
-    INNER JOIN 
-        seat_section ss ON s.seat_section_id = ss.id
+        event_seat es ON de.event_id = es.event_id
     WHERE 
-        e.id = ?;
+        de.event_id = ?;
 """
 # End: Event Details Queries
 
@@ -194,9 +182,16 @@ INSERT_TICKET_ORDER_DETAILS = """
 """
 
 UPDATE_EVENT_SEAT_BOOKING_STATUS = """
-    UPDATE event_seat
-    SET booking_status = 1
-    WHERE id = ?;
+    UPDATE 
+        event_seat
+    SET 
+        booking_status = 1
+    WHERE 
+        event_seat_id = ? 
+    AND 
+        event_id = ? 
+    AND 
+        seat_id = ?;
 """
 
 # End: Checkout Queries

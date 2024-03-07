@@ -114,6 +114,7 @@ class EventDetailsView {
         cursor: seat.booking_status === 0 ? "pointer" : "not-allowed",
         opacity: seat.booking_status === 0 ? 1 : 0.6,
       })
+      .attr("data-event-seat-id", seat.event_seat_id)
       .attr("data-seat-id", seat.seat_id)
       .attr("data-section-name", seat.section_name)
       .attr("data-seat-price", seat.seat_price);
@@ -203,11 +204,13 @@ class EventDetailsView {
     const selectedSeatElement = document.querySelector(".selected-seat");
 
     if (selectedSeatElement) {
+      const eventSeatId = selectedSeatElement.dataset.eventSeatId;
       const seatId = selectedSeatElement.dataset.seatId;
       const sectionName = selectedSeatElement.dataset.sectionName;
       const seatPrice = parseFloat(selectedSeatElement.dataset.seatPrice);
 
       return {
+        event_seat_id: eventSeatId,
         seat_id: seatId,
         section_name: sectionName,
         seat_price: seatPrice,

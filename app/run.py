@@ -212,7 +212,7 @@ def my_tickets():
 def get_my_tickets():
     if "user" in session:
         user_id = session["user"]["id"]
-        print("Getting Tickets for:", user_id)
+        print("Getting Tickets for User Id:", user_id)
         user_ticket_data = get_db().get_user_tickets(user_id)
         return {"user_ticket_data": user_ticket_data}
     else:
@@ -351,10 +351,10 @@ def add_to_cart():
         session["event_details_cart"] = [event_details]
     else:
         event_details_cart = session["event_details_cart"]
-        seat_ids = get_seat_ids(event_details_cart)
+        event_seat_ids, seat_ids = get_seat_ids(event_details_cart)
 
-        if event_details["seat_id"] in seat_ids:
-            original_ticket = get_original_ticket(
+        if event_details["event_seat_id"] in event_seat_ids and event_details["seat_id"] in seat_ids:
+            original_ticket = get_original_ticket(event_details["event_seat_id"],
                 event_details["event_id"], event_details["seat_id"], event_details_cart
             )
 
@@ -372,8 +372,10 @@ def add_to_cart():
         else:
             event_details_cart.append(event_details)
 
+        
         session["event_details_cart"] = event_details_cart
-
+        
+    print("Number of items in cart:", len(session["event_details_cart"]))
     return make_response()
 
 
@@ -391,6 +393,7 @@ def build_event_details_dict(form):
     start_date = form.get("event_details[start_date]")
     start_time = form.get("event_details[start_time]")
     event_image = form.get("event_details[event_image]")
+    event_seat_id = form.get("event_details[seat][event_seat_id]")
     seat_id = form.get("event_details[seat][seat_id]")
     section_name = form.get("event_details[seat][section_name]")
     seat_price = form.get("event_details[seat][seat_price]")
@@ -410,6 +413,7 @@ def build_event_details_dict(form):
             ("start_date", start_date),
             ("start_time", start_time),
             ("event_image", event_image),
+            ("event_seat_id", event_seat_id),
             ("seat_id", seat_id),
             ("section_name", section_name),
             ("seat_price", seat_price),
@@ -419,17 +423,21 @@ def build_event_details_dict(form):
     )
 
 
-def get_original_ticket(event_id, seat_id, cart_with_tickets):
+def get_original_ticket(event_seat_id, event_id, seat_id, cart_with_tickets):
     for ticket in cart_with_tickets:
-        if ticket["event_id"] == event_id and ticket["seat_id"] == seat_id:
+        if ticket["event_seat_id"] == event_seat_id and ticket["event_id"] == event_id and ticket["seat_id"] == seat_id:
             return ticket
 
-
 def get_seat_ids(event_details_cart):
+    event_seat_ids = []
+    for ticket in event_details_cart:
+        event_seat_ids.append(ticket["event_seat_id"])
+        
     seat_ids = []
     for ticket in event_details_cart:
         seat_ids.append(ticket["seat_id"])
-    return seat_ids
+    
+    return event_seat_ids, seat_ids
 
 
 @app.route("/api/update_cart", methods=["POST"])
