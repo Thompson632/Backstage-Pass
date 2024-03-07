@@ -30,22 +30,6 @@ CREATE TABLE IF NOT EXISTS venue_image (
 	image text
 );
 
-CREATE TABLE IF NOT EXISTS seat (
-	id integer primary key,
-	venue_id integer not null,
-	seat_section_id integer not null,
-	foreign key (venue_id) references venue(id),
-	foreign key (seat_section_id) references seat_section(id)
-);
-
-CREATE TABLE IF NOT EXISTS seat_section (
-	id integer primary key,
-	section_name text not null,
-	section_image text not null,
-	venue_id integer not null,
-	foreign key (venue_id) references venue(id)
-);
-
 CREATE TABLE IF NOT EXISTS event (
 	id integer primary key,
 	venue_id integer not null,
@@ -57,16 +41,6 @@ CREATE TABLE IF NOT EXISTS event (
 	end_time time not null,
 	event_image text,
 	foreign key (venue_id) references venue(id)
-);
-
-CREATE TABLE IF NOT EXISTS event_seat (
-	id integer primary key,
-	event_id integer not null,
-	seat_id integer not null,
-	seat_price real not null,
-	booking_status integer not null,
-	foreign key (event_id) references event(id),
-	foreign key (seat_id) references seat(id)
 );
 
 CREATE TABLE IF NOT EXISTS ticket_orders (
@@ -85,7 +59,7 @@ CREATE TABLE IF NOT EXISTS ticket_order_details (
     quantity integer not null,
     foreign key(ticket_order_id) references ticket_orders(id),
 	foreign key (event_id) references event(id),
-    foreign key(event_seat_id) references event_seat(id)
+    foreign key(event_seat_id) references event_seat(event_seat_id)
 );
 
 CREATE TABLE IF NOT EXISTS contact_us (
@@ -98,13 +72,43 @@ CREATE TABLE IF NOT EXISTS contact_us (
     CreatedDate datetime DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS denormalized_event (
+    event_id integer primary key,
+    event_name text not null,
+    artist text not null,
+    start_date date not null,
+    end_date date not null,
+    start_time TIME not null,
+    end_time TIME not null,
+    event_image text,
+    venue_id integer not null,
+    venue_name text not null,
+    venue_image text,
+    street text not null,
+    city text not null,
+    state text not null,
+    zip_code text not null,
+    country text not null
+);
+
+CREATE TABLE IF NOT EXISTS event_seat (
+    event_seat_id integer primary key,
+    event_id integer not null,
+    seat_id integer not null,
+    seat_section_id integer not null,
+    section_name text not null,
+    section_image text not null,
+    seat_price REAL not null,
+    booking_status integer not null
+);
+
+
 .mode csv
 .import ../mock_data/user.csv user
 
 .import ../mock_data/venue.csv venue
 .import ../mock_data/venue_image.csv venue_image
-.import ../mock_data/seat.csv seat
-.import ../mock_data/seat_section.csv seat_section
-
 .import ../mock_data/event.csv event
+
+.import ../mock_data/denormalized_event.csv denormalized_event
 .import ../mock_data/event_seat.csv event_seat

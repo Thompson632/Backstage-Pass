@@ -338,14 +338,16 @@ class Database:
         ticket_order_id = self.get_last_inserted_id()
 
         for ticket_detail in ticket_details:
+            event_seat_id = ticket_detail["event_seat_id"]
             event_id = ticket_detail["event_id"]
-            event_seat_id = ticket_detail["seat_id"]
+            seat_id = ticket_detail["seat_id"]
             quantity = ticket_detail["quantity"]
             self.execute(
                 INSERT_TICKET_ORDER_DETAILS, [ticket_order_id, event_id, event_seat_id, quantity]
             )
 
-            self.execute(UPDATE_EVENT_SEAT_BOOKING_STATUS, [event_seat_id])
+            print("Updating Event Seat Id:", event_seat_id, "for Event Id:", event_id)
+            self.execute(UPDATE_EVENT_SEAT_BOOKING_STATUS, [event_seat_id, event_id, seat_id])
 
     def get_last_inserted_id(self):
         c = self.conn.cursor()
