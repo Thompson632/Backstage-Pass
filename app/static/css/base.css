@@ -61,17 +61,15 @@ header {
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 80vh;
 }
 
 .hero-info {
-  margin-right: 32px;
   width: 50%;
 }
 
 .hero-img {
-  height: 500px;
   width: 50%;
-  background-color: #222;
 }
 
 .jumbotron-fluid {
@@ -100,4 +98,13 @@ header {
 .card img {
   height: 200px;
   width: auto;
+}
+
+.find-event-search-bar {
+  display: block;
+  width: auto;
+}
+
+.find-event-button {
+  width: 120px;
 }

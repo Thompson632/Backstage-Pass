@@ -1,183 +1,121 @@
-{% extends 'base.html' %} {% set active = 'About' %} {% block title %}
+{% extends 'base.html' %} {% set active = 'About' %} 
+
+{% block title %}
   About Us
 {% endblock %} 
+
 {% block header %}
 <link rel="stylesheet" href="/static/css/about.css" />
 {% endblock %}
 
 {% block content %}
-<script>
-  var error_value = "{{error_data}}";
-  if (error_value != "")
-    alert( error_value );
-</script>
-<div id="carousel_aboutus" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="#carousel_aboutus" data-slide-to="0" class="active"></li>
-    <li data-target="#carousel_aboutus" data-slide-to="1"></li>
-    <li data-target="#carousel_aboutus" data-slide-to="2"></li>
-    <li data-target="#carousel_aboutus" data-slide-to="3"></li>
-  </ol>
-
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-    <div class="row">
-        <div class="col-md-4">
-          <img class="d-block w-100" src="/static/img/aboutus/concert_goer.png" alt="First slide">
-        </div>
-
-        <div class="col-md-8">
-            <h1 class="display-3">Our Mission</h1>
-            <text>At <a href="/">Backstage Pass</a>, we are driven by a passion for music and concerts, and a commitment 
-              to providing unforgettable experiences to music enthusiasts worldwide. 
-              Our mission is simple yet powerful: to connect fans with their favorite artists and create memories that last a lifetime.
-            <h1 class="display-5">Commitment to Excellence</h1>
-            <text>We strive for excellence in everything we do. From offering a seamless ticket booking experience to 
-              ensuring top-notch customer service, we are dedicated to exceeding your expectations at every turn.
-            </text>
-            <h1 class="display-5">Empowering Artists</h1>
-            <text>We believe in supporting artists and empowering them to showcase their talent on a global stage. 
-              By providing a platform for both emerging and established musicians, we aim to foster creativity and celebrate
-              the diversity of musical expression.
-            </text>  
-            <h1 class="display-5">Community Engagement</h1>
-            <text>Music has the incredible power to unite people from all walks of life. We are committed to fostering a 
-              vibrant community of music lovers, where fans can connect, share their passion, and create lasting friendships.
-            </text>
-            <h2 class="display-5">Accessibility and Inclusivity</h1>
-            <text>We are committed to making live music accessible to everyone. Whether you're a seasoned concert-goer 
-              or attending your first show, we strive to create inclusive experiences that cater to diverse audiences.
-            </text>
-            <h2 class="display-5">Environmental Responsibility</h1>
-            <text>As stewards of the environment, we recognize our responsibility to minimize our ecological footprint. 
-              We are dedicated to implementing sustainable practices and reducing waste in all aspects of our operations.
-            </text>
-             Join us on our mission to celebrate the magic of music and create unforgettable moments together. Welcome to <a href="/">Backstage Pass</a> - where the love for music knows no bounds.
-            </text>
-        </div>
-      </div>
-    </div>
-
-    <div class="carousel-item">
-      <div class="row">
-        <div class="col-md-4">
-          <img class="d-block w-100" src="/static/img/aboutus/our-team.png" alt="Second slide">
-        </div>
-        <div class="col-md-8">
-            <h1 class="display-3">Who are we!</h1>
-            <p>At <a href="www.drexel.org">Drexelville</a>, Rob, Zidane and Dheeraj, the music aficionados, joined forces with a common dream: 
-            to make concert ticket booking effortless for fellow music enthusiasts and while they were at it, try getting good grades on their
-            college project. 
-            Faced with the frustration of navigating complex ticketing systems, they set out to create 
-            <a href="/">Backstage Pass</a> - a user-friendly platform offering a seamless booking experience.
-            
-            They dedicated themselves to building Backstage Pass from the ground up. 
-            Their hard work paid off, and soon, music lovers across Musicville embraced the platform for its simplicity and transparency.
-            Today, <a href="/">Backstage Pass</a> stands as a testament to their commitment to the music community.
-          </p>
-          <h2 class="display-5">Robert</h1>
-          <p>Meet Robert, a dedicated project manager and tech-savvy founder from New Jersey. 
-            Balancing studies and a full-time job, Robert brings technical expertise and leadership to our team. 
-            His passion for excellence and relentless drive make him a vital asset in steering our projects to success.
-          </p>
-          <h2 class="display-5">Zidane</h1>
-          <p>Zidane, a full-time student with a knack for crafting rich user interfaces. 
-            With experience in research computer departments at top-tier companies, 
-            Zidane brings invaluable expertise to our team. 
-            His commitment to innovation and eye for detail elevate our projects to new heights.
-          </p>  
-          <h2 class="display-5">Dheeraj</h1>
-          <p>Meet Dheeraj, an experienced software professional who currently works as a program manager and 
-            is also pursuing further education. With a strong background in software development and technical expertise, 
-            Dheeraj's leadership drives our projects forward, ensuring success at every turn.
-          </p>
-      </div>
-      </div>
-    </div>
-
-    <div class="carousel-item">
-      <h1 class="display-3">Our Partners</h1>
-      <div class="row">
-      <div class="col-md-3">
-        <img class="d-block w-100" src="/static/img/aboutus/partner_1.png" alt="Third slide">
-      </div>
-      <div class="col-md-3">
-        <img class="d-block w-100" src="/static/img/aboutus/partner_2.png" alt="Third slide">
-      </div>
-      <div class="col-md-3">
-        <img class="d-block w-100" src="/static/img/aboutus/partner_3.png" alt="Third slide">
-      </div>
-      <div class="col-md-3">
-        <img class="d-block w-100" src="/static/img/aboutus/partner_4.png" alt="Third slide">
-      </div>
-      <div class="col-md-3">
-        <img class="d-block w-100" src="/static/img/aboutus/partner_5.png" alt="Third slide">
-      </div>
-      <div class="col-md-3">
-        <img class="d-block w-100" src="/static/img/aboutus/partner_6.png" alt="Third slide">
-      </div>
-      <div class="col-md-3">
-        <img class="d-block w-100" src="/static/img/aboutus/partner_7.png" alt="Third slide">
-      </div>
-      <div class="col-md-3">
-        <img class="d-block w-100" src="/static/img/aboutus/partner_8.png" alt="Third slide">
-      </div>
-    </div>
-    </div>
-
-    <div class="carousel-item">
-        <h1>Contact Us</h1>
-      <form action="/contactus" method="post">
-        <div class="form-group">
-          <div class="col-5">
-            <label for="first_name_label">First Name</label>
-            <input type="text" class="form-control" id="first_name_input" name="first_name_input" placeholder="First Name" required>
-          </div> 
-        </div>
-        <div class="form-group">
-          <div class="col-5">
-            <label for="last_name_input">Last Name</label>
-            <input type="text" class="form-control" id="last_name_input" name="last_name_input" placeholder="Last Name">
-          </div> 
-        </div>
-        <div class="form-group">
-          <div class="col-5">
-            <label for="email_id_input">Email address</label>
-            <input type="email" class="form-control" id="email_id_input" name="email_id_input" aria-describedby="emailHelp" placeholder="Enter email" required>
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-5">
-            <label for="phone_input">Phone Number</label>
-            <input type="tel" class="form-control" id="phone_input" name="phone_input" aria-describedby="phoneHelp" placeholder="XXX-XXX-XXXX">
-            <small id="phoneHelp" class="form-text text-muted">Your phone number is secure with us.</small>
-          </div>
-        </div>   
-        <div class="form-group">
-          <div class="input-group">
-            <div class="input-group-prepend col-2" >
-              <span class="input-group-text">Your query / questions</span>
-            </div>
-            <textarea id="query_input" name="query_input"  class="form-control col-7" aria-label="With query" rows="10" required></textarea>
-          </div>
-        </div>
-        <div class="col-5">
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </div>  
-      </form>
+<div class="mt-4 container-fluid">
+  <h1 class="display-4 mb-3">About Us</h1>
+  <div>
+    <h2 class="display-5">Who we are!</h1>
+          <p>At <a href="www.drexel.org">Drexelville</a>, Rob, Zidane and Dheeraj, the music aficionados, joined forces with a common dream: 
+          to make concert ticket booking effortless for fellow music enthusiasts and while they were at it, try getting good grades on their
+          college project. 
+          Faced with the frustration of navigating complex ticketing systems, they set out to create 
+          <a href="/">Backstage Pass</a> - a user-friendly platform offering a seamless booking experience.
+          
+          They dedicated themselves to building Backstage Pass from the ground up. 
+          Their hard work paid off, and soon, music lovers across Musicville embraced the platform for its simplicity and transparency.
+          Today, <a href="/">Backstage Pass</a> stands as a testament to their commitment to the music community.
+        </p>
+        <img class="rounded text-sm-center float-md-left mb-sm-4 mb-md-0 mr-md-4" style="height:400px;width:auto;" src="/static/img/aboutus/our-team.png" alt="Second slide">
+        <h2 class="display-6">Robert</h1>
+        <p>Meet Robert, a dedicated project manager and tech-savvy founder from New Jersey. 
+          Balancing studies and a full-time job, Robert brings technical expertise and leadership to our team. 
+          His passion for excellence and relentless drive make him a vital asset in steering our projects to success.
+        </p>
+        <h2 class="display-6">Zidane</h1>
+        <p>Zidane, a full-time student with a knack for crafting rich user interfaces. 
+          With experience in research computer departments at top-tier companies, 
+          Zidane brings invaluable expertise to our team. 
+          His commitment to innovation and eye for detail elevate our projects to new heights.
+        </p>  
+        <h2 class="display-6">Dheeraj</h1>
+        <p>Meet Dheeraj, an experienced software professional who currently works as a program manager and 
+          is also pursuing further education. With a strong background in software development and technical expertise, 
+          Dheeraj's leadership drives our projects forward, ensuring success at every turn.
+        </p>
   </div>
+  <div class="mt-md-4">
+    <h2 class="display-5">Our Mission!</h2>
+    <div>
+      <p>
+        At <a href="/">Backstage Pass</a>, we are driven by a passion for music and concerts, and a commitment 
+        to providing unforgettable experiences to music enthusiasts worldwide. Our mission is simple yet powerful: 
+        to connect fans with their favorite artists and create memories that last a lifetime. 
+      </p>
+
+      <p>We strive for excellence in everything we do. From offering a seamless ticket booking experience to 
+        ensuring top-notch customer service, we are dedicated to exceeding your expectations at every turn. We believe in 
+        supporting artists and empowering them to showcase their talent on a global stage. By providing a platform for both 
+        emerging and established musicians, we aim to foster creativity and celebrate the diversity of musical expression.
+      </p>  
+
+      <p>Music has the incredible power to unite people from all walks of life. We are committed to fostering a 
+        vibrant community of music lovers, where fans can connect, share their passion, and create lasting friendships.
+      </p>
+
+      <p>We are committed to making live music accessible to everyone. Whether you're a seasoned concert-goer 
+        or attending your first show, we strive to create inclusive experiences that cater to diverse audiences.
+      </p>
+
+      <p>As stewards of the environment, we recognize our responsibility to minimize our ecological footprint. 
+        We are dedicated to implementing sustainable practices and reducing waste in all aspects of our operations.
+      </p>
+      <p>
+        Join us on our mission to celebrate the magic of music and create unforgettable moments together. Welcome to <a href="/">Backstage Pass</a> - where the love for music knows no bounds.
+      </p>
+    </div>
   </div>
+
 
 </div>
-<a class="carousel-control-prev" href="#carousel_aboutus" role="button" data-slide="prev">
-  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-  <span class="sr-only">Previous</span>
-</a>
 
-<a class="carousel-control-next" href="#carousel_aboutus" role="button" data-slide="next">
-  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-  <span class="sr-only">Next</span>
-</a>
-
+<!-- <div class="carousel-inner">
+      <h1>Contact Us</h1>
+    <form action="/contactus" method="post">
+      <div class="form-group">
+        <div class="col-5">
+          <label for="first_name_label">First Name</label>
+          <input type="text" class="form-control" id="first_name_input" name="first_name_input" placeholder="First Name" required>
+        </div> 
+      </div>
+      <div class="form-group">
+        <div class="col-5">
+          <label for="last_name_input">Last Name</label>
+          <input type="text" class="form-control" id="last_name_input" name="last_name_input" placeholder="Last Name">
+        </div> 
+      </div>
+      <div class="form-group">
+        <div class="col-5">
+          <label for="email_id_input">Email address</label>
+          <input type="email" class="form-control" id="email_id_input" name="email_id_input" aria-describedby="emailHelp" placeholder="Enter email" required>
+          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-5">
+          <label for="phone_input">Phone Number</label>
+          <input type="tel" class="form-control" id="phone_input" name="phone_input" aria-describedby="phoneHelp" placeholder="XXX-XXX-XXXX">
+          <small id="phoneHelp" class="form-text text-muted">Your phone number is secure with us.</small>
+        </div>
+      </div>   
+      <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-prepend col-2" >
+            <span class="input-group-text">Your query / questions</span>
+          </div>
+          <textarea id="query_input" name="query_input"  class="form-control col-7" aria-label="With query" rows="10" required></textarea>
+        </div>
+      </div>
+      <div class="col-5">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>  
+    </form>
+</div> -->
 {% endblock %}
