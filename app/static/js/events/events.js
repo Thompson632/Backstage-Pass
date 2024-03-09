@@ -181,10 +181,6 @@ function Events(numRows) {
           });
   
           filter_from_date_par = filter_from_date
-      //   alert(EVENTS_PER_PAGE);
-      //   if (filter_event_name.length == 0 && filter_city_name.length == 0 
-      //     && filter_artist_name.length == 0  
-      //     && filter_from_date.length == 0  && filter_to_date.length == 0 )
           $.get('/api/get_events', {
                       n: EVENTS_PER_PAGE
                   ,   offset: (this.currentPage - 1) * EVENTS_PER_PAGE
@@ -196,30 +192,10 @@ function Events(numRows) {
                   ,   filter_to_date: filter_to_date
               }
           , (data) => {
-                  // this.build(data
-                  //     , search_events     , [] , []
-                  //     , [], ""  , "");
                   this.build(data
                       , search_events     , filter_event_name , filter_city_name
                       , filter_artist_name, filter_from_date  , filter_to_date);    
               });
-      //   else
-      //     $.get('/api/get_events', {
-      //                 n: EVENTS_PER_PAGE
-      //             ,   offset: (this.currentPage - 1) * EVENTS_PER_PAGE
-      //             ,   search_events: search_events 
-      //             ,   filter_event_name: filter_event_par
-      //             ,   filter_city_name: filter_city_par
-      //             ,   filter_artist_name: filter_artist_par
-      //             ,   filter_from_date: filter_from_date
-      //             ,   filter_to_date: filter_to_date
-  
-      //         }
-      //     , (data) => {
-      //             this.build(data
-      //                 , search_events     , filter_event_name , filter_city_name
-      //                 , filter_artist_name, filter_from_date  , filter_to_date);
-      //       });            
     }
   
   }

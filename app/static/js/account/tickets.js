@@ -12,18 +12,135 @@ function TicketsView() {
   };
 
   this.update = (data) => {
-    console.log(data["user_ticket_data"]);
     if (!data["user_ticket_data"] || data["user_ticket_data"].length === 0) {
       $("#ticketHeader").text(NO_TICKETS_PURCHASED);
       return;
     } else {
       $("#ticketHeader").text(MY_TICKETS);
-      this.updateTable(data["user_ticket_data"]);
+      this.displayTickets(data["user_ticket_data"]);
       this.updatePagination(data["user_ticket_data"]);
       this.initializeVenueModal();
-      this.initializeToggleDetails();
     }
   };
+
+  this.createTicketElement = (ticket) => {
+    const ticketEl = $(`
+      <div class="ticket mb-4" data-toggle="modal" data-target="#ticket${ticket['ticket_id']}Modal">
+          <div class="ticket-inner">
+            <div class="ticket-event-section">
+              <small class="text-muted">Event Name:</small>
+              <span>${ticket['event_name']} - ${ticket['artist']}</span>
+            </div>
+            <div class="ticket-event-section">
+              <small class="text-muted">Venue:</small>
+              <span>${ticket['venue_name']} - ${ticket['venue_street']}, ${ticket['venue_city']}, ${ticket['venue_state']}, ${ticket['venue_zip_code']}</span>
+            </div>
+            <div class="ticket-event-section">
+              <small class="text-muted">Date:</small>
+              <span>${this.formatDate(ticket['start_date'])} at ${this.formatTime(ticket['start_time'])}</span>
+            </div>
+            <div class="ticket-divider"></div>
+            <div id="ticketAttendee" class="ticket-event-section">
+              <small class="text-muted">Attendee:</small>
+              <span>John Doe</span>
+            </div>
+            <div class="ticket-attendee-section">
+              <div class="ticket-attendee-col">
+                <small class="text-muted">Section</small>
+                <span class="ticket-section">${ticket['section_id']}</span>
+              </div>
+              <div class="ticket-attendee-col"">
+                <small class="text-muted">Row</small>
+                <span class="ticket-section">2</span>
+              </div>
+              <div class="ticket-attendee-col">
+                <small class="text-muted">Seat</small>
+                <span class="ticket-seat-number">${ticket['seat_number']}</span>
+              </div>
+            </div>
+          </div>
+          <div class="ticket-qr-code-container">
+            <img src="/static/img/qr-code.png" class="ticket-qr-code"></div>
+        </div>
+    `);
+
+    return ticketEl;
+  }
+
+  this.createTicketModal = (ticket) => {
+    const modalEl = $(`
+    <div class="modal fade" id="ticket${ticket['ticket_id']}Modal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">${ticket['event_name']} Ticket</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body d-flex align-items-center justify-content-center">
+            <div class="ticket mb-4" data-toggle="modal" data-target="ticket${ticket['ticket_id']}Modal">
+            <div class="ticket-inner">
+              <div class="ticket-event-section">
+                <small class="text-muted">Event Name:</small>
+                <span>${ticket['event_name']} - ${ticket['artist']}</span>
+              </div>
+              <div class="ticket-event-section">
+                <small class="text-muted">Venue:</small>
+                <span>${ticket['venue_name']} - ${ticket['venue_street']}, ${ticket['venue_city']}, ${ticket['venue_state']}, ${ticket['venue_zip_code']}</span>
+              </div>
+              <div class="ticket-event-section">
+                <small class="text-muted">Date:</small>
+                <span>${this.formatDate(ticket['start_date'])} at ${this.formatTime(ticket['start_time'])}</span>
+              </div>
+              <div class="ticket-divider"></div>
+              <div id="ticketAttendee" class="ticket-event-section">
+                <small class="text-muted">Attendee:</small>
+                <span>John Doe</span>
+              </div>
+              <div class="ticket-attendee-section">
+                <div class="ticket-attendee-col">
+                  <small class="text-muted">Section</small>
+                  <span class="ticket-section">${ticket['section_id']}</span>
+                </div>
+                <div class="ticket-attendee-col"">
+                  <small class="text-muted">Row</small>
+                  <span class="ticket-section">2</span>
+                </div>
+                <div class="ticket-attendee-col">
+                  <small class="text-muted">Seat</small>
+                  <span class="ticket-seat-number">${ticket['seat_number']}</span>
+                </div>
+              </div>
+            </div>
+            <div class="ticket-qr-code-container">
+              <img src="/static/img/qr-code.png" class="ticket-qr-code"></div>
+          </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    `);
+
+    return modalEl;
+  }
+
+  this.displayTickets = (userTickets) => {
+    const ticketContainer = $('#ticketList');
+    userTickets.forEach(ticket => {
+      const ticketEl = this.createTicketElement(ticket);
+      const modalEl = this.createTicketModal(ticket);
+      ticketContainer.append(ticketEl);
+      ticketContainer.append(modalEl);
+    });
+  }
+
+  this.createTicketVenueModal = (ticket) => {
+
+  }
 
   this.updateTable = (userTicketData) => {
     $("#ticketsTable").empty();
@@ -127,32 +244,6 @@ function TicketsView() {
         <td>${this.buildTicketDetails(ticket)}</td>
       </tr>
     `);
-  };
-
-  this.buildTicketDetails = (ticket) => {
-    return `
-      <div class="details-content d-flex align-items-center">
-      <div class="ticket-image-container mr-3">
-        <img src="/static/img/seats/${ticket.section_image}" alt="Section Image" style="width: 100px; height: auto;">
-      </div>
-      <div class="ticket-details">
-        <p><strong>Ticket ID:</strong> ${ticket.ticket_id}</p>
-        <p><strong>Order Date:</strong> ${ticket.ticket_order_date}</p>
-        <p><strong>Seat Number:</strong> ${ticket.seat_number}</p>
-        <p><strong>Section:</strong> ${ticket.section_name}</p>
-        <p><strong>Seat Price:</strong> $${ticket.seat_price.toFixed(2)}</p>
-        <p><strong>Quantity:</strong> ${ticket.quantity}</p>
-      </div>
-    </div>
-    `;
-  };
-
-  this.initializeToggleDetails = () => {
-    $(document).on("click", ".toggle-details", function () {
-      const eventName = $(this).data("event-name");
-      $(`.details-row[data-event-name="${eventName}"]`).toggle();
-      $(this).find("i").toggleClass("fa-caret-down fa-caret-up");
-    });
   };
 
   this.initializeVenueModal = () => {
