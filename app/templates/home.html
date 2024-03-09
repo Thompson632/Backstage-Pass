@@ -18,8 +18,8 @@
               will be like before even getting to the venue.
             </p>
             <form class="d-flex" id="searchEvents" action="/events" method="GET">
-              <input type="text" class="form-control d-flex mr-sm-2 py-2 my-0" id="search_events" name="search_events" placeholder="Search by Event Name, City or Artist..." />
-              <button type="submit" class="btn btn-primary">Find Events!</button>
+              <input type="text" class="event-search-input d-flex py-2 my-0" id="search_events" name="search_events" placeholder="Search by Event Name, City or Artist..." />
+              <button type="submit" class="event-search-btn btn btn-primary">Find Events!</button>
             </form>
           </div>
         </div>
@@ -49,7 +49,7 @@
       <div class="row row-cols-1 row-cols-md-4 mt-5">
         {% for event in events %}
         <div class="col mb-4">
-          <div class="card box-shadow">
+          <a href="/events/event_details?event_id={{ event.event_id }}" class="card cursor-pointer box-shadow-custom">
             <img src="/static/img/events/{{ event.event_image }}" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title text-truncate">{{ event.event_name }}</h5>
@@ -64,7 +64,7 @@
                 <span class="card-text"><small class="text-muted">{{ event.city }}, {{ event.state }}</small></span>
               </div>
             </div>
-          </div>
+          </a>
         </div>
         {% endfor %}
         </div>

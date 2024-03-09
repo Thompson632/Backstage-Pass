@@ -113,6 +113,14 @@ header {
   width: 120px;
 }
 
+.box-shadow-custom {
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.box-shadow-custom:hover {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
 .ticket {
   background-color: #fdfbfb;
   /* box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; */
@@ -232,4 +240,25 @@ header {
 
 .cover-img {
   background-image: url('../img/hero-img.jpeg');
+}
+
+.event-search-input {
+  border-radius: 32px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.event-search-btn {
+  border-radius: 32px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.event-filter-btn {
+  border-radius: 0px;
+  border-right: 1px solid #fff;
 }

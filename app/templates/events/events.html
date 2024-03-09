@@ -16,15 +16,6 @@
 {% block content %}
 
 <!-- Modal code begins -->
-<div class="row mb-3 form-group">
-  <div class="col-md-7">
-    <button id="bn" name="bn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#all_filter_modal">
-        Filter Events
-    </button>
-  </div>
-  <div class="col-md-5"></div>
-</div>
-
 <div class="modal fade custom-modal-bg" tabindex="-1" role="dialog" id="all_filter_modal" aria-labelledby="filterModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -115,14 +106,23 @@ $(function() {
 </script>
 <!-- Modal code Ends -->
 
-<div class="container-fluid">
-  <div id="placeholder" class="container-fluid"></div>
-  <nav>
-    <ul id="paginator" class="pagination justify-content-center">
-    </ul>
-  </nav>
+<div class="container-fluid d-flex flex-column justify-content-center align-items-center">
+  <form class="w-75 d-flex mt-4 mb-5" id="searchEvents" action="/events" method="GET">
+    <input type="text" class="event-search-input form-control d-block py-2 my-0" id="search_events" name="search_events" placeholder="Search by Event Name, City or Artist..." />
+    <div class="d-flex flex-row justify-content-between">
+      <button id="bn" name="bn" type="button" class="event-filter-btn btn btn-primary" data-toggle="modal" data-target="#all_filter_modal">
+        Filter
+      </button>
+      <button type="submit" class="event-search-btn btn btn-primary">Search</button>
+    </div>
+  </form>
+  <!-- <div id="placeholder" class="container-fluid"></div> -->
+
+  <table id="maintable" class ="table px-5"></table>
 </div>
-<!-- <table id="maintable" class ="table"></table> -->
+<nav>
+  <ul id="paginator" class="pagination justify-content-center"></ul>
+</nav>
 <script>
 
   $(() => {

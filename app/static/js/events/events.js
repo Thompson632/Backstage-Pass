@@ -53,7 +53,7 @@ function Events(numRows) {
                       <th data-field="artist" data-filter-control="select" scope="col" scope="col">Artist      <img></th>
                   <tr>`);
       //   if (events.length > 0) {
-            const thead = $(`<thead class="thead-light"></thead>`);
+            const thead = $(`<thead></thead>`);
             thead.append(t_headers);
   
             $('#maintable').append(thead);
