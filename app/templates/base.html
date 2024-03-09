@@ -25,8 +25,8 @@
 
   <body>
     <header>
-      <div class="container-fluid">
-        <div class="row">
+      <div class="container-fluid px-0">
+        <div class="row navbar-row px-3">
             <nav class="navbar navbar-expand-md navbar-light">
               <a class="navbar-brand" href="/">
                 <img src="/static/img/logo/logo-main.svg" style="max-height: 100px"/>
@@ -50,11 +50,10 @@
                   </li>
                 </ul>
 
-                <div class="header-user-profile my-auto mr-2 d-flex">
-                  <i class="fa-solid fa-user my-auto"></i>
+                <div class="mr-2 d-flex flex-column flex-md-row">
                   {% if session['user'] %}
                     <div class="dropdown">
-                      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</button>
+                      <button class="btn btn-link account-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</button>
                       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navLink">
                         <h6 class="dropdown-header">Welcome back!</h6>
                         <h6 class="dropdown-header">{{ session['user']['first_name'] }} {{ session['user']['last_name'] }}</h6>
@@ -65,37 +64,46 @@
                       </div>
                     </div>
                   {% else %}
-                    <div class="mt-2 mt-md-0 px-3 px-md-0 d-flex flex-column flex-md-row">
-                      <button id="showSignInModalContentBtn" type="button" class="mb-2 mb-md-0 mr-md-2 btn btn-outline-secondary px-4" data-toggle="modal">Sign in</button>
-                      <button id="showSignUpModalContentBtn" type="button" class="btn btn-primary px-4" data-toggle="modal">Sign up</button>
+                    <div class="px-1 px-md-0 d-flex flex-column flex-md-row">
+                      <button id="showSignInModalContentBtn" type="button" class="mb-2 mb-md-0 mr-md-2 btn btn-link account-link" data-toggle="modal">Sign in</button>
+                      <button id="showSignUpModalContentBtn" type="button" class="btn btn-link account-link" data-toggle="modal">Sign up</button>
                     </div>
                   {% endif %}
+                  <div class="nav-item">
+                    <a class="nav-link cart-link" href="/cart">
+                      <span class="cart-text mr-2">Cart</span>
+                      <small class="cart-count">0</small>
+                    </a>
+                  </div>
                 </div>
               </div>
 
-              <div class="cart-icon ml-auto">
+              <!-- <div class="cart-icon ml-auto">
                 <a href="/cart" class="position-relative">
                   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
                     <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
                   </svg>
                 </a>
-              </div>
+              </div> -->
             
             </nav>
-            <!-- Success flash messages from the server-side -->
-            {% with messages = get_flashed_messages(category_filter=["success"], with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
+        </div>
+        <div class="navbar-decoration"></div>
+        <!-- Success flash messages from the server-side -->
+        {% with messages = get_flashed_messages(category_filter=["success"], with_categories=true) %}
+          {% if messages %}
+            <div class="row">
+              {% for category, message in messages %}
               <div class="position-sticky w-100 text-center alert alert-{{ category }} alert-dismissible fade show" role="alert">
                 {{ message }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
-        </div>
+            {% endfor %}
+            </div>
+          {% endif %}
+      {% endwith %}
       </div>
     </header>
 
@@ -180,7 +188,7 @@
     </div>
 
     <main>
-      <div class="container-fluid content">
+      <div class="container-fluid px-0 content">
         {% block content %}
 
         {% endblock %}

@@ -185,3 +185,51 @@ header {
   margin-left: auto;
   margin-right: auto;
 }
+
+.cart-count {
+  height: 20px;
+  width: auto;
+  border-radius: 12px;
+  border: 1.5px solid #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 16px;
+  padding: 4px 8px;
+  font-weight: 500;
+}
+
+.account-link, .nav-link {
+  color: #222;
+  font-weight: 500;
+}
+
+.account-link {
+  width: fit-content;
+}
+
+.cart-link {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-decoration {
+  background-color: pink;
+  background-image: linear-gradient(66deg, rgb(230, 251, 254) 0%, rgb(237, 221, 251) 100%);
+  position: absolute;
+  top: 0px;
+  height: 20vh;
+  width: 100%;
+  z-index: -1;
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
+.cover-img {
+  background-image: url('../img/hero-img.jpeg');
+}

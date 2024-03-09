@@ -1,6 +1,44 @@
 function Events(numRows) {
 
     const EVENTS_PER_PAGE = numRows;
+    const EVENTS_PER_COL = 4;
+
+    this.buildEventCard = (event) => {
+        return $(`
+        <div class="col col-md-3 mb-4">
+          <div class="card box-shadow">
+            <img src="/static/img/events/${event.event_image}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title text-truncate">${event.event_name}</h5>
+              <p class="card-subtitle text-muted mb-2 text-truncate">${event.artist}</p>
+              <div class="d-flex flex-column">
+                <span class="card-text">
+                  <small class="text-muted">
+                    <span class="event-start-date">${event.start_date}</span> at 
+                    <span class="event-start-time">${event.start_time}</span>
+                  </small>
+                </span>
+                <span class="card-text"><small class="text-muted">${event.city}, ${event.state}</small></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        `);
+    };
+
+    this.buildEventCards = (events) => {
+        const container = $('#placeholder');
+        let row; 
+        events.forEach((event, i) => {
+            const eventCard = this.buildEventCard(event);
+            if (i % EVENTS_PER_COL == 0) {
+                row = $('<div class="row"></div>');
+            }
+
+            row.append(eventCard);
+            container.append(row)
+        });
+    }
   
     this.buildEventTable = (events) => {
         $('#maintable').empty();
@@ -37,10 +75,6 @@ function Events(numRows) {
                     $(tbody).append(dataRow);
                 } 
             $('#maintable').append(tbody);
-            const tfoot = $(`<tfoot></tfoot>`);
-            tfoot.append(t_headers.clone());
-  
-            $('#maintable').append(tfoot);
   
             
             // JQuery code to sort by columns on the page
@@ -70,8 +104,6 @@ function Events(numRows) {
             `);
             // Find all select elements within the modal body
             var selectElements = document.getElementById('bn');
-          //   alert(selectElements.style.display);
-          //   selectElements.style.display = false;
             $('#maintable').append(noDataFound);
         }
   
@@ -155,6 +187,7 @@ function Events(numRows) {
     this.build = (data , search_events     , filter_event_name , filter_city_name
                        , filter_artist_name, filter_from_date  , filter_to_date) => {
           this.buildEventTable(data.events);
+          this.buildEventCards(data.events);
           this.buildFilterEvents(data.event_names);
           this.buildFilterCity(data.city_names);
           this.buildFilterArtist(data.artist_names);

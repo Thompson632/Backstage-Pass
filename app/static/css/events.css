@@ -15,17 +15,9 @@
 }
 
 .table-imgs {
-  max-height: 100px ;
+  height: 180px;
+  width: 180px;
 }
-
-.d-flex {
-  display: flex;
-  align-items: center;
-}
-h1 {
-  text-align : center;
-}
-
 
 th {
   cursor: pointer;

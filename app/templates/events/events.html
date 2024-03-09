@@ -115,11 +115,14 @@ $(function() {
 </script>
 <!-- Modal code Ends -->
 
-<table id="maintable" class ="table table-striped"></table>
-<nav>
-  <ul id="paginator" class="pagination justify-content-center">
-  </ul>
-</nav>
+<div class="container-fluid">
+  <div id="placeholder" class="container-fluid"></div>
+  <nav>
+    <ul id="paginator" class="pagination justify-content-center">
+    </ul>
+  </nav>
+</div>
+<!-- <table id="maintable" class ="table"></table> -->
 <script>
 
   $(() => {
@@ -139,7 +142,4 @@ $(function() {
                   );
   });
 </script>
-
-
-
 {% endblock %}
