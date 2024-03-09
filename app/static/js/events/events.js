@@ -52,7 +52,6 @@ function Events(numRows) {
                       <th scope="col">To          <img></th>
                       <th data-field="artist" data-filter-control="select" scope="col" scope="col">Artist      <img></th>
                   <tr>`);
-      //   if (events.length > 0) {
             const thead = $(`<thead></thead>`);
             thead.append(t_headers);
   
