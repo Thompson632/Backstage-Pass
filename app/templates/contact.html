@@ -9,10 +9,12 @@
 {% endblock %}
 
 {% block content %}
-<div class="mt-4 container-fluid">
-  <h1 class="display-4 mb-3">Contact Us</h1>
+<div class="container-fluid px-0">
+  <div class="mb-3 container-fluid navbar-decoration px-0 d-flex align-items-center justify-content-center">
+    <h1 class="display-4">Contact Us</h1>
+  </div>
 
-  <form action="/contactus" method="post">
+  <form class="px-4" action="/contactus" method="post">
     <div class="form-group">
     <div class="col-5">
         <label for="first_name_label">First Name</label>
