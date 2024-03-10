@@ -23,7 +23,6 @@ function CartView() {
       $("#cartHeader").text(MY_CART);
       this.updateTable(data["cart"]);
       this.updatePagination(data["cart"]);
-      $("#checkoutButton").click(this.handleCheckout);
     }
   };
 
@@ -210,15 +209,16 @@ function CartView() {
         contentType: "application/json",
         success: function (response) {
           if (response.success) {
-            alert(response.success);
+            console.log(response.success);
             window.location.href = "/account/tickets";
           }          
         },
         error: function (xhr) {
           console.error("Error Occurred:", xhr.responseText);
-          const response = JSON.parse(xhr.responseText);
-          alert(`${response.error}`);
-        },
+          var response = JSON.parse(xhr.responseText);
+          $('#ajaxErrorMessage').text(response.error);
+          $('#ajaxAlertError').show();
+        }
       });
     }
   };
@@ -230,6 +230,8 @@ function CartView() {
   this.formatDate = (dateString) => {
     return convertDateToHumanReadable(dateString);
   };
+
+  $(document).on('click', '#checkoutButton', this.handleCheckout);
 }
 
 function convertTo12HourFormat(time) {

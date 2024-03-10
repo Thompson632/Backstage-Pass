@@ -34,6 +34,7 @@ tbody tr {
   cursor: pointer;
 }
 
-.custom-modal-bg .modal-body {
-  background-color: cornsilk; 
+.custom-modal-bg  .modal-body  {
+  background: linear-gradient(66deg, rgb(230, 251, 254) 0%, rgb(237, 221, 251) 100%);
 }
+

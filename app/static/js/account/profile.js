@@ -53,16 +53,17 @@ document.addEventListener("DOMContentLoaded", function () {
       url: actionUrl + `?user_id=${userId}`,
       type: "POST",
       data: form.serialize(),
-      success: function (_) {       
-        alert("Updated successfully!");
+      success: function (response) {
+        console.log("Updated successfully");
+        $('#ajaxSuccessMessage').text(response.success);
+        $('#ajaxAlertSuccess').show();
       },
       error: function (xhr) {
         console.error("Error Occurred:", xhr.responseText);
-        const response = JSON.parse(xhr.responseText);
-        alert(`${response.error}`);
-      },
-    }).done(() => {
-      location.reload();
+        var response = JSON.parse(xhr.responseText);
+        $('#ajaxErrorMessage').text(response.error);
+        $('#ajaxAlertError').show();
+      }          
     });
   });
 });

@@ -102,7 +102,26 @@
             {% endfor %}
             </div>
           {% endif %}
-      {% endwith %}
+        {% endwith %}
+
+        <!-- This is a workaround for the flash messages for the following use cases because ajax and flash are tricky:
+          1. Unable to update user info, email address, password, phone number, address
+          2. Unable to checkout because the user is not logged in
+        -->
+        <div class="row">
+          <div id="ajaxAlertSuccess" class="position-sticky w-100 text-center alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
+            <span id="ajaxSuccessMessage"></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div id="ajaxAlertError" class="position-sticky w-100 text-center alert alert-danger alert-dismissible fade show" role="alert" style="display: none;">
+            <span id="ajaxErrorMessage"></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -128,7 +147,6 @@
                 <label for="signInPasswordInput">Password</label>
                 <input id="signInPasswordInput" type="password" class="form-control" name="password">
               </div>
-              <small id="signInHelp" class="mb-2 form-text text-muted"><a href="#">Having trouble signing in?</a></small>
             </form>
           </div>
 

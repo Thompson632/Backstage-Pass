@@ -14,7 +14,7 @@ from passlib.hash import pbkdf2_sha256
 from werkzeug.datastructures import MultiDict
 import logging
 
-from errors import *
+from messages import *
 
 logging.basicConfig(level=logging.INFO)
 
@@ -60,6 +60,7 @@ def create_account():
                     first_name, last_name, username, encrypted_password
                 )
                 session["user"] = get_db().get_user_by_username(username)
+                flash(ACCOUNT_CREATION, "success")
                 return jsonify({"success": True, "message": ACCOUNT_CREATION})
             else:
                 return jsonify({"success": False, "error": ERROR_USER_HAS_ACCOUNT})
@@ -94,13 +95,19 @@ def login():
             elif not username and password:
                 error_message = ERROR_MISSING_USERNAME
 
-    return jsonify({"success": False, "error": error_message})
+    # Modal will handle showing the error to the user
+    return jsonify({"success": False, "error": error_message}), 401
 
 
 @app.route("/signout")
 def signout():
-    session.pop("user", None)
-    return redirect("/")
+    if "user" in session:
+        first_name = session["user"]["first_name"]
+        last_name = session["user"]["last_name"]
+        message = first_name + " " + last_name + SUCCESSFULLY_SIGNED_OUT
+        session.pop("user", None)
+        flash(message, "success")
+        return redirect("/")
 
 
 # End: Account Creation
@@ -116,7 +123,7 @@ def my_profile():
         return redirect("/")
 
 
-@app.route("/api/profile/edit/info", methods=["GET", "POST"])
+@app.route("/api/profile/edit/info", methods=["POST"])
 def edit_user_info():
     if "user" in session:
         user_id = request.args.get("user_id")
@@ -126,11 +133,12 @@ def edit_user_info():
         user_data = get_db().get_user_by_id(user_id)
 
         if user_data:
-            return render_template("account/profile.html", user=user_data)
+            return jsonify({"success": SUCCESS_UPDATE_USER_INFO}), 200
         else:
             return jsonify({"error": FAILED_TO_UPDATE_USER_INFO}), 404
     else:
-        return redirect("/")
+        return jsonify({"error": USER_NOT_LOGGED_IN}), 401
+
 
 
 @app.route("/api/profile/edit/email_address", methods=["POST"])
@@ -142,11 +150,11 @@ def edit_user_email_address():
         user_data = get_db().get_user_by_id(user_id)
 
         if user_data:
-            return render_template("account/profile.html", user=user_data)
+            return jsonify({"success": SUCCESS_UPDATE_USER_EMAIL_ADDRESS}), 200
         else:
             return jsonify({"error": FAILED_TO_UPDATE_USER_EMAIL_ADDRESS}), 404
     else:
-        return redirect("/")
+        return jsonify({"error": USER_NOT_LOGGED_IN}), 401
 
 
 @app.route("/api/profile/edit/password", methods=["POST"])
@@ -159,11 +167,11 @@ def edit_user_password():
         user_data = get_db().get_user_by_id(user_id)
 
         if user_data:
-            return render_template("account/profile.html", user=user_data)
+            return jsonify({"success": SUCCESS_UPDATE_USER_PASSWORD}), 200
         else:
             return jsonify({"error": FAILED_TO_UPDATE_USER_PASSWORD}), 404
     else:
-        return redirect("/")
+        return jsonify({"error": USER_NOT_LOGGED_IN}), 401
 
 
 @app.route("/api/profile/edit/phone_number", methods=["POST"])
@@ -175,11 +183,11 @@ def edit_user_phone_number():
         user_data = get_db().get_user_by_id(user_id)
 
         if user_data:
-            return render_template("account/profile.html", user=user_data)
+            return jsonify({"success": SUCCESS_UPDATE_USER_PHONE_NUMBER}), 200
         else:
             return jsonify({"error": FAILED_TO_UPDATE_USER_PHONE_NUMBER}), 404
     else:
-        return redirect("/")
+        return jsonify({"error": USER_NOT_LOGGED_IN}), 401
 
 
 @app.route("/api/profile/edit/address", methods=["POST"])
@@ -195,11 +203,11 @@ def edit_user_address():
         user_data = get_db().get_user_by_id(user_id)
 
         if user_data:
-            return render_template("account/profile.html", user=user_data)
+            return jsonify({"success": SUCCESS_UPDATE_USER_ADDRESS}), 200
         else:
             return jsonify({"error": FAILED_TO_UPDATE_USER_ADDRESS}), 404
     else:
-        return redirect("/")
+        return jsonify({"error": USER_NOT_LOGGED_IN}), 401
 
 
 # End: Account Profile
@@ -211,7 +219,7 @@ def my_tickets():
     if "user" in session:
         return render_template("account/tickets.html")
     else:
-        return redirect("/")
+        return jsonify({"error": USER_NOT_LOGGED_IN}), 401
 
 
 @app.route("/api/account/tickets", methods=["GET"])
@@ -222,7 +230,7 @@ def get_my_tickets():
         user_ticket_data = get_db().get_user_tickets(user_id)
         return {"user_ticket_data": user_ticket_data}
     else:
-        return redirect("/")
+        return jsonify({"error": USER_NOT_LOGGED_IN}), 401
 
 
 # End: Account Tickets
@@ -297,6 +305,7 @@ def checkout():
 
         get_db().checkout(user_id, session["event_details_cart"], total)
         session["event_details_cart"] = []
+        flash(SUCCESSFUL_CHECKOUT, "success")
         return jsonify({"success": SUCCESSFUL_CHECKOUT})
     else:
         return jsonify({"error": USER_NOT_LOGGED_IN}), 401
@@ -314,6 +323,7 @@ def submit_contact_us():
     phone = request.form.get("phone_input")
     question = request.form.get("query_input")
     get_db().insert_contact_us(first_name, last_name, email_id, phone, question)
+    flash(SUCCESSFULLY_PUBLISHED_CONTACT_QUERY, "success")
     return redirect("/")
 
 
@@ -479,6 +489,7 @@ def build_cart_event_details(current_index, form):
     start_date = form.get("cart" + "[" + current_index + "][start_date]")
     start_time = form.get("cart" + "[" + current_index + "][start_time]")
     event_image = form.get("cart" + "[" + current_index + "][event_image]")
+    event_seat_id = form.get("cart" + "[" + current_index + "][event_seat_id]")
     seat_id = form.get("cart" + "[" + current_index + "][seat_id]")
     section_name = form.get("cart" + "[" + current_index + "][section_name]")
     seat_price = form.get("cart" + "[" + current_index + "][seat_price]")
@@ -503,6 +514,7 @@ def build_cart_event_details(current_index, form):
                 ("start_date", start_date),
                 ("start_time", start_time),
                 ("event_image", event_image),
+                ("event_seat_id", event_seat_id),
                 ("seat_id", seat_id),
                 ("section_name", section_name),
                 ("seat_price", seat_price),
