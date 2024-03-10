@@ -32,17 +32,6 @@ python run.py
 
 Once running, you will need to open your browser and navigate to `http://localhost:8080`
 
-## Docker
-### Build
-```bash
-docker-compose build
-```
-
-### Run
-```bash
-docker-compose up
-```
-
 # Authors
 - [Dheeraj Kaul](dk989@drexel.edu)
 - [Robert Thompson](rt598@drexel.edu)
