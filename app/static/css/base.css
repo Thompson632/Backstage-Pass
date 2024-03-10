@@ -1,6 +1,15 @@
 /* Robert Thompson, rt598@drexel.edu
 CS530: DUI, Assignment [2] */
 
+:root {
+  --primary-color: #5386e4;
+  --secondary-color: #4c4b63;
+}
+
+html {
+  background-color: #ececec;
+}
+
 body {
   font-family: "Avenir";
   font-size: 1rem;
@@ -8,74 +17,245 @@ body {
 }
 
 header {
-  background: #28282B;
+  background: #fff;
 }
 
-.table {
-  table-layout: fixed;
+.navbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
 
-.btn-primary {
-  color: white;
-  border: none;
+.navbar-brand {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
-.divider {
-  width: 10px;
-  height: auto;
-  display: inline-block;
-}
-
-.btn-primary:hover {
-  color: white;
-  border: none;
-}
-
-.btn-secondary {
-  border: none;
-  color: black;
-  background-color: #a9a9a9;
-}
-
-.row.empty {
-  opacity: 0.25;
-  display: table-row;
-  vertical-align: inherit;
-  border-color: inherit;
-}
-
-.row.fill {
-  display: table-row;
-  vertical-align: inherit;
-  border-color: inherit;
+.navbar-brand h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
 }
 
 .navbar-expand-md .navbar-nav .nav-link {
   padding-left: 1rem;
   padding-right: 1rem;
-  color: #FFDD6B;
+  color: #222;
+  font-weight: 500;
 }
 
-.content {
-  padding: 2rem 1.5rem;
+.btn-primary {
+  background-color: var(--secondary-color);
+  border: none;
+  outline: 0;
 }
 
-.jumbotron {
-  padding: 1.5rem;
-  background: 0;
+.btn-primary:hover {
+  background-color: var(--primary-color);
 }
 
-.jumbotron img {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+.hero-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 80vh;
 }
 
-.btn-size {
-  width: 40px;
-  height: 40px;
-  display: inline-block;
+.hero-info {
+  width: 50%;
+}
+
+.hero-img {
+  width: 50%;
+}
+
+.jumbotron-fluid {
+  background-color: transparent;
+}
+
+@media only screen and (max-width: 600px) {
+  .hero-section {
+    flex-direction: column;
+  }
+
+  .hero-info {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero-img {
+    width: 100%;
+  }
 }
 
 .page-link, .page-link:hover {
   color: #204C19;
+}
+
+.card img {
+  height: 200px;
+  width: auto;
+}
+
+.find-event-search-bar {
+  display: block;
+  width: auto;
+}
+
+.find-event-button {
+  width: 120px;
+}
+
+.box-shadow-custom {
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.box-shadow-custom:hover {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.ticket {
+  background-color: #fdfbfb;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; */
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  margin-right: 16px;
+  width: 300px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 18px;
+  cursor: pointer;
+}
+
+.ticket:hover {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.ticket:last-child {
+  margin-right: 0px;
+}
+
+.ticket .ticket-event-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  padding: 0 18px;
+}
+
+.ticket-divider {
+  margin-top: 8px;
+  margin-bottom: 16px;
+  border-bottom: 2px dashed #dcd8d8;
+  content: '';
+  flex: 1;
+}
+
+.ticket-inner .ticket-attendee-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 18px;
+}
+
+.ticket-attendee-section .ticket-attendee-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ticket-scan-code {
+  background-color: #fff;
+  border-top: 1px solid #000;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  width: 100%;
+  height: 100px;
+}
+
+.ticket-qr-code-container {
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+}
+
+.ticket-qr-code-container img {
+  height: 200px;
+  width: 200px;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cart-count {
+  height: 20px;
+  width: auto;
+  border-radius: 12px;
+  border: 1.5px solid #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 16px;
+  padding: 4px 8px;
+  font-weight: 500;
+}
+
+.account-link, .nav-link {
+  color: #222;
+  font-weight: 500;
+}
+
+.account-link {
+  width: fit-content;
+}
+
+.cart-link {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-decoration {
+  background-image: linear-gradient(66deg, rgb(230, 251, 254) 0%, rgb(237, 221, 251) 100%);
+  height: 20vh;
+  width: 100%;
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
+.cover-img {
+  background-image: linear-gradient(66deg, rgb(194, 222, 245) 0%, rgb(233, 207, 255) 100%);
+  /* background-image: url('../img/hero-img.jpeg'); */
+}
+
+.event-search-input {
+  border-radius: 32px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.event-search-btn {
+  border-radius: 32px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.event-filter-btn {
+  border-radius: 0px;
+  border-right: 1px solid #fff;
 }

@@ -1,5 +1,6 @@
 from flask import (
     Flask,
+    flash,
     g,
     make_response,
     render_template,
@@ -31,13 +32,17 @@ def get_db():
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    events = get_db().get_events("", [], [], [], "", "", 4, 0)
+    return render_template("home.html", events=events)
 
 
 @app.route("/about")
 def about():
     return render_template("about.html")
 
+@app.route("/contact-us")
+def contact_us():
+    return render_template("contact.html")
 
 # Begin: Account Creation
 @app.route("/create_account", methods=["POST"])
@@ -78,6 +83,7 @@ def login():
                 if user:
                     if pbkdf2_sha256.verify(password, user["password"]):
                         session["user"] = user
+                        flash(SUCCESSFUL_LOGIN, "success")
                         return jsonify({"success": True, "message": SUCCESSFUL_LOGIN})
                     else:
                         error_message = ERROR_INVALID_PASSWORD

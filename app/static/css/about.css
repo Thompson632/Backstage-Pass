@@ -57,12 +57,6 @@ tbody tr {
   background-size: cover;
 }
 
-h1 {
-  align-content:center;
-  text-align: center;
-  color:#555555;
-}
-
 .carousel-indicators li {
   background-color: lightsteelblue; /* Change background color */
 }

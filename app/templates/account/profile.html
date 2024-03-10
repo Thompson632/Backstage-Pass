@@ -14,21 +14,10 @@
 {% endblock %}
 
 {% block content %}
-  <div class="mb-3">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="/">Home</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">My Profile</li>
-      </ol>
-    </nav>
-  </div>
-
   <div class="container mt-5">
     <div class="mb-5">
       <form id="updateMyInfoForm" action="/api/profile/edit/info" method="POST" data-user-id="{{ session['user']['id'] }}">
-        <h2>My Info</h2>
+        <h2>Personal Information</h2>
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
           <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required disabled />

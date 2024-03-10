@@ -146,6 +146,8 @@ function CartView() {
             $(event.currentTarget).data("event-id"),
             $(event.currentTarget).data("seat-id")
           );
+          const currentCount = $('#cartCount').text();
+          $('#cartCount').text(parseInt(currentCount) - 1);
         });
 
       $(row)
@@ -155,6 +157,8 @@ function CartView() {
             $(event.currentTarget).data("event-id"),
             $(event.currentTarget).data("seat-id")
           );
+          const currentCount = $('#cartCount').text();
+          $('#cartCount').text(parseInt(currentCount) + 1);
         });
 
       tableBody.append(row);

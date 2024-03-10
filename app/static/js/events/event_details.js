@@ -172,6 +172,10 @@ class EventDetailsView {
         .done(() => {
           console.log("Seat added to cart:", selectedSeat);
           $("#seatDetailsModal").modal("hide");
+
+          const quantity = eventTicketDetails.reduce((prev, curr) => prev + parseInt(curr['quantity']), 0);
+          const currentCount = cartCount.text(quantity);
+          $('#cartCount').text(parseInt(currentCount) + 1);
         })
         .fail(() => {
           console.error("Failed to add seat to cart");
