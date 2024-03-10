@@ -11,13 +11,12 @@ The purpose of this repository is to hold our Term Project called "Backstage Pas
 This will insert all necessary initialization data
 
 ```bash
-cd app/dev
+cd dev
 sqlite3 backstage_pass.db < create_db.txt
 ```
 
 ## Installing Dependencies
 ```bash
-cd app/
 pip install -r requirements.txt
 ```
 
@@ -26,7 +25,6 @@ pip install -r requirements.txt
 In order to start the web-application, you will need to run the following command
 
 ```bash
-cd app/
 python run.py
 ```
 
