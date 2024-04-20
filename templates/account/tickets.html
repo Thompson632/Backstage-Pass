@@ -8,16 +8,17 @@
   <link rel="stylesheet" href="/static/css/cart-tickets.css" />
   <script src="/static/js/account/tickets.js"></script>
   <script>
-    const ticketView = new TicketsView();
-    ticketView.load();
-</script>
+    var firstName = "{{ session['user']['first_name'] }}"
+    var lastName = "{{ session['user']['last_name'] }}"
+    const ticketView = new TicketsView()
+    ticketView.load(firstName, lastName)
+  </script>
 {% endblock %}
 
 {% block content %}
   <div class="container-fluid mx-auto mt-5">
-      <h2>My Tickets</h2>
-      <div id="ticketList" class="container-fluid d-flex flex-column flex-md-row flex-md-wrap justify-content-center align-items-center justify-content-md-start align-items-md-start">
-      </div>
+    <h2>My Tickets</h2>
+    <div id="ticketList" class="container-fluid d-flex flex-column flex-md-row flex-md-wrap justify-content-center align-items-center justify-content-md-start align-items-md-start"></div>
   </div>
 
   <div class="modal fade" id="venueModal" tabindex="-1" aria-labelledby="venueModalLabel" aria-hidden="true">
